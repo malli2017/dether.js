@@ -1,5 +1,17 @@
 window.esdocSearchIndex = [
   [
+    "dethergateway/src/utils/add0x.js~add0x",
+    "function/index.html#static-function-add0x",
+    "<span>add0x</span> <span class=\"search-result-import-path\">dethergateway/src/utils/add0x.js</span>",
+    "function"
+  ],
+  [
+    "dethergateway/src/utils/contractinstance.js~getsignedcontract",
+    "function/index.html#static-function-getSignedContract",
+    "<span>getSignedContract</span> <span class=\"search-result-import-path\">dethergateway/src/utils/contractInstance.js</span>",
+    "function"
+  ],
+  [
     "src/.external-ecmascript.js~array",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
     "src/.external-ecmascript.js~Array",
@@ -280,5 +292,29 @@ window.esdocSearchIndex = [
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined",
     "src/.external-ecmascript.js~undefined",
     "external"
+  ],
+  [
+    "src/constants/appconstants.js",
+    "file/src/constants/appConstants.js.html",
+    "src/constants/appConstants.js",
+    "file"
+  ],
+  [
+    "src/index.js",
+    "file/src/index.js.html",
+    "src/index.js",
+    "file"
+  ],
+  [
+    "src/utils/add0x.js",
+    "file/src/utils/add0x.js.html",
+    "src/utils/add0x.js",
+    "file"
+  ],
+  [
+    "src/utils/contractinstance.js",
+    "file/src/utils/contractInstance.js.html",
+    "src/utils/contractInstance.js",
+    "file"
   ]
 ]

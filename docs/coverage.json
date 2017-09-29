@@ -1,6 +1,20 @@
 {
-  "coverage": "0%",
-  "expectCount": 0,
-  "actualCount": 0,
-  "files": {}
+  "coverage": "33.33%",
+  "expectCount": 3,
+  "actualCount": 1,
+  "files": {
+    "src/utils/add0x.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/utils/contractInstance.js": {
+      "expectCount": 2,
+      "actualCount": 0,
+      "undocumentLines": [
+        8,
+        11
+      ]
+    }
+  }
 }
