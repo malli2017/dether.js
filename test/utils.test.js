@@ -42,7 +42,7 @@ describe('getSignedContract', () => {
 
   it('should return dtrContract instance', async () => {
     try {
-      const test = await getSignedContract({ privateKey, address });
+      const test = await getSignedContract(privateKey, address);
       expect(typeof test).to.equal('object');
     } catch (e) {
       expect(e).to.equal(null);
