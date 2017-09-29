@@ -1,0 +1,24 @@
+{
+  "name": "dethergateway",
+  "version": "1.0.0",
+  "description": "Gateway between Front App and the detherContracts.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dethertech/detherGateway.git"
+  },
+  "keywords": [
+    "Dether",
+    "ethereum",
+    "gateway"
+  ],
+  "author": "Dether Team",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dethertech/detherGateway/issues"
+  },
+  "homepage": "https://github.com/dethertech/detherGateway#readme"
+}
