@@ -2,7 +2,7 @@
   "name": "dethergateway",
   "version": "1.0.0",
   "description": "Gateway between Front App and the detherContracts.",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "mocha --compilers js:babel-core/register test/*.js --recursive"
   },
