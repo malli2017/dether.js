@@ -12,7 +12,7 @@ const providerUrl = process.env.DETHER_ETHEREUM_PROVIDER;
  * @param {string} address ethereum address
  * @return {object} return dtrContract instance
  */
-export const getSignedContract = async (privateKey, address) => {
+export const getSignedContract = (privateKey, address) => {
   if (!privateKey || !address) return null;
   const dtrContract = contract(DetherJson);
   const provider = new SignerProvider(providerUrl, {
