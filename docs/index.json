@@ -564,6 +564,142 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 48,
+    "kind": "file",
+    "name": "src/constants/appConstants.js",
+    "content": "// export const GAS_PRICE = 25000000000;\n",
+    "static": true,
+    "longname": "/Users/apple/Desktop/detherGateway/src/constants/appConstants.js",
+    "access": "public",
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 49,
+    "kind": "file",
+    "name": "src/index.js",
+    "content": "require('dotenv').config({ path: '.env' });\n",
+    "static": true,
+    "longname": "/Users/apple/Desktop/detherGateway/src/index.js",
+    "access": "public",
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 50,
+    "kind": "file",
+    "name": "src/utils/add0x.js",
+    "content": "/**\n * @param {string} input address ethereum\n * @return {string} formated address ethereum\n */\nconst add0x = (input) => {\n  if (typeof (input) !== 'string') return input;\n  else if (input.length < 2 || input.slice(0, 2) !== '0x') return `0x${input}`;\n  return input;\n};\n\nexport default add0x;\n",
+    "static": true,
+    "longname": "/Users/apple/Desktop/detherGateway/src/utils/add0x.js",
+    "access": "public",
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 51,
+    "kind": "function",
+    "name": "add0x",
+    "memberof": "src/utils/add0x.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "src/utils/add0x.js~add0x",
+    "access": "public",
+    "export": true,
+    "importPath": "dethergateway/src/utils/add0x.js",
+    "importStyle": "add0x",
+    "description": "",
+    "lineNumber": 5,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "input",
+        "description": "address ethereum"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "string"
+      ],
+      "spread": false,
+      "description": "formated address ethereum"
+    }
+  },
+  {
+    "__docId__": 52,
+    "kind": "file",
+    "name": "src/utils/contractInstance.js",
+    "content": "import contract from 'truffle-contract';\nimport DetherJson from 'dethercontract/contracts/DetherInterface.json';\nimport SignerProvider from 'ethjs-provider-signer';\nimport { sign } from 'ethjs-signer';\n\nimport add0x from './add0x';\n\nconst providerUrl = process.env.DETHER_ETHEREUM_PROVIDER;\n\n\nexport const getSignedContract = async ({ privateKey, address }) => {\n  if (!privateKey || !address) return null;\n  const dtrContract = contract(DetherJson);\n  const provider = new SignerProvider(providerUrl, {\n    signTransaction: (rawTx, cb) => cb(null, sign(rawTx, add0x(privateKey))),\n    accounts: cb => cb(null, address),\n  });\n  dtrContract.setProvider(provider);\n  return dtrContract.deployed();\n};\n",
+    "static": true,
+    "longname": "/Users/apple/Desktop/detherGateway/src/utils/contractInstance.js",
+    "access": "public",
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 53,
+    "kind": "variable",
+    "name": "providerUrl",
+    "memberof": "src/utils/contractInstance.js",
+    "static": true,
+    "longname": "src/utils/contractInstance.js~providerUrl",
+    "access": "public",
+    "export": false,
+    "importPath": "dethergateway/src/utils/contractInstance.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 8,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "ignore": true
+  },
+  {
+    "__docId__": 54,
+    "kind": "function",
+    "name": "getSignedContract",
+    "memberof": "src/utils/contractInstance.js",
+    "generator": false,
+    "async": true,
+    "static": true,
+    "longname": "src/utils/contractInstance.js~getSignedContract",
+    "access": "public",
+    "export": true,
+    "importPath": "dethergateway/src/utils/contractInstance.js",
+    "importStyle": "{getSignedContract}",
+    "description": null,
+    "lineNumber": 11,
+    "undocument": true,
+    "params": [
+      {
+        "name": "objectPattern",
+        "types": [
+          "{\"privateKey\": *, \"address\": *}"
+        ],
+        "defaultRaw": {
+          "privateKey": null,
+          "address": null
+        },
+        "defaultValue": "{\"privateKey\":null,\"address\":null}"
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
     "kind": "index",
     "content": "# detherGateway\nGateway between Front App and the detherContracts.\n\n### Build doc\n```\n# Run ESDoc.\n./node_modules/.bin/esdoc\n\n# View a documentation\nopen ./docs/index.html\n```\n",
     "longname": "/Users/apple/Desktop/detherGateway/README.md",
@@ -573,7 +709,7 @@
   },
   {
     "kind": "packageJSON",
-    "content": "{\n  \"name\": \"dethergateway\",\n  \"version\": \"1.0.0\",\n  \"description\": \"Gateway between Front App and the detherContracts.\",\n  \"main\": \"lib/index.js\",\n  \"scripts\": {\n    \"test\": \"mocha --compilers js:babel-core/register test/*.js --recursive\"\n  },\n  \"repository\": {\n    \"type\": \"git\",\n    \"url\": \"git+https://github.com/dethertech/detherGateway.git\"\n  },\n  \"keywords\": [\n    \"Dether\",\n    \"ethereum\",\n    \"gateway\"\n  ],\n  \"author\": \"Dether Team\",\n  \"license\": \"ISC\",\n  \"bugs\": {\n    \"url\": \"https://github.com/dethertech/detherGateway/issues\"\n  },\n  \"homepage\": \"https://github.com/dethertech/detherGateway#readme\",\n  \"devDependencies\": {\n    \"babel-core\": \"^6.26.0\",\n    \"babel-eslint\": \"^8.0.1\",\n    \"babel-preset-latest\": \"^6.24.1\",\n    \"chai\": \"^4.1.2\",\n    \"chai-as-promised\": \"^7.1.1\",\n    \"eslint\": \"^4.7.2\",\n    \"eslint-config-airbnb-base\": \"^12.0.1\",\n    \"eslint-plugin-import\": \"^2.7.0\",\n    \"mocha\": \"^3.5.3\"\n  }\n}\n",
+    "content": "{\n  \"name\": \"dethergateway\",\n  \"version\": \"1.0.0\",\n  \"description\": \"Gateway between Front App and the detherContracts.\",\n  \"main\": \"lib/index.js\",\n  \"scripts\": {\n    \"test\": \"mocha --compilers js:babel-core/register test/*.js --recursive\"\n  },\n  \"repository\": {\n    \"type\": \"git\",\n    \"url\": \"git+https://github.com/dethertech/detherGateway.git\"\n  },\n  \"keywords\": [\n    \"Dether\",\n    \"ethereum\",\n    \"gateway\"\n  ],\n  \"author\": \"Dether Team\",\n  \"license\": \"ISC\",\n  \"bugs\": {\n    \"url\": \"https://github.com/dethertech/detherGateway/issues\"\n  },\n  \"homepage\": \"https://github.com/dethertech/detherGateway#readme\",\n  \"dependencies\": {\n    \"dethercontract\": \"^1.2.5\",\n    \"dotenv\": \"^4.0.0\",\n    \"ethjs-provider-signer\": \"^0.1.4\",\n    \"ethjs-signer\": \"^0.1.1\",\n    \"truffle-contract\": \"^3.0.0\"\n  },\n  \"devDependencies\": {\n    \"babel-core\": \"^6.26.0\",\n    \"babel-eslint\": \"^8.0.1\",\n    \"babel-polyfill\": \"^6.26.0\",\n    \"babel-preset-latest\": \"^6.24.1\",\n    \"chai\": \"^4.1.2\",\n    \"chai-as-promised\": \"^7.1.1\",\n    \"esdoc\": \"^1.0.2\",\n    \"esdoc-standard-plugin\": \"^1.0.0\",\n    \"eslint\": \"^4.7.2\",\n    \"eslint-config-airbnb-base\": \"^12.0.1\",\n    \"eslint-plugin-import\": \"^2.7.0\",\n    \"mocha\": \"^3.5.3\"\n  }\n}\n",
     "longname": "/Users/apple/Desktop/detherGateway/package.json",
     "name": "package.json",
     "static": true,
