@@ -1,0 +1,35 @@
+{
+  "name": "dethergateway",
+  "version": "1.0.0",
+  "description": "Gateway between Front App and the detherContracts.",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "mocha --compilers js:babel-core/register test/*.js --recursive"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dethertech/detherGateway.git"
+  },
+  "keywords": [
+    "Dether",
+    "ethereum",
+    "gateway"
+  ],
+  "author": "Dether Team",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dethertech/detherGateway/issues"
+  },
+  "homepage": "https://github.com/dethertech/detherGateway#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.0.1",
+    "babel-preset-latest": "^6.24.1",
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "eslint": "^4.7.2",
+    "eslint-config-airbnb-base": "^12.0.1",
+    "eslint-plugin-import": "^2.7.0",
+    "mocha": "^3.5.3"
+  }
+}
