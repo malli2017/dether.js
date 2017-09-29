@@ -11,8 +11,6 @@ analysis.html
 src/**/*.css
 src/**/_snapshots_
 
-# doc
-/docs
 
 # misc
 .DS_Store
