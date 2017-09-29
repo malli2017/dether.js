@@ -7,8 +7,12 @@ import add0x from './add0x';
 
 const providerUrl = process.env.DETHER_ETHEREUM_PROVIDER;
 
-
-export const getSignedContract = async ({ privateKey, address }) => {
+/**
+ * @param {string} privateKey ethereum private key
+ * @param {string} address ethereum address
+ * @return {object} return dtrContract instance
+ */
+export const getSignedContract = async (privateKey, address) => {
   if (!privateKey || !address) return null;
   const dtrContract = contract(DetherJson);
   const provider = new SignerProvider(providerUrl, {
