@@ -1,13 +1,7 @@
-import contract from 'truffle-contract';
-import DetherJson from 'dethercontract/contracts/DetherInterface.json';
-
 import decodeKeystore from './utils/decodeKeystore';
 import { getSignedContract } from './utils/contractInstance';
 import add0x from './utils/add0x';
-import { GAS_PRICE, UTILITYWEB3 } from './constants/appConstants';
-
-const DetherContract = contract(DetherJson);
-DetherContract.setProvider(UTILITYWEB3.currentProvider);
+import { GAS_PRICE, UTILITYWEB3, DETHER_CONTRACT } from './constants/appConstants';
 
 // gas used = 223319
 // gas price average (mainnet) = 25000000000 wei
@@ -82,7 +76,7 @@ const dtrRegisterPoint = async (
     );
     return res({
         from: add0x(keys.address),
-        to: DetherContract.address,
+        to: DETHER_CONTRACT.address,
         value: amount,
         date: new Date().toLocaleString('en-US', { hour12: false }),
         receive: 'no',
