@@ -17,15 +17,18 @@ import { UTILITYWEB3 } from './constants/appConstants';
  */
 export const dtrSendCoin = async (receiver, amount, keystore, password) => {
   const keys = await decodeKeystore(keystore, password);
-  const dtrContractInstance = await getSignedContract(keys);
-
-  return dtrContractInstance.sendCoin(
-    add0x(receiver),
-    parseInt(UTILITYWEB3.toWei(amount, 'ether'), 10),
-    {
-      from: keys.address,
-      gas: 200000,
-      gasPrice: 25000000000,
-    },
-  );
+  try {
+    const dtrContractInstance = await getSignedContract(keys);
+    return dtrContractInstance.sendCoin(
+      add0x(receiver),
+      parseInt(UTILITYWEB3.toWei(amount, 'ether'), 10),
+      {
+        from: keys.address,
+        gas: 200000,
+        gasPrice: 25000000000,
+      },
+    );
+  } catch (e) {
+    return new TypeError(e);
+  }
 };
