@@ -1,17 +1,13 @@
-import Web3 from 'web3';
 import contract from 'truffle-contract';
 import DetherJson from 'dethercontract/contracts/DetherInterface.json';
 
 import decodeKeystore from './utils/decodeKeystore';
 import { getSignedContract } from './utils/contractInstance';
 import add0x from './utils/add0x';
-
-const providerUrl = process.env.DETHER_ETHEREUM_PROVIDER;
-const utilityWeb3 = new Web3(new Web3.providers.HttpProvider(providerUrl));
-const gasPrice = 25000000000;
+import { GAS_PRICE, UTILITYWEB3 } from './constants/appConstants';
 
 const DetherContract = contract(DetherJson);
-DetherContract.setProvider(utilityWeb3.currentProvider);
+DetherContract.setProvider(UTILITYWEB3.currentProvider);
 
 // gas used = 223319
 // gas price average (mainnet) = 25000000000 wei
@@ -29,6 +25,7 @@ DetherContract.setProvider(utilityWeb3.currentProvider);
  * @param {string} name username
  * @param {object} keystore deserialize keystore
  * @param {string} password
+ * @return {object} Return txs
  */
 const dtrRegisterPoint = async (
   lat,
@@ -59,12 +56,12 @@ const dtrRegisterPoint = async (
     const keys = await decodeKeystore(keystore, password);
     const dtrContractInstance = await getSignedContract(keys);
 
-    let tsxAmount = parseInt(utilityWeb3.toWei(amount, 'ether'), 10);
-    const balance = await utilityWeb3.eth.getBalance(keys.address);
+    let tsxAmount = parseInt(UTILITYWEB3.toWei(amount, 'ether'), 10);
+    const balance = await UTILITYWEB3.eth.getBalance(keys.address);
 
-    if (balance.toNumber() < (tsxAmount + (gasPrice * 650000))) {
+    if (balance.toNumber() < (tsxAmount + (GAS_PRICE * 650000))) {
       // add if tsxAmount < 0.0025 reject
-      tsxAmount = balance.toNumber() - (gasPrice * 650000);
+      tsxAmount = balance.toNumber() - (GAS_PRICE * 650000);
     }
 
     const result = await dtrContractInstance.registerPoint(
@@ -80,7 +77,7 @@ const dtrRegisterPoint = async (
         from: add0x(keys.address),
         value: parseInt(tsxAmount, 10),
         gas: 450000,
-        gasPrice: 25000000000,
+        GAS_PRICE: 25000000000,
       },
     );
     return res({
