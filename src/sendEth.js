@@ -4,9 +4,9 @@ import { GAS_PRICE, UTILITYWEB3 } from './constants/appConstants';
 import add0x from './utils/add0x';
 
 /**
- * Send eth from escrow
+ * Send eth
  * @param  {string} address eth address
- * @param  {number} amount max escrow
+ * @param  {number} amount max balance
  * @param  {object} keystore deserialize keystore
  * @param  {string} password
  * @return {object} Return txs
