@@ -4,7 +4,7 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
 import add0x from '../src/utils/add0x';
-import { getSignedContract } from '../src/utils/contractInstance';
+import { getSignedContract, getSignedWeb3 } from '../src/utils/contractInstance';
 import decodeKeystore from '../src/utils/decodeKeystore';
 import { createKeystore, password } from './utils/createKeystore';
 
@@ -111,6 +111,31 @@ describe('getSignedContract', () => {
   it('should return error', async () => {
     try {
       await getSignedContract();
+    } catch (e) {
+      expect(e).to.not.equal(null);
+    }
+  });
+});
+
+// Test getSignedWeb3 utils
+describe('getSignedWeb3', () => {
+  it('should is a function', () => {
+    expect(typeof getSignedWeb3).to.equal('function');
+  });
+
+  it('should return web3 provider', async () => {
+    try {
+      const test = await getSignedWeb3(privateKey, address);
+      expect(typeof test).to.equal('object');
+    } catch (e) {
+      console.log(e);
+      expect(e).to.equal(null);
+    }
+  });
+
+  it('should return error', async () => {
+    try {
+      await getSignedWeb3();
     } catch (e) {
       expect(e).to.not.equal(null);
     }

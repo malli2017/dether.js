@@ -1,3 +1,4 @@
+import Web3 from 'web3';
 import contract from 'truffle-contract';
 import DetherJson from 'dethercontract/contracts/DetherInterface.json';
 import SignerProvider from 'ethjs-provider-signer';
@@ -21,4 +22,13 @@ export const getSignedContract = (privateKey, address) => {
   });
   dtrContract.setProvider(provider);
   return dtrContract.deployed();
+};
+
+export const getSignedWeb3 = ({ privateKey, address }) => {
+  if (!privateKey || !address) return null;
+  const provider = new SignerProvider(providerUrl, {
+    signTransaction: (rawTx, cb) => cb(null, sign(rawTx, add0x(privateKey))),
+    accounts: cb => cb(null, address),
+  });
+  return new Web3(provider);
 };
