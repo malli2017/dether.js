@@ -6,8 +6,10 @@ import add0x from './utils/add0x';
  * @param  {string}  address ethereum address
  * @return {Promise}
  */
-export const dtrGetTellerbalances = async (address) => {
+const dtrGetTellerbalances = async (address) => {
   const dtrContractInstance = await getContractInstance();
   const result = await dtrContractInstance.getTellerBalances.call(add0x(address));
   return UTILITYWEB3.fromWei(result.toNumber(), 'ether');
 };
+
+export default dtrGetTellerbalances;

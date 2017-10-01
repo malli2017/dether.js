@@ -15,7 +15,7 @@ import { UTILITYWEB3 } from './constants/appConstants';
  * @param  {string}  password
  * @return {Promise}
  */
-export const dtrSendCoin = async (receiver, amount, keystore, password) => {
+const dtrSendCoin = async (receiver, amount, keystore, password) => {
   const keys = await decodeKeystore(keystore, password);
   try {
     const dtrContractInstance = await getSignedContract(keys);
@@ -32,3 +32,5 @@ export const dtrSendCoin = async (receiver, amount, keystore, password) => {
     return new TypeError(e);
   }
 };
+
+export default dtrSendCoin;
