@@ -3,7 +3,7 @@ import { getContractStorageInstance, getContractInstance, UTILITYWEB3 } from './
 /**
  * get teller by address
  * @param  {string}  address ethereum address
- * @return {Promise}
+ * @return {object} return teller
  */
 export const dtrGetTeller = async (address) => {
   const teller = {};
@@ -22,7 +22,8 @@ export const dtrGetTeller = async (address) => {
     teller.messengerAddr = 'Dether';
   }
   return {
-    ...teller,
+    messengerAddr: teller.name,
+    name: teller.messengerAddr,
     lat: tellerPos[0].toNumber(),
     lng: tellerPos[1].toNumber(),
     zoneId: tellerPos[2].toNumber(),
@@ -40,7 +41,7 @@ export const dtrGetTeller = async (address) => {
 /**
  * Get All tellers per zone
  * @param  {string}  zone
- * @return {Promise}      [description]
+ * @return {array} return array of tellers
  */
 export const getTellersPerZone = async (zone) => {
   const dtrContractStorageInstance = await getContractStorageInstance();
@@ -57,7 +58,7 @@ export const getTellersPerZone = async (zone) => {
 
 /**
  * Get All tellers on the map
- * @return {Promise}
+ * @return {array} return array of tellers
  */
 export const getAllTellers = async () => {
   const dtrContractStorageInstance = await getContractStorageInstance();

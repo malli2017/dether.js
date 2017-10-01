@@ -1,14 +1,122 @@
 window.esdocSearchIndex = [
   [
+    "dethergateway/src/constants/appconstants.js~dether_contract",
+    "variable/index.html#static-variable-DETHER_CONTRACT",
+    "<span>DETHER_CONTRACT</span> <span class=\"search-result-import-path\">dethergateway/src/constants/appConstants.js</span>",
+    "variable"
+  ],
+  [
+    "dethergateway/src/constants/appconstants.js~gas_price",
+    "variable/index.html#static-variable-GAS_PRICE",
+    "<span>GAS_PRICE</span> <span class=\"search-result-import-path\">dethergateway/src/constants/appConstants.js</span>",
+    "variable"
+  ],
+  [
+    "dethergateway/src/constants/appconstants.js~provider_url",
+    "variable/index.html#static-variable-PROVIDER_URL",
+    "<span>PROVIDER_URL</span> <span class=\"search-result-import-path\">dethergateway/src/constants/appConstants.js</span>",
+    "variable"
+  ],
+  [
+    "dethergateway/src/constants/appconstants.js~utilityweb3",
+    "variable/index.html#static-variable-UTILITYWEB3",
+    "<span>UTILITYWEB3</span> <span class=\"search-result-import-path\">dethergateway/src/constants/appConstants.js</span>",
+    "variable"
+  ],
+  [
     "dethergateway/src/utils/add0x.js~add0x",
     "function/index.html#static-function-add0x",
     "<span>add0x</span> <span class=\"search-result-import-path\">dethergateway/src/utils/add0x.js</span>",
     "function"
   ],
   [
+    "dethergateway/src/utils/decodekeystore.js~decodekeystore",
+    "function/index.html#static-function-decodeKeystore",
+    "<span>decodeKeystore</span> <span class=\"search-result-import-path\">dethergateway/src/utils/decodeKeystore.js</span>",
+    "function"
+  ],
+  [
+    "dethergateway/src/gettellers.js~dtrgetteller",
+    "function/index.html#static-function-dtrGetTeller",
+    "<span>dtrGetTeller</span> <span class=\"search-result-import-path\">dethergateway/src/getTellers.js</span>",
+    "function"
+  ],
+  [
+    "dethergateway/src/dtrgettellerbalances.js~dtrgettellerbalances",
+    "function/index.html#static-function-dtrGetTellerbalances",
+    "<span>dtrGetTellerbalances</span> <span class=\"search-result-import-path\">dethergateway/src/dtrGetTellerbalances.js</span>",
+    "function"
+  ],
+  [
+    "dethergateway/src/addsellpoint.js~dtrregisterpoint",
+    "function/index.html#static-function-dtrRegisterPoint",
+    "<span>dtrRegisterPoint</span> <span class=\"search-result-import-path\">dethergateway/src/addSellPoint.js</span>",
+    "function"
+  ],
+  [
+    "dethergateway/src/dtrsendcoin.js~dtrsendcoin",
+    "function/index.html#static-function-dtrSendCoin",
+    "<span>dtrSendCoin</span> <span class=\"search-result-import-path\">dethergateway/src/dtrSendCoin.js</span>",
+    "function"
+  ],
+  [
+    "dethergateway/src/gettellers.js~getalltellers",
+    "function/index.html#static-function-getAllTellers",
+    "<span>getAllTellers</span> <span class=\"search-result-import-path\">dethergateway/src/getTellers.js</span>",
+    "function"
+  ],
+  [
+    "dethergateway/src/getalltsx.js~getalltsx",
+    "function/index.html#static-function-getAllTsx",
+    "<span>getAllTsx</span> <span class=\"search-result-import-path\">dethergateway/src/getAllTsx.js</span>",
+    "function"
+  ],
+  [
+    "dethergateway/src/constants/appconstants.js~getcontractinstance",
+    "function/index.html#static-function-getContractInstance",
+    "<span>getContractInstance</span> <span class=\"search-result-import-path\">dethergateway/src/constants/appConstants.js</span>",
+    "function"
+  ],
+  [
+    "dethergateway/src/constants/appconstants.js~getcontractstorageinstance",
+    "function/index.html#static-function-getContractStorageInstance",
+    "<span>getContractStorageInstance</span> <span class=\"search-result-import-path\">dethergateway/src/constants/appConstants.js</span>",
+    "function"
+  ],
+  [
+    "dethergateway/src/getethbalance.js~getethbalance",
+    "function/index.html#static-function-getEthBalance",
+    "<span>getEthBalance</span> <span class=\"search-result-import-path\">dethergateway/src/getEthBalance.js</span>",
+    "function"
+  ],
+  [
     "dethergateway/src/utils/contractinstance.js~getsignedcontract",
     "function/index.html#static-function-getSignedContract",
     "<span>getSignedContract</span> <span class=\"search-result-import-path\">dethergateway/src/utils/contractInstance.js</span>",
+    "function"
+  ],
+  [
+    "dethergateway/src/utils/contractinstance.js~getsignedweb3",
+    "function/index.html#static-function-getSignedWeb3",
+    "<span>getSignedWeb3</span> <span class=\"search-result-import-path\">dethergateway/src/utils/contractInstance.js</span>",
+    "function"
+  ],
+  [
+    "dethergateway/src/gettellers.js~gettellersperzone",
+    "function/index.html#static-function-getTellersPerZone",
+    "<span>getTellersPerZone</span> <span class=\"search-result-import-path\">dethergateway/src/getTellers.js</span>",
+    "function"
+  ],
+  [
+    "dethergateway/src/sendeth.js~sendether",
+    "function/index.html#static-function-sendEther",
+    "<span>sendEther</span> <span class=\"search-result-import-path\">dethergateway/src/sendEth.js</span>",
+    "function"
+  ],
+  [
+    "dethergateway/src/deletesellpoint.js~withdrawall",
+    "function/index.html#static-function-withdrawAll",
+    "<span>withdrawAll</span> <span class=\"search-result-import-path\">dethergateway/src/deleteSellPoint.js</span>",
     "function"
   ],
   [
@@ -294,15 +402,63 @@ window.esdocSearchIndex = [
     "external"
   ],
   [
+    "src/addsellpoint.js",
+    "file/src/addSellPoint.js.html",
+    "src/addSellPoint.js",
+    "file"
+  ],
+  [
     "src/constants/appconstants.js",
     "file/src/constants/appConstants.js.html",
     "src/constants/appConstants.js",
     "file"
   ],
   [
+    "src/deletesellpoint.js",
+    "file/src/deleteSellPoint.js.html",
+    "src/deleteSellPoint.js",
+    "file"
+  ],
+  [
+    "src/dtrgettellerbalances.js",
+    "file/src/dtrGetTellerbalances.js.html",
+    "src/dtrGetTellerbalances.js",
+    "file"
+  ],
+  [
+    "src/dtrsendcoin.js",
+    "file/src/dtrSendCoin.js.html",
+    "src/dtrSendCoin.js",
+    "file"
+  ],
+  [
+    "src/getalltsx.js",
+    "file/src/getAllTsx.js.html",
+    "src/getAllTsx.js",
+    "file"
+  ],
+  [
+    "src/getethbalance.js",
+    "file/src/getEthBalance.js.html",
+    "src/getEthBalance.js",
+    "file"
+  ],
+  [
+    "src/gettellers.js",
+    "file/src/getTellers.js.html",
+    "src/getTellers.js",
+    "file"
+  ],
+  [
     "src/index.js",
     "file/src/index.js.html",
     "src/index.js",
+    "file"
+  ],
+  [
+    "src/sendeth.js",
+    "file/src/sendEth.js.html",
+    "src/sendEth.js",
     "file"
   ],
   [
@@ -315,6 +471,12 @@ window.esdocSearchIndex = [
     "src/utils/contractinstance.js",
     "file/src/utils/contractInstance.js.html",
     "src/utils/contractInstance.js",
+    "file"
+  ],
+  [
+    "src/utils/decodekeystore.js",
+    "file/src/utils/decodeKeystore.js.html",
+    "src/utils/decodeKeystore.js",
     "file"
   ]
 ]

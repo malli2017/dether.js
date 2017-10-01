@@ -8,7 +8,7 @@ import { getSignedContract } from './utils/contractInstance';
 /**
  * Delete sell point, this function withdraw automatically balance escrow to owner
  * @param  {object}  keystore deserialize keystore
- * @param  {[type]}  password
+ * @param  {string}  password
  * @return {Promise}
  */
 const withdrawAll = async (keystore, password) => {

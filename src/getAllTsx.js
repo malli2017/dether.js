@@ -7,7 +7,7 @@ import { UTILITYWEB3 } from './constants/appConstants';
 const etherScanKey = process.env.DETHER_ETHERSCAN_KEY;
 
 /**
- * [getAllTsx description]
+ * Get all tsx
  * @param  {string} address ethereum address
  * @param  {number} network network ethereum
  * @return {array} all tsx

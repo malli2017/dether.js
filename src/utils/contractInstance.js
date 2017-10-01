@@ -24,6 +24,13 @@ export const getSignedContract = (privateKey, address) => {
   return dtrContract.deployed();
 };
 
+/**
+ * get signed web3
+ * @param
+ * @param.privateKey  {string} privateKey
+ * @param.address  {string} address
+ * @return {object}
+ */
 export const getSignedWeb3 = ({ privateKey, address }) => {
   if (!privateKey || !address) return null;
   const provider = new SignerProvider(providerUrl, {

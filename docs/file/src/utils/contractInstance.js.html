@@ -29,14 +29,33 @@
 <nav class="navigation" data-ice="nav"><div>
   <ul>
     
-  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utils">utils</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-add0x">add0x</a></span></span></li>
+  <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-dtrRegisterPoint">dtrRegisterPoint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-withdrawAll">withdrawAll</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-dtrGetTellerbalances">dtrGetTellerbalances</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-dtrSendCoin">dtrSendCoin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getAllTsx">getAllTsx</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getEthBalance">getEthBalance</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-dtrGetTeller">dtrGetTeller</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getAllTellers">getAllTellers</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getTellersPerZone">getTellersPerZone</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-sendEther">sendEther</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#constants">constants</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getContractInstance">getContractInstance</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getContractStorageInstance">getContractStorageInstance</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DETHER_CONTRACT">DETHER_CONTRACT</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GAS_PRICE">GAS_PRICE</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-PROVIDER_URL">PROVIDER_URL</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UTILITYWEB3">UTILITYWEB3</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utils">utils</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-add0x">add0x</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getSignedContract">getSignedContract</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getSignedWeb3">getSignedWeb3</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-decodeKeystore">decodeKeystore</a></span></span></li>
 </ul>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/utils/contractInstance.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import contract from &apos;truffle-contract&apos;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import Web3 from &apos;web3&apos;;
+import contract from &apos;truffle-contract&apos;;
 import DetherJson from &apos;dethercontract/contracts/DetherInterface.json&apos;;
 import SignerProvider from &apos;ethjs-provider-signer&apos;;
 import { sign } from &apos;ethjs-signer&apos;;
@@ -45,8 +64,12 @@ import add0x from &apos;./add0x&apos;;
 
 const providerUrl = process.env.DETHER_ETHEREUM_PROVIDER;
 
-
-export const getSignedContract = async ({ privateKey, address }) =&gt; {
+/**
+ * @param {string} privateKey ethereum private key
+ * @param {string} address ethereum address
+ * @return {object} return dtrContract instance
+ */
+export const getSignedContract = (privateKey, address) =&gt; {
   if (!privateKey || !address) return null;
   const dtrContract = contract(DetherJson);
   const provider = new SignerProvider(providerUrl, {
@@ -55,6 +78,22 @@ export const getSignedContract = async ({ privateKey, address }) =&gt; {
   });
   dtrContract.setProvider(provider);
   return dtrContract.deployed();
+};
+
+/**
+ * get signed web3
+ * @param
+ * @param.privateKey  {string} privateKey
+ * @param.address  {string} address
+ * @return {object}
+ */
+export const getSignedWeb3 = ({ privateKey, address }) =&gt; {
+  if (!privateKey || !address) return null;
+  const provider = new SignerProvider(providerUrl, {
+    signTransaction: (rawTx, cb) =&gt; cb(null, sign(rawTx, add0x(privateKey))),
+    accounts: cb =&gt; cb(null, address),
+  });
+  return new Web3(provider);
 };
 </code></pre>
 
