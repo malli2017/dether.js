@@ -19,5 +19,6 @@ export const password = 'Dether@1';
 export const createKeystore = async () => {
   const extraEntropy = entropy.toString();
   const seed = await generateRandomSeed(extraEntropy);
+  console.log('seed: ', seed);
   return createVault({ password, seedPhrase: seed, hdPathString: "m/44'/60'/0'/0" });
 };

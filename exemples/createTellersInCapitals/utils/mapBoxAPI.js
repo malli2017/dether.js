@@ -17,7 +17,6 @@ export const getCountryId = latlng =>
       limit: 1,
       types: 'country',
     };
-
     client.geocodeReverse(location, options, (err, data) => {
       if (err) {
         rej(err);

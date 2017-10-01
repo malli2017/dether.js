@@ -1,200 +1,1409 @@
-Afghanistan	Kabul	34.28N	69.11E
-Albania	Tirane	41.18N	19.49E
-Algeria	Algiers	36.42N	03.08E
-American Samoa	Pago Pago	14.16S	170.43W
-Andorra	Andorra la Vella	42.31N	01.32E
-Angola	Luanda	08.50S	13.15E
-Antigua and Barbuda	West Indies	17.20N	61.48W
-Argentina	Buenos Aires	36.30S	60.00W
-Armenia	Yerevan	40.10N	44.31E
-Aruba	Oranjestad	12.32N	70.02W
-Australia	Canberra	35.15S	149.08E
-Austria	Vienna	48.12N	16.22E
-Azerbaijan	Baku	40.29N	49.56E
-Bahamas	Nassau	25.05N	77.20W
-Bahrain	Manama	26.10N	50.30E
-Bangladesh	Dhaka	23.43N	90.26E
-Barbados	Bridgetown	13.05N	59.30W
-Belarus	Minsk	53.52N	27.30E
-Belgium	Brussels	50.51N	04.21E
-Belize	Belmopan	17.18N	88.30W
-Benin	Porto Novo (constitutional) / Cotonou (seat of government)	06.23N	02.42E
-Bhutan	Thimphu	27.31N	89.45E
-Bolivia	La Paz (administrative) / Sucre (legislative)	16.20S	68.10W
-Bosnia and Herzegovina	Sarajevo	43.52N	18.26E
-Botswana	Gaborone	24.45S	25.57E
-Brazil	Brasilia	15.47S	47.55W
-British Virgin Islands	Road Town	18.27N	64.37W
-Brunei Darussalam	Bandar Seri Begawan	04.52N	115.00E
-Bulgaria	Sofia	42.45N	23.20E
-Burkina Faso	Ouagadougou	12.15N	01.30W
-Burundi	Bujumbura	03.16S	29.18E
-Cambodia	Phnom Penh	11.33N	104.55E
-Cameroon	Yaounde	03.50N	11.35E
-Canada	Ottawa	45.27N	75.42W
-Cape Verde	Praia	15.02N	23.34W
-Cayman Islands	George Town	19.20N	81.24W
-Central African Republic	Bangui	04.23N	18.35E
-Chad	N'Djamena	12.10N	14.59E
-Chile	Santiago	33.24S	70.40W
-China	Beijing	39.55N	116.20E
-Colombia	Bogota	04.34N	74.00W
-Comros	Moroni	11.40S	43.16E
-Congo	Brazzaville	04.09S	15.12E
-Costa Rica	San Jose	09.55N	84.02W
-Cote d'Ivoire	Yamoussoukro	06.49N	05.17W
-Croatia	Zagreb	45.50N	15.58E
-Cuba	Havana	23.08N	82.22W
-Cyprus	Nicosia	35.10N	33.25E
-Czech Republic	Prague	50.05N	14.22E
-Democratic Republic of the Congo	Kinshasa	04.20S	15.15E
-Denmark	Copenhagen	55.41N	12.34E
-Djibouti	Djibouti	11.08N	42.20E
-Dominica	Roseau	15.20N	61.24W
-Dominica Republic	Santo Domingo	18.30N	69.59W
-East Timor	Dili	08.29S	125.34E
-Ecuador	Quito	00.15S	78.35W
-Egypt	Cairo	30.01N	31.14E
-El Salvador	San Salvador	13.40N	89.10W
-Equatorial Guinea	Malabo	03.45N	08.50E
-Eritrea	Asmara	15.19N	38.55E
-Estonia	Tallinn	59.22N	24.48E
-Ethiopia	Addis Ababa	09.02N	38.42E
-Falkland Islands (Malvinas)	Stanley	51.40S	59.51W
-Faroe Islands	Torshavn	62.05N	06.56W
-Fiji	Suva	18.06S	178.30E
-Finland	Helsinki	60.15N	25.03E
-France	Paris	48.50N	02.20E
-French Guiana	Cayenne	05.05N	52.18W
-French Polynesia	Papeete	17.32S	149.34W
-Gabon	Libreville	00.25N	09.26E
-Gambia	Banjul	13.28N	16.40W
-Georgia	T'bilisi	41.43N	44.50E
-Germany	Berlin	52.30N	13.25E
-Ghana	Accra	05.35N	00.06W
-Greece	Athens	37.58N	23.46E
-Greenland	Nuuk	64.10N	51.35W
-Guadeloupe	Basse-Terre	16.00N	61.44W
-Guatemala	Guatemala	14.40N	90.22W
-Guernsey	St. Peter Port	49.26N	02.33W
-Guinea	Conakry	09.29N	13.49W
-Guinea-Bissau	Bissau	11.45N	15.45W
-Guyana	Georgetown	06.50N	58.12W
-Haiti	Port-au-Prince	18.40N	72.20W
-Heard Island and McDonald Islands	 	53.00S	74.00E
-Honduras	Tegucigalpa	14.05N	87.14W
-Hungary	Budapest	47.29N	19.05E
-Iceland	Reykjavik	64.10N	21.57W
-India	New Delhi	28.37N	77.13E
-Indonesia	Jakarta	06.09S	106.49E
-Iran (Islamic Republic of)	Tehran	35.44N	51.30E
-Iraq	Baghdad	33.20N	44.30E
-Ireland	Dublin	53.21N	06.15W
-Israel	Jerusalem	31.71N	35.10W
-Italy	Rome	41.54N	12.29E
-Jamaica	Kingston	18.00N	76.50W
-Jordan	Amman	31.57N	35.52E
-Kazakhstan	Astana	51.10N	71.30E
-Kenya	Nairobi	01.17S	36.48E
-Kiribati	Tarawa	01.30N	173.00E
-Kuwait	Kuwait	29.30N	48.00E
-Kyrgyzstan	Bishkek	42.54N	74.46E
-Lao People's Democratic Republic	Vientiane	17.58N	102.36E
-Latvia	Riga	56.53N	24.08E
-Lebanon	Beirut	33.53N	35.31E
-Lesotho	Maseru	29.18S	27.30E
-Liberia	Monrovia	06.18N	10.47W
-Libyan Arab Jamahiriya	Tripoli	32.49N	13.07E
-Liechtenstein	Vaduz	47.08N	09.31E
-Lithuania	Vilnius	54.38N	25.19E
-Luxembourg	Luxembourg	49.37N	06.09E
-Macao, China	Macau	22.12N	113.33E
-Madagascar	Antananarivo	18.55S	47.31E
-Macedonia (Former Yugoslav Republic)	Skopje	42.01N	21.26E
-Malawi	Lilongwe	14.00S	33.48E
-Malaysia	Kuala Lumpur	03.09N	101.41E
-Maldives	Male	04.00N	73.28E
-Mali	Bamako	12.34N	07.55W
-Malta	Valletta	35.54N	14.31E
-Martinique	Fort-de-France	14.36N	61.02W
-Mauritania	Nouakchott	20.10S	57.30E
-Mayotte	Mamoudzou	12.48S	45.14E
-Mexico	Mexico	19.20N	99.10W
-Micronesia (Federated States of)	Palikir	06.55N	158.09E
-Moldova, Republic of	Chisinau	47.02N	28.50E
-Mozambique	Maputo	25.58S	32.32E
-Myanmar	Yangon	16.45N	96.20E
-Namibia	Windhoek	22.35S	17.04E
-Nepal	Kathmandu	27.45N	85.20E
-Netherlands	Amsterdam / The Hague (seat of Government)	52.23N	04.54E
-Netherlands Antilles	Willemstad	12.05N	69.00W
-New Caledonia	Noumea	22.17S	166.30E
-New Zealand	Wellington	41.19S	174.46E
-Nicaragua	Managua	12.06N	86.20W
-Niger	Niamey	13.27N	02.06E
-Nigeria	Abuja	09.05N	07.32E
-Norfolk Island	Kingston	45.20S	168.43E
-North Korea	Pyongyang	39.09N	125.30E
-Northern Mariana Islands	Saipan	15.12N	145.45E
-Norway	Oslo	59.55N	10.45E
-Oman	Masqat	23.37N	58.36E
-Pakistan	Islamabad	33.40N	73.10E
-Palau	Koror	07.20N	134.28E
-Panama	Panama	09.00N	79.25W
-Papua New Guinea	Port Moresby	09.24S	147.08E
-Paraguay	Asuncion	25.10S	57.30W
-Peru	Lima	12.00S	77.00W
-Philippines	Manila	14.40N	121.03E
-Poland	Warsaw	52.13N	21.00E
-Portugal	Lisbon	38.42N	09.10W
-Puerto Rico	San Juan	18.28N	66.07W
-Qatar	Doha	25.15N	51.35E
-Republic of Korea	Seoul	37.31N	126.58E
-Romania	Bucuresti	44.27N	26.10E
-Russian Federation	Moskva	55.45N	37.35E
-Rawanda	Kigali	01.59S	30.04E
-Saint Kitts and Nevis	Basseterre	17.17N	62.43W
-Saint Lucia	Castries	14.02N	60.58W
-Saint Pierre and Miquelon	Saint-Pierre	46.46N	56.12W
-Saint Vincent and the Greenadines	Kingstown	13.10N	61.10W
-Samoa	Apia	13.50S	171.50W
-San Marino	San Marino	43.55N	12.30E
-Sao Tome and Principe	Sao Tome	00.10N	06.39E
-Saudi Arabia	Riyadh	24.41N	46.42E
-Senegal	Dakar	14.34N	17.29W
-Sierra Leone	Freetown	08.30N	13.17W
-Slovakia	Bratislava	48.10N	17.07E
-Slovenia	Ljubljana	46.04N	14.33E
-Solomon Islands	Honiara	09.27S	159.57E
-Somalia	Mogadishu	02.02N	45.25E
-South Africa	Pretoria (administrative) / Cape Town (legislative) / Bloemfontein (judicial)	25.44S	28.12E
-Spain	Madrid	40.25N	03.45W
-Sudan	Khartoum	15.31N	32.35E
-Suriname	Paramaribo	05.50N	55.10W
-Swaziland	Mbabane (administrative)	26.18S	31.06E
-Sweden	Stockholm	59.20N	18.03E
-Switzerland	Bern	46.57N	07.28E
-Syrian Arab Republic	Damascus	33.30N	36.18E
-Tajikistan	Dushanbe	38.33N	68.48E
-Thailand	Bangkok	13.45N	100.35E
-Togo	Lome	06.09N	01.20E
-Tonga	Nuku'alofa	21.10S	174.00W
-Tunisia	Tunis	36.50N	10.11E
-Turkey	Ankara	39.57N	32.54E
-Turkmenistan	Ashgabat	38.00N	57.50E
-Tuvalu	Funafuti	08.31S	179.13E
-Uganda	Kampala	00.20N	32.30E
-Ukraine	Kiev (Russia)	50.30N	30.28E
-United Arab Emirates	Abu Dhabi	24.28N	54.22E
-United Kingdom of Great Britain and Northern Ireland	London	51.36N	00.05W
-United Republic of Tanzania	Dodoma	06.08S	35.45E
-United States of America	Washington DC	39.91N	77.02W
-United States of Virgin Islands	Charlotte Amalie	18.21N	64.56W
-Uruguay	Montevideo	34.50S	56.11W
-Uzbekistan	Tashkent	41.20N	69.10E
-Vanuatu	Port-Vila	17.45S	168.18E
-Venezuela	Caracas	10.30N	66.55W
-Viet Nam	Hanoi	21.05N	105.55E
-Yugoslavia	Belgrade	44.50N	20.37E
-Zambia	Lusaka	15.28S	28.16E
-Zimbabwe	Harare	17.43S	31.02E
+const data = [
+  {
+    capital: 'China Beijing',
+    lat: 39.55,
+    lng: 116.2,
+    rates: 500,
+    avatar: 3,
+    currency: 0,
+    telegram: 'ishak_dether',
+    amount: 0.026,
+    name: 'Ishak',
+    zone: 'country.3122',
+  },
+];
+//   {
+//     capital: 'Bulgaria Sofia',
+//     lat: 42.45,
+//     lng: 23.2,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.2109',
+//   },
+//   {
+//     capital: 'Ethiopia Addis Ababa',
+//     lat: 9.02,
+//     lng: 38.42,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.326',
+//   },
+//   {
+//     capital: 'Burundi Bujumbura',
+//     lat: -3.16,
+//     lng: 29.18,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3116',
+//   },
+//   {
+//     capital: 'Andorra Andorra la Vella',
+//     lat: 42.31,
+//     lng: 1.32,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3110',
+//   },
+//   {
+//     capital: 'France Paris',
+//     lat: 48.5,
+//     lng: 2.2,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3148',
+//   },
+//   {
+//     capital: 'Democratic Republic of the Congo Kinshasa',
+//     lat: -4.2,
+//     lng: 15.15,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.382',
+//   },
+//   {
+//     capital: 'Austria Vienna',
+//     lat: 48.12,
+//     lng: 16.22,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.352',
+//   },
+//   {
+//     capital: 'Algeria Algiers',
+//     lat: 36.42,
+//     lng: 3.08,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3114',
+//   },
+//   {
+//     capital: 'Czech Republic Prague',
+//     lat: 50.05,
+//     lng: 14.22,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3172',
+//   },
+//   {
+//     capital: 'Denmark Copenhagen',
+//     lat: 55.41,
+//     lng: 12.34,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3180',
+//   },
+//   {
+//     capital: 'Kazakhstan Astana',
+//     lat: 51.1,
+//     lng: 71.3,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.349',
+//   },
+//   {
+//     capital: 'Croatia Zagreb',
+//     lat: 45.5,
+//     lng: 15.58,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.362',
+//   },
+//   {
+//     capital: 'Azerbaijan Baku',
+//     lat: 40.29,
+//     lng: 49.56,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.328',
+//   },
+//   {
+//     capital: 'Lao People s Democratic Republic Vientiane',
+//     lat: 17.58,
+//     lng: 102.3,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.375',
+//   },
+//   {
+//     capital: 'Hungary Budapest',
+//     lat: 47.29,
+//     lng: 19.05,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.384',
+//   },
+//   {
+//     capital: 'Bahrain Manama',
+//     lat: 26.1,
+//     lng: 50.3,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3166',
+//   },
+//   {
+//     capital: 'Georgia T bilisi',
+//     lat: 41.43,
+//     lng: 44.5,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3159',
+//   },
+//   {
+//     capital: 'Indonesia Jakarta',
+//     lat: -6.09,
+//     lng: 106.4,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.368',
+//   },
+//   {
+//     capital: 'Cambodia Phnom Penh',
+//     lat: 11.33,
+//     lng: 104.5,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3120',
+//   },
+//   {
+//     capital: 'Egypt Cairo',
+//     lat: 30.01,
+//     lng: 31.14,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3151',
+//   },
+//   {
+//     capital: 'Estonia Tallinn',
+//     lat: 59.22,
+//     lng: 24.48,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3126',
+//   },
+//   {
+//     capital: 'Central African Republic Bangui',
+//     lat: 4.23,
+//     lng: 18.35,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.383',
+//   },
+//   {
+//     capital: 'Bangladesh Dhaka',
+//     lat: 23.43,
+//     lng: 90.26,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.320',
+//   },
+//   {
+//     capital: 'Malawi Lilongwe',
+//     lat: -14,
+//     lng: 33.48,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3109',
+//   },
+//   {
+//     capital: 'Kuwait Kuwait',
+//     lat: 29.3,
+//     lng: 48,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3140',
+//   },
+//   {
+//     capital: 'Iraq Baghdad',
+//     lat: 33.2,
+//     lng: 44.3,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.399',
+//   },
+//   {
+//     capital: 'Armenia Yerevan',
+//     lat: 40.1,
+//     lng: 44.31,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.374',
+//   },
+//   {
+//     capital: 'India New Delhi',
+//     lat: 28.37,
+//     lng: 77.13,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3146',
+//   },
+//   {
+//     capital: 'Moldova, Republic of Chisinau',
+//     lat: 47.02,
+//     lng: 28.5,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.295',
+//   },
+//   {
+//     capital: 'Fiji Suva',
+//     lat: -18.06,
+//     lng: 178.3,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3131',
+//   },
+//   {
+//     capital: 'Niger Niamey',
+//     lat: 13.27,
+//     lng: 2.06,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.21394',
+//   },
+//   {
+//     capital: 'Latvia Riga',
+//     lat: 56.53,
+//     lng: 24.08,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.2944',
+//   },
+//   {
+//     capital: 'Brunei Darussalam Bandar Seri Begawan',
+//     lat: 4.52,
+//     lng: 115,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3153',
+//   },
+//   {
+//     capital: 'Lebanon Beirut',
+//     lat: 33.53,
+//     lng: 35.31,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.22590',
+//   },
+//   {
+//     capital: 'Kyrgyzstan Bishkek',
+//     lat: 42.54,
+//     lng: 74.46,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.367',
+//   },
+//   {
+//     capital: 'Iran (Islamic Republic of) Tehran',
+//     lat: 35.44,
+//     lng: 51.3,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.335',
+//   },
+//   {
+//     capital: 'Libyan Arab Jamahiriya Tripoli',
+//     lat: 32.49,
+//     lng: 13.07,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.22603',
+//   },
+//   {
+//     capital: 'New Zealand Wellington',
+//     lat: -41.19,
+//     lng: 174.4,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.379',
+//   },
+//   {
+//     capital: 'Luxembourg Luxembourg',
+//     lat: 49.37,
+//     lng: 6.09,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3148',
+//   },
+//   {
+//     capital: 'Lesotho Maseru',
+//     lat: -29.18,
+//     lng: 27.3,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.387',
+//   },
+//   {
+//     capital: 'Macao, China Macau',
+//     lat: 22.12,
+//     lng: 113.3,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3122',
+//   },
+//   {
+//     capital: 'Gabon Libreville',
+//     lat: 0.25,
+//     lng: 9.26,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3177',
+//   },
+//   {
+//     capital: 'Kiribati Tarawa',
+//     lat: 1.3,
+//     lng: 173,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.343',
+//   },
+//   {
+//     capital: 'Equatorial Guinea Malabo',
+//     lat: 3.45,
+//     lng: 8.5,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3107',
+//   },
+//   {
+//     capital: 'Greece Athens',
+//     lat: 37.58,
+//     lng: 23.46,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3125',
+//   },
+//   {
+//     capital: 'Kenya Nairobi',
+//     lat: -1.17,
+//     lng: 36.48,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.33',
+//   },
+//   {
+//     capital: 'Finland Helsinki',
+//     lat: 60.15,
+//     lng: 25.03,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.21596',
+//   },
+//   {
+//     capital: 'Oman Masqat',
+//     lat: 23.37,
+//     lng: 58.36,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3129',
+//   },
+//   {
+//     capital: 'Philippines Manila',
+//     lat: 14.4,
+//     lng: 121,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.323',
+//   },
+//   {
+//     capital: 'Nepal Kathmandu',
+//     lat: 27.45,
+//     lng: 85.2,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3132',
+//   },
+//   {
+//     capital: 'Eritrea Asmara',
+//     lat: 15.19,
+//     lng: 38.55,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3117',
+//   },
+//   {
+//     capital: 'Netherlands Amsterdam / The Hague (seat of Government)',
+//     lat: 52.23,
+//     lng: 4.54,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3101',
+//   },
+//   {
+//     capital: 'Norfolk Island Kingston',
+//     lat: -45.2,
+//     lng: 168.4,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.379',
+//   },
+//   {
+//     capital: 'Sudan Khartoum',
+//     lat: 15.31,
+//     lng: 32.35,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.385',
+//   },
+//   {
+//     capital: 'Macedonia (Former Yugoslav Republic) Skopje',
+//     lat: 42.01,
+//     lng: 21.26,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.236',
+//   },
+//   {
+//     capital: 'Albania Tirane',
+//     lat: 41.18,
+//     lng: 19.49,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.388',
+//   },
+//   {
+//     capital: 'Belgium Brussels',
+//     lat: 50.51,
+//     lng: 4.21,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.21681',
+//   },
+//   {
+//     capital: 'Norway Oslo',
+//     lat: 59.55,
+//     lng: 10.45,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.31102',
+//   },
+//   {
+//     capital: 'Lithuania Vilnius',
+//     lat: 54.38,
+//     lng: 25.19,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.2380',
+//   },
+//   {
+//     capital: 'Sweden Stockholm',
+//     lat: 59.2,
+//     lng: 18.03,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.21595',
+//   },
+//   {
+//     capital: 'Madagascar Antananarivo',
+//     lat: -18.55,
+//     lng: 47.31,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.313',
+//   },
+//   {
+//     capital: 'Poland Warsaw',
+//     lat: 52.13,
+//     lng: 21,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.340',
+//   },
+//   {
+//     capital: 'Germany Berlin',
+//     lat: 52.3,
+//     lng: 13.25,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3135',
+//   },
+//   {
+//     capital: 'North Korea Pyongyang',
+//     lat: 39.09,
+//     lng: 125.3,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.336',
+//   },
+//   {
+//     capital: 'Sao Tome and Principe Sao Tome',
+//     lat: 0.1,
+//     lng: 6.39,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3121',
+//   },
+//   {
+//     capital: 'Switzerland Bern',
+//     lat: 46.57,
+//     lng: 7.28,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3173',
+//   },
+//   {
+//     capital: 'Togo Lome',
+//     lat: 6.09,
+//     lng: 1.2,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3115',
+//   },
+//   {
+//     capital: 'Nigeria Abuja',
+//     lat: 9.05,
+//     lng: 7.32,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.360',
+//   },
+//   {
+//     capital: 'New Caledonia Noumea',
+//     lat: -22.17,
+//     lng: 166.3,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3106',
+//   },
+//   {
+//     capital: 'Tunisia Tunis',
+//     lat: 36.5,
+//     lng: 10.11,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.396',
+//   },
+//   {
+//     capital: 'Liechtenstein Vaduz',
+//     lat: 47.08,
+//     lng: 9.31,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3173',
+//   },
+//   {
+//     capital: 'Turkey Ankara',
+//     lat: 39.57,
+//     lng: 32.54,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.329',
+//   },
+//   {
+//     capital: 'Palau Koror',
+//     lat: 7.2,
+//     lng: 134.2,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.317',
+//   },
+//   {
+//     capital: 'Saudi Arabia Riyadh',
+//     lat: 24.41,
+//     lng: 46.42,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.319',
+//   },
+//   {
+//     capital: 'Papua New Guinea Port Moresby',
+//     lat: -9.24,
+//     lng: 147,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.372',
+//   },
+//   {
+//     capital: 'Ukraine Kiev (Russia)',
+//     lat: 50.3,
+//     lng: 30.28,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3130',
+//   },
+//   {
+//     capital: 'Malaysia Kuala Lumpur',
+//     lat: 3.09,
+//     lng: 101.4,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3153',
+//   },
+//   {
+//     capital: 'Zambia Lusaka',
+//     lat: -15.28,
+//     lng: 28.16,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.366',
+//   },
+//   {
+//     capital: 'United Republic of Tanzania Dodoma',
+//     lat: -6.08,
+//     lng: 35.45,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.392',
+//   },
+//   {
+//     capital: 'Slovakia Bratislava',
+//     lat: 48.1,
+//     lng: 17.07,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.352',
+//   },
+//   {
+//     capital: 'Somalia Mogadishu',
+//     lat: 2.02,
+//     lng: 45.25,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3174',
+//   },
+//   {
+//     capital: 'Myanmar Yangon',
+//     lat: 16.45,
+//     lng: 96.2,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3142',
+//   },
+//   {
+//     capital: 'Turkmenistan Ashgabat',
+//     lat: 38,
+//     lng: 57.5,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.327',
+//   },
+//   {
+//     capital: 'South Africa Pretoria (administrative) / Cape Town (legislative) / Bloemfontein (judicial)',
+//     lat: -25.44,
+//     lng: 28.12,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.387',
+//   },
+//   {
+//     capital: 'Republic of Korea Seoul',
+//     lat: 37.31,
+//     lng: 126.5,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3102',
+//   },
+//   {
+//     capital: 'San Marino San Marino',
+//     lat: 43.55,
+//     lng: 12.3,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.333',
+//   },
+//   {
+//     capital: 'Uganda Kampala',
+//     lat: 0.2,
+//     lng: 32.3,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.2383',
+//   },
+//   {
+//     capital: 'Namibia Windhoek',
+//     lat: -22.35,
+//     lng: 17.04,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.32',
+//   },
+//   {
+//     capital: 'Yugoslavia Belgrade',
+//     lat: 44.5,
+//     lng: 20.37,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.341',
+//   },
+//   {
+//     capital: 'Syrian Arab Republic Damascus',
+//     lat: 33.3,
+//     lng: 36.18,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.2109253',
+//   },
+//   {
+//     capital: 'Zimbabwe Harare',
+//     lat: -17.43,
+//     lng: 31.02,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.394',
+//   },
+//   {
+//     capital: 'Tajikistan Dushanbe',
+//     lat: 38.33,
+//     lng: 68.48,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3164',
+//   },
+//   {
+//     capital: 'Uzbekistan Tashkent',
+//     lat: 41.2,
+//     lng: 69.1,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.351',
+//   },
+//   {
+//     capital: 'Rawanda Kigali',
+//     lat: -1.59,
+//     lng: 30.04,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.22347',
+//   },
+//   {
+//     capital: 'Russian Federation Moskva',
+//     lat: 55.45,
+//     lng: 37.35,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.330',
+//   },
+//   {
+//     capital: 'Romania Bucuresti',
+//     lat: 44.27,
+//     lng: 26.1,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.318',
+//   },
+//   {
+//     capital: 'Jordan Amman',
+//     lat: 31.57,
+//     lng: 35.52,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3134',
+//   },
+//   {
+//     capital: 'Australia Canberra',
+//     lat: -35.15,
+//     lng: 149,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3104',
+//   },
+//   {
+//     capital: 'Congo Brazzaville',
+//     lat: -4.09,
+//     lng: 15.12,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.382',
+//   },
+//   {
+//     capital: 'Botswana Gaborone',
+//     lat: -24.45,
+//     lng: 25.57,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3161',
+//   },
+//   {
+//     capital: 'Belarus Minsk',
+//     lat: 53.52,
+//     lng: 27.3,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.386',
+//   },
+//   {
+//     capital: 'Afghanistan Kabul',
+//     lat: 34.28,
+//     lng: 69.11,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3133',
+//   },
+//   {
+//     capital: 'Bhutan Thimphu',
+//     lat: 27.31,
+//     lng: 89.45,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.2599',
+//   },
+//   {
+//     capital: 'Bosnia and Herzegovina Sarajevo',
+//     lat: 43.52,
+//     lng: 18.26,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.390',
+//   },
+//   {
+//     capital: 'Cameroon Yaounde',
+//     lat: 3.5,
+//     lng: 11.35,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.397',
+//   },
+//   {
+//     capital: 'Cyprus Nicosia',
+//     lat: 35.1,
+//     lng: 33.25,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3168',
+//   },
+//   {
+//     capital: 'Viet Nam Hanoi',
+//     lat: 21.05,
+//     lng: 105.5,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3155',
+//   },
+//   {
+//     capital: 'Djibouti Djibouti',
+//     lat: 11.08,
+//     lng: 42.2,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.22515',
+//   },
+//   {
+//     capital: 'Thailand Bangkok',
+//     lat: 13.45,
+//     lng: 100.3,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.375',
+//   },
+//   {
+//     capital: 'Slovenia Ljubljana',
+//     lat: 46.04,
+//     lng: 14.33,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3170',
+//   },
+//   {
+//     capital: 'Swaziland Mbabane (administrative)',
+//     lat: -26.18,
+//     lng: 31.06,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.22599',
+//   },
+//   {
+//     capital: 'United Arab Emirates Abu Dhabi',
+//     lat: 24.28,
+//     lng: 54.22,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3118',
+//   },
+//   {
+//     capital: 'Qatar Doha',
+//     lat: 25.15,
+//     lng: 51.35,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3171',
+//   },
+//   {
+//     capital: 'Pakistan Islamabad',
+//     lat: 33.4,
+//     lng: 73.1,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3141',
+//   },
+//   {
+//     capital: 'Chad N Djamena',
+//     lat: 12.1,
+//     lng: 14.59,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.360',
+//   },
+//   {
+//     capital: 'Mozambique Maputo',
+//     lat: -25.58,
+//     lng: 32.32,
+//     rates: 500,
+//     avatar: 3,
+//     currency: 0,
+//     telegram: 'ishak_dether',
+//     amount: 0.03,
+//     name: 'Ishak',
+//     zone: 'country.3112',
+//   },
+// ];
+
+export default data;

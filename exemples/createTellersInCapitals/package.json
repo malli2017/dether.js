@@ -10,8 +10,10 @@
   "author": "Dether TEAM",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.16.2",
     "babel-cli": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
+    "fs": "0.0.1-security",
     "mapbox": "^1.0.0-beta9"
   }
 }

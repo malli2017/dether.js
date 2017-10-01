@@ -35,8 +35,7 @@ const dtrRegisterPoint = async (
   password,
 ) =>
   new Promise(async (res, rej) => {
-    if (!lat || !lng || !zone || !rates || !avatar || !currency
-      || !telegram || !amount || !name || !keystore || !password) {
+    if (!lat || !lng || !zone || !telegram || !amount || !name || !keystore || !password) {
         return rej(new TypeError('Invalid arguments'));
       }
     if ((lat < -90 || lat > 90) || (lng < -180 || lng > 180)) {
@@ -47,17 +46,24 @@ const dtrRegisterPoint = async (
     if (amount < 0.0025) return rej(new TypeError('Invalid amount'));
     if (name.length < 3 || name.lenght > 32) return rej(new TypeError('Invalid name'));
 
+    console.log('1');
     const keys = await decodeKeystore(keystore, password);
-    const dtrContractInstance = await getSignedContract(keys);
+    console.log('2');
+
+    const dtrContractInstance = await getSignedContract(keys.privateKey, keys.address);
+    console.log('3');
 
     let tsxAmount = parseInt(UTILITYWEB3.toWei(amount, 'ether'), 10);
-    const balance = await UTILITYWEB3.eth.getBalance(keys.address);
+    console.log(keys);
+    // const balance = await UTILITYWEB3.eth.getBalance(keys.address);
+    console.log('4');
 
-    if (balance.toNumber() < (tsxAmount + (GAS_PRICE * 650000))) {
-      // add if tsxAmount < 0.0025 reject
-      tsxAmount = balance.toNumber() - (GAS_PRICE * 650000);
-    }
-
+    // if (balance.toNumber() < (tsxAmount + (GAS_PRICE * 650000))) {
+    //   // add if tsxAmount < 0.0025 reject
+    //   tsxAmount = balance.toNumber() - (GAS_PRICE * 650000);
+    // }
+    console.log('before call smart contract');
+    console.log(dtrContractInstance);
     const result = await dtrContractInstance.registerPoint(
       lat,
       lng,
@@ -74,6 +80,7 @@ const dtrRegisterPoint = async (
         GAS_PRICE: 25000000000,
       },
     );
+    console.log('5');
     return res({
         from: add0x(keys.address),
         to: DETHER_CONTRACT.address,
