@@ -16,12 +16,10 @@ const providerUrl = process.env.DETHER_ETHEREUM_PROVIDER;
 export const getSignedContract = (privateKey, address) => {
   if (!privateKey || !address) return null;
   const dtrContract = contract(DetherJson);
-  console.log('dtrContract', dtrContract);
-  const provider = new SignerProvider(providerUrl, {
+  const provider = new SignerProvider('https://kovan.infura.io/v604Wu8pXGoPC41ARh0B', {
     signTransaction: (rawTx, cb) => cb(null, sign(rawTx, add0x(privateKey))),
     accounts: cb => cb(null, address),
   });
-  console.log('provider', provider);
   dtrContract.setProvider(provider);
   return dtrContract.deployed();
 };

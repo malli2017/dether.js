@@ -34,7 +34,7 @@ ajv-keywords@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/ajv-keywords/-/ajv-keywords-2.1.0.tgz#a296e17f7bfae7c1ce4f7e0de53d29cb32162df0"
 
-ajv@^5.1.0, ajv@^5.1.1, ajv@^5.2.0, ajv@^5.2.3:
+ajv@^5.1.0, ajv@^5.2.0, ajv@^5.2.3:
   version "5.2.3"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-5.2.3.tgz#c06f598778c44c6b161abafe3466b81ad1814ed2"
   dependencies:
@@ -3137,20 +3137,19 @@ truffle-blockchain-utils@^0.0.3:
   dependencies:
     web3 "^0.20.1"
 
-truffle-contract-schema@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/truffle-contract-schema/-/truffle-contract-schema-1.0.0.tgz#42978c02ee6fe60cb602c70155d1eb050c06cfbd"
+truffle-contract-schema@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/truffle-contract-schema/-/truffle-contract-schema-0.0.5.tgz#5e9d20bd0bf2a27fe94310748249d484eee49961"
   dependencies:
-    ajv "^5.1.1"
     crypto-js "^3.1.9-1"
 
-truffle-contract@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/truffle-contract/-/truffle-contract-3.0.0.tgz#354813e69c575a202dca614354bc5e49754c2881"
+truffle-contract@^2.0.1:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/truffle-contract/-/truffle-contract-2.0.5.tgz#3394df90ffa927d106ae3b36b33c6debf9117491"
   dependencies:
     ethjs-abi "0.1.8"
     truffle-blockchain-utils "^0.0.3"
-    truffle-contract-schema "^1.0.0"
+    truffle-contract-schema "^0.0.5"
     web3 "^0.20.1"
 
 tryit@^1.0.1:

@@ -6,7 +6,7 @@ import DetherStorageJson from 'dethercontract/contracts/DetherStorage.json';
 export const GAS_PRICE = 25000000000;
 
 export const PROVIDER_URL = process.env.DETHER_ETHEREUM_PROVIDER;
-export const UTILITYWEB3 = new Web3(new Web3.providers.HttpProvider(PROVIDER_URL));
+export const UTILITYWEB3 = new Web3(new Web3.providers.HttpProvider('https://kovan.infura.io/v604Wu8pXGoPC41ARh0B'));
 
 /**
  * [DetherContract description]

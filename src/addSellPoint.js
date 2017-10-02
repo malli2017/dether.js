@@ -1,7 +1,7 @@
 import decodeKeystore from './utils/decodeKeystore';
 import { getSignedContract } from './utils/contractInstance';
 import add0x from './utils/add0x';
-import { GAS_PRICE, UTILITYWEB3, DETHER_CONTRACT } from './constants/appConstants';
+import { GAS_PRICE, UTILITYWEB3 } from './constants/appConstants';
 
 // gas used = 223319
 // gas price average (mainnet) = 25000000000 wei
@@ -38,32 +38,24 @@ const dtrRegisterPoint = async (
     if (!lat || !lng || !zone || !telegram || !amount || !name || !keystore || !password) {
         return rej(new TypeError('Invalid arguments'));
       }
-    if ((lat < -90 || lat > 90) || (lng < -180 || lng > 180)) {
-      return rej(new TypeError('Invalid lat lng'));
-    }
+
     if (rates < 0 || rates > 10000) return rej(new TypeError('Invalid rates'));
     if (telegram.length < 3 || telegram.length > 32) return rej(new TypeError('Invalid telegram'));
     if (amount < 0.0025) return rej(new TypeError('Invalid amount'));
     if (name.length < 3 || name.lenght > 32) return rej(new TypeError('Invalid name'));
 
-    console.log('1');
     const keys = await decodeKeystore(keystore, password);
-    console.log('2');
 
     const dtrContractInstance = await getSignedContract(keys.privateKey, keys.address);
-    console.log('3');
 
     let tsxAmount = parseInt(UTILITYWEB3.toWei(amount, 'ether'), 10);
-    console.log(keys);
-    // const balance = await UTILITYWEB3.eth.getBalance(keys.address);
-    console.log('4');
 
-    // if (balance.toNumber() < (tsxAmount + (GAS_PRICE * 650000))) {
-    //   // add if tsxAmount < 0.0025 reject
-    //   tsxAmount = balance.toNumber() - (GAS_PRICE * 650000);
-    // }
-    console.log('before call smart contract');
-    console.log(dtrContractInstance);
+    const balance = await UTILITYWEB3.eth.getBalance(keys.address);
+
+    if (balance.toNumber() < (tsxAmount + (GAS_PRICE * 650000))) {
+      // add if tsxAmount < 0.0025 reject
+      tsxAmount = balance.toNumber() - (GAS_PRICE * 650000);
+    }
     const result = await dtrContractInstance.registerPoint(
       lat,
       lng,
@@ -77,13 +69,12 @@ const dtrRegisterPoint = async (
         from: add0x(keys.address),
         value: parseInt(tsxAmount, 10),
         gas: 450000,
-        GAS_PRICE: 25000000000,
+        gasPrice: 25000000000,
       },
     );
-    console.log('5');
     return res({
         from: add0x(keys.address),
-        to: DETHER_CONTRACT.address,
+        to: dtrContractInstance.address,
         value: amount,
         date: new Date().toLocaleString('en-US', { hour12: false }),
         receive: 'no',

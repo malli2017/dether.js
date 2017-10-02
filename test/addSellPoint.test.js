@@ -32,7 +32,7 @@ describe('dtrRegisterPoint', () => {
 
   it('', async () => {
     try {
-      const test = await dtrRegisterPoint(
+      await dtrRegisterPoint(
         12,
         30,
         '123',
@@ -45,7 +45,6 @@ describe('dtrRegisterPoint', () => {
         keystore,
         password,
       );
-      console.log('test', test);
     } catch (e) {
       console.log('e', e);
     }
