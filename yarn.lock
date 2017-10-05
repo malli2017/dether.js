@@ -1568,9 +1568,9 @@ eth-lightwallet@^2.5.6:
     tweetnacl "0.13.2"
     web3 "^0.19.1"
 
-eth-toolbox@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/eth-toolbox/-/eth-toolbox-0.1.1.tgz#b7b79c18f3ba69255f40f69c92b9f979dc871a2f"
+eth-toolbox@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/eth-toolbox/-/eth-toolbox-0.1.5.tgz#e9865730bf97f42a30ee314181b4a5410509f46f"
   dependencies:
     axios "^0.16.2"
     dethercontract "^1.2.5"
