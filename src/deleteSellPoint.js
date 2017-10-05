@@ -13,7 +13,7 @@ import { getSignedContract } from './utils/contractInstance';
  */
 const withdrawAll = async (keystore, password) => {
   const keys = await decodeKeystore(keystore, password);
-  const dtrContractInstance = await getSignedContract(keys);
+  const dtrContractInstance = await getSignedContract(keys.privateKey, keys.address);
 
   return dtrContractInstance
     .withdrawAll({

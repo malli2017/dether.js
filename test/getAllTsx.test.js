@@ -18,7 +18,7 @@ describe('getAllTsx ', () => {
   it('', async () => {
     try {
       const test = await getAllTsx(
-        '0x21243128dc8342e1fbcc0bc212e75a17ce0635a4b',
+        '0x0C6dd5B28707a045f3A0C7429eD3FB9F835Cb623',
         42,
       );
       console.log('test', test);

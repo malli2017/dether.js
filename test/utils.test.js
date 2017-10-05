@@ -3,6 +3,8 @@ import 'babel-polyfill';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
+import ethToolbox from 'eth-toolbox';
+
 import add0x from '../src/utils/add0x';
 import { getSignedContract, getSignedWeb3 } from '../src/utils/contractInstance';
 import decodeKeystore from '../src/utils/decodeKeystore';
@@ -18,6 +20,10 @@ const address = process.env.DETHER_ADDRESS_ACCOUNT_TEST;
 let keystore = null;
 
 before((done) => {
+  console.log('------------')
+  console.log(ethToolbox)
+  console.log('------------')
+
   createKeystore().then((ks) => {
     ks.keyFromPassword(password, (error, pwDerivedKey) => {
       ks.generateNewAddress(pwDerivedKey, 1);
