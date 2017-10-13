@@ -3,8 +3,12 @@ import 'babel-polyfill';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
-import dtrRegisterPoint from '../src/addSellPoint';
+import tellers from '../src/tellers';
 import { createKeystore, password } from './utils/createKeystore';
+
+require('dotenv').load();
+
+const providerUrl = process.env.PROVIDER_URL;
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -27,24 +31,26 @@ before((done) => {
 
 describe('dtrRegisterPoint', () => {
   it('should is a function', () => {
-    expect(typeof dtrRegisterPoint).to.equal('function');
+    expect(typeof tellers.add).to.equal('function');
   });
 
   it('', async () => {
     try {
-      await dtrRegisterPoint(
-        12,
-        30,
-        '123',
-        800,
-        2,
-        1,
-        'dether',
-        0.1,
-        'dether',
+      const tsx = await tellers.add({
+        lat: 12,
+        lng: 30,
+        zone: 123,
+        rates: 800,
+        avatar: 2,
+        currency: 1,
+        telegram: 'dether',
+        amount: 0.1,
+        username: 'dether',
         keystore,
         password,
-      );
+        providerUrl,
+      });
+      console.log(tsx);
     } catch (e) {
       console.log('e', e);
     }

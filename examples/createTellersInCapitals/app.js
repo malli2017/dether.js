@@ -1,56 +1,43 @@
-import axios from 'axios';
+// import axios from 'axios';
 import detherGateway from '../../src';
 import data from './constants/capitals';
 import { createKeystore, password } from '../../test/utils/createKeystore';
+
+let all = 0;
 
 require('dotenv').config({ path: '.env' });
 
 export const positionToPositionId = position => Math.round(position * (10 ** 5));
 
-const createSellPoint = (elem) =>
+const createSellPoint = () =>
   new Promise((res, rej) => {
-    console.log(elem.capital, ': ');
-    createKeystore().then((ks) => {
-      ks.keyFromPassword(password, (error, pwDerivedKey) => {
+    createKeystore().then(({ ks, seed }) => {
+      ks.keyFromPassword(password, async (error, pwDerivedKey) => {
         ks.generateNewAddress(pwDerivedKey, 1);
         const addr = ks.getAddresses()[0];
-        axios.post('https://faucet.dether.io/kovan', {
-          addr,
-        })
-          .then(async () => {
-            try {
-              const result = await detherGateway.dtrRegisterPoint(
-                positionToPositionId(elem.lat),
-                positionToPositionId(elem.lng),
-                elem.zone,
-                elem.rates,
-                elem.avatar,
-                elem.currency,
-                elem.telegram,
-                elem.amount,
-                elem.name,
-                ks,
-                password,
-              );
-              res(result);
-            } catch (e) {
-              rej(e);
-            }
-          })
-          .catch((e) => {
-            rej(e);
-          });
+        try {
+          const result = await detherGateway.getEthBalance(addr);
+
+          if (result > 0) {
+            console.log('Done: ', addr, ' amount: ', result, 'Seed: ', seed);
+            rej(all);
+          }
+          res();
+        } catch (e) {
+          rej(all);
+        }
       });
     })
     .catch((e) => {
-      rej(e);
+      rej(all);
     });
   });
 
 const createAll = async () => {
-  await Promise.all(data.map(async (elem) => {
-    await createSellPoint(elem);
-  }));
+  while (1) {
+    all += 1;
+    await createSellPoint();
+  }
 };
 
 createAll();

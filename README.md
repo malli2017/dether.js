@@ -12,7 +12,6 @@ open ./docs/index.html
 
 
 import Dether from 'dether-gateway';
-import DetherUtils from 'dether-utils';
 
 Dether = {
   // POST
@@ -24,6 +23,13 @@ Dether = {
   updateShop: () => {},
   dtrSendCoin: () => {},
 
+
+
+  tellers.add
+  tellers.put
+  tellers.del
+  tellers.get
+
   // GET
   dtrGetTellerBalance: () => {},
   getShop: () => {},
@@ -31,14 +37,3 @@ Dether = {
   getTeller: () => {},
   getAllTeller: () => {},
 }
-
-utils: {
-  decodeKeystore: () => {},
-  sendEth: () => {},
-  getTxs: () => {},
-  getEthBalance: () => {},
-}
-
-Gerer l'import de fichier seul ex:
-
-import getEthBalance from 'dether-utils/getEthBalance';
