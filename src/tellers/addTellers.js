@@ -72,13 +72,18 @@ const dtrRegisterPoint = async (teller) =>
     if (secu.error) return rej(new TypeError(secu.nsg));
 
     try {
-      const keys = await ethToolbox.decodeKeystore(teller.keystore, teller.password);
+      const key = await ethToolbox.decodeKeystore(teller.keystore, teller.password);
+
+      if (!key || !key.privateKey || !key.address || !ethToolbox.utils.isAddr(key.address)) {
+        return rej(new TypeError('Invalid keystore or password'));
+      }
+
       const dtrContractInstance = await ethToolbox.utils
-        .getSignedWeb3(keys.privateKey, keys.address);
+        .getSignedWeb3(key.privateKey, key.address);
 
       const utilityWeb3 = new Web3(new Web3.providers.HttpProvider(teller.providerUrl));
 
-      const balance = await utilityWeb3.eth.getBalance(keys.address);
+      const balance = await utilityWeb3.eth.getBalance(key.address);
 
       let tsxAmount = parseInt(utilityWeb3.toWei(teller.amount, 'ether'), 10);
 
@@ -97,7 +102,7 @@ const dtrRegisterPoint = async (teller) =>
         teller.telegram,
         teller.username,
         {
-          from: ethToolbox.utils.add0x(keys.address),
+          from: ethToolbox.utils.add0x(key.address),
           value: parseInt(tsxAmount, 10),
           gas: 450000,
           gasPrice: 25000000000,
@@ -105,7 +110,7 @@ const dtrRegisterPoint = async (teller) =>
       );
 
       return res({
-          from: ethToolbox.utils.add0x(keys.address),
+          from: ethToolbox.utils.add0x(key.address),
           to: dtrContractInstance.address,
           value: teller.amount,
           date: new Date().toLocaleString('en-US', { hour12: false }),
