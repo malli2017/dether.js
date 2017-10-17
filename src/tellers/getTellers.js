@@ -1,4 +1,8 @@
-import { getContractStorageInstance, getContractInstance, UTILITYWEB3 } from './constants/appConstants';
+import {
+  getContractStorageInstance,
+  getContractInstance,
+  UTILITYWEB3,
+} from '../constants/appConstants';
 
 /**
  * get teller by address
@@ -49,7 +53,7 @@ export const getTellersPerZone = async (zone) => {
   const tellers = [];
   await Promise.all(tellersAddressesInZone.map(async (data) => {
     const teller = await dtrGetTeller(data);
-    if (teller && teller.zoneId === parseInt(zone, 10) && tellers.indexOf(teller)) {
+    if (teller && teller.zoneId === parseInt(zone, 10) && !tellers.indexOf(teller)) {
       tellers.push(teller);
     }
   }));
@@ -66,7 +70,7 @@ export const getAllTellers = async () => {
   const tellers = [];
   await Promise.all(tellersAddressesInZone.map(async (data) => {
     const teller = await dtrGetTeller(data);
-    if (teller && tellers.indexOf(teller)) tellers.push(teller);
+    if (teller && !tellers.indexOf(teller)) tellers.push(teller);
   }));
   return tellers;
 };

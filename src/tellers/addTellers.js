@@ -72,66 +72,58 @@ const dtrRegisterPoint = async (teller) =>
     if (secu.error) return rej(new TypeError(secu.nsg));
 
     try {
-      const keys = await ethToolbox.decodeKeystore(teller.keystore, teller.password);
+      const key = await ethToolbox.decodeKeystore(teller.keystore, teller.password);
 
-      try {
-        const dtrContractInstance = await ethToolbox.utils
-          .getSignedWeb3(keys.privateKey, keys.address);
-
-        try {
-          const utilityWeb3 = new Web3(new Web3.providers.HttpProvider(teller.providerUrl));
-
-          const balance = await utilityWeb3.eth.getBalance(keys.address);
-
-          let tsxAmount = parseInt(utilityWeb3.toWei(teller.amount, 'ether'), 10);
-
-          if (balance.toNumber() < (tsxAmount + (GAS_PRICE * 650000))) {
-            tsxAmount = balance.toNumber() - (GAS_PRICE * 650000);
-            if (tsxAmount < 0.0025) return rej(new TypeError('Insufficient funds'));
-          }
-
-          try {
-            const result = await dtrContractInstance.registerPoint(
-              teller.lat,
-              teller.lng,
-              teller.zone,
-              teller.rates * 100,
-              teller.avatar,
-              teller.currency,
-              teller.telegram,
-              teller.username,
-              {
-                from: ethToolbox.utils.add0x(keys.address),
-                value: parseInt(tsxAmount, 10),
-                gas: 450000,
-                gasPrice: 25000000000,
-              },
-            );
-
-            return res({
-                from: ethToolbox.utils.add0x(keys.address),
-                to: dtrContractInstance.address,
-                value: teller.amount,
-                date: new Date().toLocaleString('en-US', { hour12: false }),
-                dether: {
-                  detherContract: true,
-                  receive: false,
-                },
-                etherscan: {
-                  kovan: `https://kovan.etherscan.io/tx/${result}`,
-                  ropsten: `https://ropsten.etherscan.io/tx/${result}`,
-                  ether: `https://etherscan.io/tx/${result}`,
-                },
-            });
-          } catch (e) {
-            return rej(new TypeError(e));
-          }
-        } catch (e) {
-          return rej(new TypeError(e));
-        }
-      } catch (e) {
-        return rej(new TypeError(e));
+      if (!key || !key.privateKey || !key.address || !ethToolbox.utils.isAddr(key.address)) {
+        return rej(new TypeError('Invalid keystore or password'));
       }
+
+      const dtrContractInstance = await ethToolbox.utils
+        .getSignedWeb3(key.privateKey, key.address);
+
+      const utilityWeb3 = new Web3(new Web3.providers.HttpProvider(teller.providerUrl));
+
+      const balance = await utilityWeb3.eth.getBalance(key.address);
+
+      let tsxAmount = parseInt(utilityWeb3.toWei(teller.amount, 'ether'), 10);
+
+      if (balance.toNumber() < (tsxAmount + (GAS_PRICE * 650000))) {
+        tsxAmount = balance.toNumber() - (GAS_PRICE * 650000);
+        if (tsxAmount < 0.0025) return rej(new TypeError('Insufficient funds'));
+      }
+
+      const result = await dtrContractInstance.registerPoint(
+        teller.lat,
+        teller.lng,
+        teller.zone,
+        teller.rates * 100,
+        teller.avatar,
+        teller.currency,
+        teller.telegram,
+        teller.username,
+        {
+          from: ethToolbox.utils.add0x(key.address),
+          value: parseInt(tsxAmount, 10),
+          gas: 450000,
+          gasPrice: 25000000000,
+        },
+      );
+
+      return res({
+          from: ethToolbox.utils.add0x(key.address),
+          to: dtrContractInstance.address,
+          value: teller.amount,
+          date: new Date().toLocaleString('en-US', { hour12: false }),
+          dether: {
+            detherContract: true,
+            receive: false,
+          },
+          etherscan: {
+            kovan: `https://kovan.etherscan.io/tx/${result}`,
+            ropsten: `https://ropsten.etherscan.io/tx/${result}`,
+            ether: `https://etherscan.io/tx/${result}`,
+          },
+      });
     } catch (e) {
       return rej(new TypeError(e));
     }
