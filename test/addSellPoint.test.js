@@ -2,45 +2,46 @@
 import 'babel-polyfill';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
+import ethToolbox from 'eth-toolbox';
 
-import tellers from '../src/tellers';
-import { createKeystore, password } from './utils/createKeystore';
+import dtrRegisterPoint from '../src/tellers/addTellers';
+// import { createKeystore, password } from './utils/createKeystore';
 
 require('dotenv').load();
 
-const providerUrl = process.env.PROVIDER_URL;
+// const providerUrl = process.env.PROVIDER_URL;
 
 chai.use(chaiAsPromised);
 chai.should();
 
 const { expect } = chai;
 let keystore = null;
+// let serializedKeystore = null;
+const password = 'Abcd';
 
-before((done) => {
-  createKeystore().then((ks) => {
-    ks.keyFromPassword(password, (error, pwDerivedKey) => {
-      ks.generateNewAddress(pwDerivedKey, 1);
-      keystore = ks;
-      done();
+before(async () => {
+  try {
+  keystore = await ethToolbox.createKeystore(123, password);
+  keystore.keyFromPassword(password, (error, pwDerivedKey) => {
+      keystore.generateNewAddress(pwDerivedKey, 1);
+      // serializedKeystore = keystore.serialize();
     });
-  })
-  .catch((e) => {
-    console.log(e);
-  });
+  } catch (e) {
+    console.log('e', e);
+  }
 });
 
 describe('dtrRegisterPoint', () => {
-  it('should is a function', () => {
-    expect(typeof tellers.add).to.equal('function');
+  it('should be a function', () => {
+    expect(typeof dtrRegisterPoint).to.equal('function');
   });
-
-  it('', async () => {
+  it('should work', async () => {
     try {
-      const tsx = await tellers.add({
+      const tsx = await dtrRegisterPoint({
         lat: 12,
         lng: 30,
         zone: 123,
-        rates: 800,
+        rates: 8,
         avatar: 2,
         currency: 1,
         telegram: 'dether',
@@ -48,11 +49,251 @@ describe('dtrRegisterPoint', () => {
         username: 'dether',
         keystore,
         password,
-        providerUrl,
+        providerUrl: 'test',
       });
-      console.log(tsx);
+      expect(typeof tsx).to.equal('object');
     } catch (e) {
       console.log('e', e);
+    }
+  });
+  it('should crash', async () => {
+    try {
+      await dtrRegisterPoint({
+        lat: 'bug',
+        lng: 30,
+        zone: 123,
+        rates: 8,
+        avatar: 2,
+        currency: 1,
+        telegram: 'dether',
+        amount: 0.1,
+        username: 'dether',
+        keystore,
+        password,
+        providerUrl: 'test',
+      });
+    } catch (e) {
+      expect(e).to.not.equal(null);
+    }
+  });
+  it('should crash', async () => {
+    try {
+      await dtrRegisterPoint({
+        lat: 12,
+        lng: 'bug',
+        zone: 123,
+        rates: 8,
+        avatar: 2,
+        currency: 1,
+        telegram: 'dether',
+        amount: 0.1,
+        username: 'dether',
+        keystore,
+        password,
+        providerUrl: 'test',
+      });
+    } catch (e) {
+      expect(e).to.not.equal(null);
+    }
+  });
+  it('should crash', async () => {
+    try {
+      await dtrRegisterPoint({
+        lat: 12,
+        lng: 123,
+        zone: 'bug',
+        rates: 8,
+        avatar: 2,
+        currency: 1,
+        telegram: 'dether',
+        amount: 0.1,
+        username: 'dether',
+        keystore,
+        password,
+        providerUrl: 'test',
+      });
+    } catch (e) {
+      expect(e).to.not.equal(null);
+    }
+  });
+  it('should crash', async () => {
+    try {
+      await dtrRegisterPoint({
+        lat: 12,
+        lng: 333,
+        zone: 42,
+        rates: 'bug',
+        avatar: 2,
+        currency: 1,
+        telegram: 'dether',
+        amount: 0.1,
+        username: 'dether',
+        keystore,
+        password,
+        providerUrl: 'test',
+      });
+    } catch (e) {
+      expect(e).to.not.equal(null);
+    }
+  });
+  it('should crash', async () => {
+    try {
+      await dtrRegisterPoint({
+        lat: 12,
+        lng: 333,
+        zone: 42,
+        rates: 99,
+        avatar: 'bug',
+        currency: 1,
+        telegram: 'dether',
+        amount: 0.1,
+        username: 'dether',
+        keystore,
+        password,
+        providerUrl: 'test',
+      });
+    } catch (e) {
+      expect(e).to.not.equal(null);
+    }
+  });
+  it('should crash', async () => {
+    try {
+      await dtrRegisterPoint({
+        lat: 12,
+        lng: 333,
+        zone: 42,
+        rates: 99,
+        avatar: 2,
+        currency: 'bug',
+        telegram: 'dether',
+        amount: 0.1,
+        username: 'dether',
+        keystore,
+        password,
+        providerUrl: 'test',
+      });
+    } catch (e) {
+      expect(e).to.not.equal(null);
+    }
+  });
+  it('should crash', async () => {
+    try {
+      await dtrRegisterPoint({
+        lat: 12,
+        lng: 333,
+        zone: 42,
+        rates: 99,
+        avatar: 2,
+        currency: 2,
+        telegram: 2,
+        amount: 0.1,
+        username: 'dether',
+        keystore,
+        password,
+        providerUrl: 'test',
+      });
+    } catch (e) {
+      expect(e).to.not.equal(null);
+    }
+  });
+  it('should crash', async () => {
+    try {
+      await dtrRegisterPoint({
+        lat: 12,
+        lng: 333,
+        zone: 42,
+        rates: 99,
+        avatar: 2,
+        currency: 2,
+        telegram: 'Tele',
+        amount: 'bug',
+        username: 'dether',
+        keystore,
+        password,
+        providerUrl: 'test',
+      });
+    } catch (e) {
+      expect(e).to.not.equal(null);
+    }
+  });
+  it('should crash', async () => {
+    try {
+      await dtrRegisterPoint({
+        lat: 12,
+        lng: 333,
+        zone: 42,
+        rates: 99,
+        avatar: 2,
+        currency: 2,
+        telegram: 'Tele',
+        amount: 2,
+        username: 123,
+        keystore,
+        password,
+        providerUrl: 'test',
+      });
+    } catch (e) {
+      expect(e).to.not.equal(null);
+    }
+  });
+  it('should crash', async () => {
+    try {
+      await dtrRegisterPoint({
+        lat: 12,
+        lng: 333,
+        zone: 42,
+        rates: 99,
+        avatar: 2,
+        currency: 2,
+        telegram: 'Tele',
+        amount: 2,
+        username: 'name',
+        keystore: null,
+        password,
+        providerUrl: 'test',
+      });
+    } catch (e) {
+      expect(e).to.not.equal(null);
+    }
+  });
+  it('should crash', async () => {
+    try {
+      await dtrRegisterPoint({
+        lat: 12,
+        lng: 333,
+        zone: 42,
+        rates: 99,
+        avatar: 2,
+        currency: 2,
+        telegram: 'Tele',
+        amount: 2,
+        username: 'name',
+        keystore,
+        password: null,
+        providerUrl: 'test',
+      });
+    } catch (e) {
+      expect(e).to.not.equal(null);
+    }
+  });
+  it('should crash', async () => {
+    try {
+      await dtrRegisterPoint({
+        lat: 12,
+        lng: 333,
+        zone: 42,
+        rates: 99,
+        avatar: 2,
+        currency: 2,
+        telegram: 'Tele',
+        amount: 2,
+        username: 'name',
+        keystore,
+        password,
+        providerUrl: null,
+      });
+    } catch (e) {
+      expect(e).to.not.equal(null);
     }
   });
 });

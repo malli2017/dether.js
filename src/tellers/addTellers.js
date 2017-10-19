@@ -1,31 +1,31 @@
 import ethToolbox from 'eth-toolbox';
 import Web3 from 'web3';
 
-import { GAS_PRICE } from '../constants/appConstants';
+import { GAS_PRICE, UTILITYWEB3, getSignedContractInstance } from '../constants/appConstants';
 
 const check = (teller) => {
-  if (!teller.lat || !Number.isInteger(teller.lat) || teller.lat > 90 || teller.lat < 90) {
+  if (!teller.lat || !Number.isInteger(teller.lat) || teller.lat > 90 || teller.lat < -90) {
     return { error: true, msg: 'Invalid latitude' };
   }
-  if (!teller.lng || !Number.isInteger(teller.lng) || teller.lng > 180 || teller.lng < 180) {
+  if (!teller.lng || !Number.isInteger(teller.lng) || teller.lng > 180 || teller.lng < -180) {
     return { error: true, msg: 'Invalid longitude' };
   }
-  if (!teller.zone || !Number.isInter(teller.zone)) {
+  if (!teller.zone || !Number.isInteger(teller.zone)) {
     return { error: true, msg: 'Invalid zone' };
   }
-  if (!teller.rates || teller.rates < 0 || teller.rates > 100) {
+  if (!teller.rates || teller.rates <= 0 || teller.rates > 100) {
     return { error: true, msg: 'Invalid rates' };
   }
-  if (!teller.avatar || !Number.isInter(teller.avatar) || teller.avatar < 0) {
+  if (!teller.avatar || !Number.isInteger(teller.avatar) || teller.avatar < 0) {
     return { error: true, msg: 'Invalid avatar' };
   }
-  if (!teller.currency || !Number.isInter(teller.currency) || teller.currency < 0) {
+  if (!teller.currency || !Number.isInteger(teller.currency) || teller.currency < 0) {
     return { error: true, msg: 'Invalid currency' };
   }
   if (!teller.telegram || teller.telegram.length < 3 || teller.telegram.length > 30) {
     return { error: true, msg: 'Invalid telegram' };
   }
-  if (!teller.amount || !Number.isInter(teller.amount) || teller.amount < 0) {
+  if (!teller.amount || Number.isNaN(teller.amount) || teller.amount < 0.01 ) {
     return { error: true, msg: 'Invalid amount' };
   }
   if (!teller.username || teller.username.length < 3 || teller.username.length > 30) {
@@ -34,15 +34,15 @@ const check = (teller) => {
   if (!teller.keystore) {
     return { error: true, msg: 'Invalid keystore' };
   }
-  if (!teller.password || !teller.password.length < 1) {
+  if (!teller.password || teller.password.length < 1) {
     return { error: true, msg: 'Invalid password' };
   }
   if (!teller.providerUrl) {
     return { error: true, msg: 'Invalid provider url' };
   }
-  if (!teller.gasPrice || teller.gasPrice < 0) {
-    return { error: true, msg: 'Invalid gas Price' };
-  }
+  // if (!teller.gasPrice || teller.gasPrice < 0) {
+  //   return { error: true, msg: 'Invalid gas Price' };
+  // }
   return {};
 };
 
@@ -69,32 +69,28 @@ const check = (teller) => {
 const dtrRegisterPoint = async (teller) =>
   new Promise(async (res, rej) => {
     const secu = check(teller);
-    if (secu.error) return rej(new TypeError(secu.nsg));
+    if (secu.error) return rej(new TypeError(secu.msg));
 
     try {
       const key = await ethToolbox.decodeKeystore(teller.keystore, teller.password);
-
       if (!key || !key.privateKey || !key.address || !ethToolbox.utils.isAddr(key.address)) {
         return rej(new TypeError('Invalid keystore or password'));
       }
-
-      const dtrContractInstance = await ethToolbox.utils
-        .getSignedWeb3(key.privateKey, key.address);
-
+      const dtrContractInstance = await getSignedContractInstance(key.privateKey, key.address, teller.providerUrl);
       const utilityWeb3 = new Web3(new Web3.providers.HttpProvider(teller.providerUrl));
-
-      const balance = await utilityWeb3.eth.getBalance(key.address);
-
       let tsxAmount = parseInt(utilityWeb3.toWei(teller.amount, 'ether'), 10);
 
-      if (balance.toNumber() < (tsxAmount + (GAS_PRICE * 650000))) {
-        tsxAmount = balance.toNumber() - (GAS_PRICE * 650000);
-        if (tsxAmount < 0.0025) return rej(new TypeError('Insufficient funds'));
+      if (teller.providerUrl != 'test') {
+        const balance = await utilityWeb3.eth.getBalance(key.address);
+         // check if enough gas is present to sendCoin once after registering
+         if (balance.toNumber() < (tsxAmount + (GAS_PRICE * 650000))) {
+           tsxAmount = balance.toNumber() - (GAS_PRICE * 650000);
+           if (tsxAmount < 0.0025) return rej(new TypeError('Insufficient funds'));
+         }
       }
-
       const result = await dtrContractInstance.registerPoint(
-        teller.lat,
-        teller.lng,
+        teller.lat.toFixed(6),
+        teller.lng.toFixed(6),
         teller.zone,
         teller.rates * 100,
         teller.avatar,
@@ -105,10 +101,9 @@ const dtrRegisterPoint = async (teller) =>
           from: ethToolbox.utils.add0x(key.address),
           value: parseInt(tsxAmount, 10),
           gas: 450000,
-          gasPrice: 25000000000,
+          gasPrice: GAS_PRICE,
         },
       );
-
       return res({
           from: ethToolbox.utils.add0x(key.address),
           to: dtrContractInstance.address,
