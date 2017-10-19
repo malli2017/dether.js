@@ -62,13 +62,19 @@ export const dtrGetTeller = async (address) => {
   const teller = {};
   const tellerPos = await dtrContractInstance.getTellerPos(address);
   // we need to be able to skip element here
-  if (tellerPos[3].toNumber() === 0) return null;
+  console.log('tellerPos:', tellerPos)
+  if (tellerPos[3].toNumber() === 0) {
+    console.log('here')
+    return null;
+  }
   teller.lat = tellerPos[0].toNumber();
   teller.lng = tellerPos[1].toNumber();
   teller.zoneId = tellerPos[2].toNumber();
   teller.escrowBalance = utilityWeb3.fromWei(tellerPos[3].toNumber(), 'ether');
   // teller.escrowBalance = await dtrGetTellerbalances(address);
   const tellerProfile = await dtrContractInstance.getTellerProfile(address);
+  console.log('tellerProfile:', tellerProfile)
+
   // TODO make contract throw when no teller at this address
   teller.rates = tellerProfile[0].toNumber();
   teller.volumeTrade = utilityWeb3.fromWei(tellerProfile[1].toNumber(), 'ether');
