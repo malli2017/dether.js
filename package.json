@@ -4,7 +4,7 @@
   "description": "Gateway between Front App and the detherContracts.",
   "main": "lib/index.js",
   "scripts": {
-    "test": "mocha --compilers js:babel-core/register test/*.js --recursive"
+    "test": "mocha --timeout 5000 --compilers js:babel-core/register test/*.js --recursive"
   },
   "repository": {
     "type": "git",
@@ -37,6 +37,7 @@
     "babel-eslint": "^8.0.1",
     "babel-polyfill": "^6.26.0",
     "babel-preset-latest": "^6.24.1",
+    "bignumber.js": "^4.1.0",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "esdoc": "^1.0.2",
