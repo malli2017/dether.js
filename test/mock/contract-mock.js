@@ -55,3 +55,39 @@ export const mock = {
   at: () => instance,
   deployed: () => instance,
 };
+
+
+const storageInstance = {
+  getAllTellers: () =>
+    new Promise(res => {
+      res([
+        '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',
+        '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',
+        '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',
+        '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',
+        '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',
+        '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',
+        '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',
+      ]);
+    }),
+  getZone: {
+    call: () =>
+      new Promise(res => {
+        res([
+          '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',
+          '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',
+          '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',
+          '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',
+          '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',
+          '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',
+          '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',
+        ]);
+      }),
+  },
+};
+
+export const mockStorage = {
+  setProvider: () => {},
+  at: () => storageInstance,
+  deployed: () => storageInstance,
+};
