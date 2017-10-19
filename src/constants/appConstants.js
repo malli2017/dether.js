@@ -1,7 +1,7 @@
 import Web3 from 'web3';
 import contract from 'truffle-contract';
 import DetherJson from 'dethercontract/contracts/DetherInterface.json';
-import DetherStorageJson from 'dethercontract/contracts/DetherStorage.json';
+// import DetherStorageJson from 'dethercontract/contracts/DetherStorage.json';
 import { mock } from '../../test/mock/contract-mock';
 
 export const GAS_PRICE = 25000000000;
@@ -22,7 +22,7 @@ export const UTILITYWEB3 = new Web3(new Web3.providers.HttpProvider('http://loca
  * [getContractStorageInstance description]
  * @return {[type]} [description]
  */
-export const getContractStorageInstance = () => DetherStorageContract.deployed();
+// export const getContractStorageInstance = () => DetherStorageContract.deployed();
 
 /**
  * [getContractInstance description]
@@ -31,12 +31,11 @@ export const getContractStorageInstance = () => DetherStorageContract.deployed()
 export const getContractInstance = (provider) =>
   new Promise(async (res, rej) => {
     if (!provider) return rej(new TypeError('Invalid provider URL'));
-    if (provider === 'test') {
-      console.log('tessssst');
-      return res(mock.deployed());
-    }
-    const test3 = new Web3(new Web3.providers.HttpProvider(provider));
+    if (provider === 'test') return res(mock.deployed());
+
+    const newProvider = new Web3(new Web3.providers.HttpProvider(provider));
     const DetherContract = contract(DetherJson);
-    DetherContract.setProvider(test3.currentProvider);
+
+    DetherContract.setProvider(newProvider.currentProvider);
     return res(DetherContract.deployed());
 });
