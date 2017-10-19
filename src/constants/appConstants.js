@@ -42,3 +42,17 @@ export const getContractStorageInstance = (provider) =>
     DetherStorageContract.setProvider(newProvider.currentProvider);
     return res(DetherStorageContract.deployed());
 });
+
+
+// tellerPos:[ { [String: '3642000'] s: 1, e: 6, c: [ 3642000 ] },
+//   { [String: '308000'] s: 1, e: 5, c: [ 308000 ] },
+//   { [String: '3114'] s: 1, e: 3, c: [ 3114 ] },
+//   { [String: '0'] s: 1, e: 0, c: [ 0 ] } ]
+//
+// tellerProfile: [ { [String: '300'] s: 1, e: 2, c: [ 300 ] },
+//   { [String: '0'] s: 1, e: 0, c: [ 0 ] },
+//   { [String: '0'] s: 1, e: 0, c: [ 0 ] },
+//   '0x4861727279000000000000000000000000000000000000000000000000000000',
+//   { [String: '0'] s: 1, e: 0, c: [ 0 ] },
+//   { [String: '2'] s: 1, e: 0, c: [ 2 ] },
+//   '0x6861727279343039000000000000000000000000000000000000000000000000' ]

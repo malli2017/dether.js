@@ -3,11 +3,12 @@ import BigNumber from 'bignumber.js';
 const instance = {
   getTellerPos: () =>
       new Promise(resolve => {
-        resolve([1230000, 1110000, 42, 10000]);
+        resolve([new BigNumber(123444), new BigNumber(123444),
+          new BigNumber(123444), new BigNumber(123444)]);
       }),
   getTellerProfile: () =>
       new Promise(resolve => {
-        resolve([2300, 10000, 200000, 'name', 3, 3, 'telegram']);
+        resolve([new BigNumber(123444), new BigNumber(123444), new BigNumber(123444), '0x4861727279000000000000000000000000000000000000000000000000000000', new BigNumber(123444), new BigNumber(123444), '0x4861727279000000000000000000000000000000000000000000000000000000']);
       }),
   sendCoin: () =>
       new Promise(resolve => {
@@ -67,7 +68,7 @@ const storageInstance = {
         '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',
         '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',
         '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',
-        '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',
+        '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb621',
       ]);
     }),
   getZone: {
@@ -80,7 +81,7 @@ const storageInstance = {
           '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',
           '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',
           '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',
-          '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',
+          '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb621',
         ]);
       }),
   },

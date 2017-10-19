@@ -29,9 +29,9 @@ export const dtrGetTeller = (address, providerUrl) =>
         lat: tellerPos[0].toNumber() / (10 ** 6) || 48.864716,
         lng: tellerPos[1].toNumber() / (10 ** 6) || 2.349014,
         zoneId: tellerPos[2].toNumber(),
-        escrowBalance: UTILITYWEB3.fromWei(tellerPos[3].toNumber(), 'ether') || 0,
+        escrowBalance: Number(UTILITYWEB3.fromWei(tellerPos[3].toNumber(), 'ether')) || 0,
         rates: tellerProfile[0].toNumber(),
-        volumeTrade: UTILITYWEB3.fromWei(tellerProfile[1].toNumber(), 'ether') || 0,
+        volumeTrade: Number(UTILITYWEB3.fromWei(tellerProfile[1].toNumber(), 'ether')) || 0,
         nbTrade: tellerProfile[2].toNumber(),
         currencyId: tellerProfile[4].toNumber(),
         avatarId: tellerProfile[5].toNumber(),
@@ -62,7 +62,9 @@ export const getTellersPerZone = (zone, providerUrl) =>
       await Promise.all(tellersAddressesInZone.map(async (addr) => {
         const teller = await dtrGetTeller(addr, providerUrl);
 
-        if (teller && teller.zoneId === parseInt(zone, 10) && !tellers.indexOf(teller)) {
+        if (teller
+            && teller.zoneId === parseInt(zone, 10)
+            && !tellers.find((tel) => tel.ethAddress === teller.ethAddress)) {
           tellers.push(teller);
         }
       }));
@@ -89,9 +91,11 @@ export const getAllTellers = (providerUrl) =>
       const tellers = [];
 
       await Promise.all(tellersAddresses.map(async (addr) => {
-        const teller = await dtrGetTeller(addr);
+        const teller = await dtrGetTeller(addr, providerUrl);
 
-        if (teller && !tellers.indexOf(teller)) tellers.push(teller);
+        if (teller && !tellers.find((tel) => tel.ethAddress === teller.ethAddress)) {
+          tellers.push(teller);
+        }
       }));
 
       return res(tellers);
