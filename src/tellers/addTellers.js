@@ -63,7 +63,6 @@ const check = (teller) => {
  * @param {object} keystore deserialize keystore
  * @param {string} password
  * @param {string} providerUrl
- * @param {number}
  * @return {object} Return txs
  */
 const dtrRegisterPoint = async (teller) =>
