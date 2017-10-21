@@ -4,7 +4,10 @@
   "description": "Gateway between Front App and the detherContracts.",
   "main": "lib/index.js",
   "scripts": {
-    "test": "mocha --timeout 5000 --compilers js:babel-core/register test/*.js --recursive"
+    "babel-node": "babel-node --presets=es2015",
+    "example": "npm run babel-node -- examples/app.js",
+    "test": "mocha --timeout 15000 --compilers js:babel-core/register test/*.js --recursive",
+    "prepublish": "babel src --out-dir lib"
   },
   "repository": {
     "type": "git",
@@ -15,7 +18,7 @@
     "ethereum",
     "gateway"
   ],
-  "author": "Dether Team",
+  "author": "Dether Team <hello@dether.io>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/dethertech/detherGateway/issues"
@@ -24,15 +27,14 @@
   "dependencies": {
     "dethercontract": "^1.2.5",
     "dotenv": "^4.0.0",
-    "es6-promise": "^4.1.1",
     "eth-toolbox": "^0.1.5",
     "ethjs-provider-signer": "^0.1.4",
     "ethjs-signer": "^0.1.1",
-    "isomorphic-fetch": "^2.2.1",
     "truffle-contract": "^2.0.1",
     "web3": "^0.19.1"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.1",
     "babel-polyfill": "^6.26.0",
