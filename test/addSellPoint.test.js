@@ -5,18 +5,12 @@ import chaiAsPromised from 'chai-as-promised';
 import ethToolbox from 'eth-toolbox';
 
 import dtrRegisterPoint from '../src/tellers/addTellers';
-// import { createKeystore, password } from './utils/createKeystore';
-
-require('dotenv').load();
-
-// const providerUrl = process.env.PROVIDER_URL;
 
 chai.use(chaiAsPromised);
 chai.should();
 
 const { expect } = chai;
 let keystore = null;
-// let serializedKeystore = null;
 const password = 'Abcd';
 
 before(async () => {

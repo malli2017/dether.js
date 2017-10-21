@@ -18,7 +18,6 @@ before(async () => {
   keystore = await ethToolbox.createKeystore(123, password);
   keystore.keyFromPassword(password, (error, pwDerivedKey) => {
       keystore.generateNewAddress(pwDerivedKey, 1);
-      // serializedKeystore = keystore.serialize();
     });
   } catch (e) {
     console.log('e', e);

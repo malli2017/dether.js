@@ -1,7 +1,7 @@
 import ethToolbox from 'eth-toolbox';
 import Web3 from 'web3';
 
-import { GAS_PRICE, UTILITYWEB3, getSignedContractInstance } from '../constants/appConstants';
+import { GAS_PRICE, getSignedContractInstance } from '../constants/appConstants';
 
 const check = (teller) => {
   if (!teller.lat || !Number.isInteger(teller.lat) || teller.lat > 90 || teller.lat < -90) {
@@ -25,7 +25,7 @@ const check = (teller) => {
   if (!teller.telegram || teller.telegram.length < 3 || teller.telegram.length > 30) {
     return { error: true, msg: 'Invalid telegram' };
   }
-  if (!teller.amount || Number.isNaN(teller.amount) || teller.amount < 0.01 ) {
+  if (!teller.amount || Number.isNaN(teller.amount) || teller.amount < 0.01) {
     return { error: true, msg: 'Invalid amount' };
   }
   if (!teller.username || teller.username.length < 3 || teller.username.length > 30) {
@@ -75,11 +75,15 @@ const dtrRegisterPoint = async (teller) =>
       if (!key || !key.privateKey || !key.address || !ethToolbox.utils.isAddr(key.address)) {
         return rej(new TypeError('Invalid keystore or password'));
       }
-      const dtrContractInstance = await getSignedContractInstance(key.privateKey, key.address, teller.providerUrl);
+
+      const dtrContractInstance =
+        await getSignedContractInstance(key.privateKey, key.address, teller.providerUrl);
+
       const utilityWeb3 = new Web3(new Web3.providers.HttpProvider(teller.providerUrl));
+
       let tsxAmount = parseInt(utilityWeb3.toWei(teller.amount, 'ether'), 10);
 
-      if (teller.providerUrl != 'test') {
+      if (teller.providerUrl !== 'test') {
         const balance = await utilityWeb3.eth.getBalance(key.address);
          // check if enough gas is present to sendCoin once after registering
          if (balance.toNumber() < (tsxAmount + (GAS_PRICE * 650000))) {

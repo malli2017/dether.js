@@ -46,7 +46,8 @@ const dtrSendCoin = async (tsx) =>
     }
 
     try {
-      const dtrContractInstance = await getSignedContractInstance(key.privateKey, key.address, tsx.provider);
+      const dtrContractInstance =
+        await getSignedContractInstance(key.privateKey, key.address, tsx.provider);
       return res(dtrContractInstance.sendCoin(
         ethToolbox.utils.add0x(tsx.receiver),
         parseInt(UTILITYWEB3.toWei(tsx.amount, 'ether'), 10),
