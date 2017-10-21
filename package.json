@@ -29,6 +29,8 @@
     "ethjs-provider-signer": "^0.1.4",
     "ethjs-signer": "^0.1.1",
     "isomorphic-fetch": "^2.2.1",
+    "mapbox": "^1.0.0-beta9",
+    "mapbox-gl": "^0.41.0",
     "truffle-contract": "^2.0.1",
     "web3": "^0.19.1"
   },
