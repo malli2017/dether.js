@@ -54,10 +54,7 @@ npm test
 yarn install
 
 # Run ESDoc.
-./node_modules/.bin/esdoc
-
-# View a documentation
-open ./docs/index.html
+yarn run:doc
 ```
 
 ## Dependencies
