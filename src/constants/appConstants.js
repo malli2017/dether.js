@@ -1,5 +1,9 @@
 import Web3 from 'web3';
 import contract from 'truffle-contract';
+import ethToolbox from 'eth-toolbox';
+import SignerProvider from 'ethjs-provider-signer';
+import { sign } from 'ethjs-signer';
+
 import DetherJson from 'dethercontract/contracts/DetherInterface.json';
 import DetherStorageJson from 'dethercontract/contracts/DetherStorage.json';
 import { mock, mockStorage } from '../../test/mock/contract-mock';
@@ -43,16 +47,21 @@ export const getContractStorageInstance = (provider) =>
     return res(DetherStorageContract.deployed());
 });
 
-
-// tellerPos:[ { [String: '3642000'] s: 1, e: 6, c: [ 3642000 ] },
-//   { [String: '308000'] s: 1, e: 5, c: [ 308000 ] },
-//   { [String: '3114'] s: 1, e: 3, c: [ 3114 ] },
-//   { [String: '0'] s: 1, e: 0, c: [ 0 ] } ]
-//
-// tellerProfile: [ { [String: '300'] s: 1, e: 2, c: [ 300 ] },
-//   { [String: '0'] s: 1, e: 0, c: [ 0 ] },
-//   { [String: '0'] s: 1, e: 0, c: [ 0 ] },
-//   '0x4861727279000000000000000000000000000000000000000000000000000000',
-//   { [String: '0'] s: 1, e: 0, c: [ 0 ] },
-//   { [String: '2'] s: 1, e: 0, c: [ 2 ] },
-//   '0x6861727279343039000000000000000000000000000000000000000000000000' ]
+/**
+ * [getSignedContractInstance description]
+ * @param  {[type]} privateKey [description]
+ * @param  {[type]} address [description]
+ * @return {[type]}          [description]
+ */
+export const getSignedContractInstance = (privateKey, address, providerUrl) =>
+  new Promise(async (res, rej) => {
+    if (!providerUrl) return rej(new TypeError('Invalid provider URL'));
+    if (providerUrl === 'test') return res(mock.deployed());
+    const DetherContract = contract(DetherJson);
+    const provider = new SignerProvider(providerUrl, {
+      signTransaction: (rawTx, cb) => cb(null, sign(rawTx, ethToolbox.add0x(privateKey))),
+      accounts: cb => cb(null, address),
+    });
+    DetherContract.setProvider(provider);
+    return res(DetherContract.deployed());
+  });

@@ -40,14 +40,7 @@ const instance = {
   },
   registerPoint: () =>
     new Promise(resolve => {
-      resolve({
-        logs: [{
-          event: 'RegisterPoint',
-          args: {
-            lat: 1222000, lng: 1239900, rates: 2300, address: '0x000000000000',
-        },
-      }],
-    });
+      resolve('0x000000000000000000000000000');
   }),
 };
 
