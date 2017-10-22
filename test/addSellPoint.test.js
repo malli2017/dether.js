@@ -32,8 +32,8 @@ describe('dtrRegisterPoint', () => {
   it('should work', async () => {
     try {
       const tsx = await dtrRegisterPoint({
-        lat: 12,
-        lng: 30,
+        lat: 4.884713,
+        lng: 0.231637,
         zone: 123,
         rates: 8,
         avatar: 2,
