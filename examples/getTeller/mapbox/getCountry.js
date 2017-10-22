@@ -1,7 +1,8 @@
 import GeocodingAPI from 'mapbox/lib/services/geocoding';
-// import mapboxgl from 'mapbox-gl/dist/mapbox-gl';
+// you need to add a mapbox token in .env to use geocoding API
+require('dotenv').config({ path: '.env' });
 
-const token = 'pk.eyJ1IjoibWVoZGlkdHIiLCJhIjoiY2o4ZW9zdWxpMHI4azJxbnZvcW0xNGtieSJ9.c-SJnFhWfYMEx4K4BB951A';
+const token = process.env.TEST_MAPBOX_TOKEN;
 const client = new GeocodingAPI(token);
 
 const getCountryId = latlng =>

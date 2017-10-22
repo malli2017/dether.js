@@ -1,4 +1,5 @@
 import detherGateway from '../../src';
+import mapboxAPI from './mapbox';
 
 const provider = 'https://kovan.infura.io/v604Wu8pXGoPC41ARh0B';
 const gpscoord = {
@@ -9,8 +10,8 @@ const gpscoord = {
 const getTeller = latlng =>
   new Promise(async (res, rej) => {
     try {
-      console.log(detherGateway);
-      const countrycode = await detherGateway.mapboxAPI.getcountrycode(latlng);
+      console.log(mapboxAPI);
+      const countrycode = await mapboxAPI.getcountrycode(latlng);
       const tellers = await detherGateway.tellers.getZone(countrycode, provider);
       res(tellers);
     } catch (e) {
