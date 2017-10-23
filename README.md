@@ -147,17 +147,17 @@ const tellers = detherGateway.tellers.del(address);
 ## Install
 ```
 // use npm
-npm install --save dether-gateway
+npm install --save detherGateway
 
 // use yarn
-yarn install dether-gateway
+yarn add detherGateway
 ```
 
 ## Example
 ```
 git clone https://github.com/dethertech/detherGateway.git
 cd detherGateway/examples
-yarn install
+yarn
 yarn run example
 ```
 
@@ -165,7 +165,7 @@ yarn run example
 ```
 git clone https://github.com/dethertech/detherGateway.git
 cd detherGateway
-yarn install
+yarn
 ```
 
 ## Test
@@ -176,7 +176,7 @@ npm test
 ## Build doc
 ```
 # Install ESDoc
-yarn install
+yarn
 
 # Run ESDoc.
 yarn run:doc

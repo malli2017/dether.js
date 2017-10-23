@@ -6,7 +6,7 @@ import { sign } from 'ethjs-signer';
 
 import DetherJson from 'dethercontract/contracts/DetherInterface.json';
 import DetherStorageJson from 'dethercontract/contracts/DetherStorage.json';
-import { mock, mockStorage } from '../../test/mock/contract-mock';
+import { mock, mockStorage } from '../mock/contract-mock';
 
 export const GAS_PRICE = 25000000000;
 
