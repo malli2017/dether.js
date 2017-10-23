@@ -1,6 +1,6 @@
 {
   "name": "dethergateway",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Gateway between Front App and the detherContracts.",
   "main": "lib/index.js",
   "scripts": {
@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/dethertech/detherGateway#readme",
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "dethercontract": "^1.2.5",
     "dotenv": "^4.0.0",
     "eth-toolbox": "^0.1.5",
@@ -38,7 +39,6 @@
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.1",
-    "babel-polyfill": "^6.26.0",
     "babel-preset-latest": "^6.24.1",
     "bignumber.js": "^4.1.0",
     "chai": "^4.1.2",
