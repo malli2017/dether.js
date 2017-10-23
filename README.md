@@ -5,7 +5,12 @@ Dether Gateway
 
 * [Get Started](#get-started)
 * [Usages](#usages)
-
+    * [Add tellers](#add-tellers)
+    * [Get teller](#get-teller)
+    * [Get zone](#get-zone)
+    * [Get all](#get-all)
+    * [Get balance](#get-balance)
+    * [Delete teller](#delete-teller)
 * [Install](#install)
 * [Example](#example)
 * [Dev](#dev)
@@ -18,6 +23,126 @@ Dether Gateway
 * [Donation](#donation)
 
 ## Usages
+
+### Add tellers
+```javascript
+const tellers = detherGateway.tellers.add(teller);
+```
+
+#### Inputs
+
+* `teller`: Ethereum address
+* `lat` latitude min -90 max +90
+* `lng` longitude min -180 max +180
+* `zone` geographic zone
+* `rates` Margin (0-100 * 100)
+* `avatar` (1-9)
+* `currency` number (0-4)
+* `telegam` pseudo telegram
+* `amount` escrow
+* `username` username
+* `keystore` deserialize keystore
+* `password` string
+* `providerUrl`string
+
+#### Return value
+```javascript
+{
+    from: ethToolbox.utils.add0x(key.address),
+    to: dtrContractInstance.address,
+    value: teller.amount,
+    date: new Date().toLocaleString('en-US', { hour12: false }),
+    dether: {
+      detherContract: true,
+      receive: false,
+    },
+    etherscan: {
+      kovan: `https://kovan.etherscan.io/tx/${result}`,
+      ropsten: `https://ropsten.etherscan.io/tx/${result}`,
+      ether: `https://etherscan.io/tx/${result}`,
+    }
+  }
+```
+
+### Get teller
+```javascript
+const tellers = detherGateway.tellers.get(address);
+```
+
+#### Inputs
+
+* `address`: Ethereum address
+
+#### Return value
+```javascript
+{
+  name: UTILITYWEB3.toUtf8(tellerProfile[3]) || 'Dether',
+  messengerAddr: UTILITYWEB3.toUtf8(tellerProfile[6]) || 'Dether_io',
+  lat: tellerPos[0].toNumber() / (10 ** 5) || 48.864716,
+  lng: tellerPos[1].toNumber() / (10 ** 5) || 2.349014,
+  zoneId: tellerPos[2].toNumber(),
+  escrowBalance: Number(UTILITYWEB3.fromWei(tellerPos[3].toNumber(), 'ether')) || 0,
+  rates: tellerProfile[0].toNumber(),
+  volumeTrade: Number(UTILITYWEB3.fromWei(tellerProfile[1].toNumber(), 'ether')) || 0,
+  nbTrade: tellerProfile[2].toNumber(),
+  currencyId: tellerProfile[4].toNumber(),
+  avatarId: tellerProfile[5].toNumber(),
+  ethAddress: address,
+  id: address,
+}
+```
+
+### Get zone
+```javascript
+const tellers = detherGateway.tellers.getZone(countryCode);
+```
+
+#### Inputs
+
+* `countryCode`: Geocoding country CODE (only the digit)
+
+#### Return value
+* {array} array of tellers
+
+
+### Get all
+```javascript
+const tellers = detherGateway.tellers.getAll();
+```
+
+#### Inputs
+
+* .
+
+#### Return value
+* {array} array of all tellers
+
+
+### Get balance
+```javascript
+const tellers = detherGateway.tellers.balance(address);
+```
+
+#### Inputs
+
+* `address`: Tellers Ethereum address
+
+#### Return value
+* balance of tellers
+
+
+### Delete teller
+```javascript
+const tellers = detherGateway.tellers.del(address);
+```
+
+#### Inputs
+
+* `address`: Tellers Ethereum address
+
+#### Return value
+* balance of tellers
+
 
 ## Install
 ```

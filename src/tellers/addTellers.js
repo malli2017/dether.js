@@ -4,10 +4,10 @@ import Web3 from 'web3';
 import { GAS_PRICE, getSignedContractInstance } from '../constants/appConstants';
 
 const check = (teller) => {
-  if (!teller.lat || !Number.isInteger(teller.lat) || teller.lat > 90 || teller.lat < -90) {
+  if (!teller.lat || Number.isNaN(teller.lat) || teller.lat > 90 || teller.lat < -90) {
     return { error: true, msg: 'Invalid latitude' };
   }
-  if (!teller.lng || !Number.isInteger(teller.lng) || teller.lng > 180 || teller.lng < -180) {
+  if (!teller.lng || Number.isNaN(teller.lng) || teller.lng > 180 || teller.lng < -180) {
     return { error: true, msg: 'Invalid longitude' };
   }
   if (!teller.zone || !Number.isInteger(teller.zone)) {
@@ -92,8 +92,8 @@ const dtrRegisterPoint = async (teller) =>
          }
       }
       const result = await dtrContractInstance.registerPoint(
-        teller.lat.toFixed(6),
-        teller.lng.toFixed(6),
+        teller.lat.toFixed(6) * (10 ** 5),
+        teller.lng.toFixed(6) * (10 ** 5),
         teller.zone,
         teller.rates * 100,
         teller.avatar,
