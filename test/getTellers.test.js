@@ -30,8 +30,9 @@ describe('getTellersPerZone', () => {
       const tellers = await getTellersPerZone(123444, 'test');
       expect(tellers[0].name).to.equal('Harry');
       expect(tellers[0].messengerAddr).to.equal('Harry');
-      expect(tellers[0].lat).to.equal(0.123444);
-      expect(tellers[0].lng).to.equal(0.123444);
+      // err
+      expect(tellers[0].lat).to.equal(1.23444);
+      expect(tellers[0].lng).to.equal(1.23444);
       expect(tellers[0].zoneId).to.equal(123444);
       expect(tellers[0].escrowBalance).to.equal(0.000000000000123444);
       expect(tellers[0].rates).to.equal(123444);
@@ -92,8 +93,9 @@ describe('getAllTellers', () => {
       const tellers = await getAllTellers('test');
       expect(tellers[0].name).to.equal('Harry');
       expect(tellers[0].messengerAddr).to.equal('Harry');
-      expect(tellers[0].lat).to.equal(0.123444);
-      expect(tellers[0].lng).to.equal(0.123444);
+      // err
+      expect(tellers[0].lat).to.equal(1.23444);
+      expect(tellers[0].lng).to.equal(1.23444);
       expect(tellers[0].zoneId).to.equal(123444);
       expect(tellers[0].escrowBalance).to.equal(0.000000000000123444);
       expect(tellers[0].rates).to.equal(123444);
