@@ -26,8 +26,8 @@ export const dtrGetTeller = (address, providerUrl) =>
       return res({
         name: UTILITYWEB3.toUtf8(tellerProfile[3]) || 'Dether',
         messengerAddr: UTILITYWEB3.toUtf8(tellerProfile[6]) || 'Dether_io',
-        lat: tellerPos[0].toNumber() / (10 ** 6) || 48.864716,
-        lng: tellerPos[1].toNumber() / (10 ** 6) || 2.349014,
+        lat: tellerPos[0].toNumber() / (10 ** 5) || 48.864716,
+        lng: tellerPos[1].toNumber() / (10 ** 5) || 2.349014,
         zoneId: tellerPos[2].toNumber(),
         escrowBalance: Number(UTILITYWEB3.fromWei(tellerPos[3].toNumber(), 'ether')) || 0,
         rates: tellerProfile[0].toNumber(),
