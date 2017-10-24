@@ -1,8 +1,12 @@
+/**
+ * detherGateway
+ * @author Dether TEAM
+ */
+
 import 'babel-polyfill';
 import tellers from './tellers';
 
-const detherGateway = {
+export default {
+  // tellers
   tellers,
 };
-
-export default detherGateway;

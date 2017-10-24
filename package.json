@@ -1,6 +1,6 @@
 {
   "name": "dethergateway",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Gateway between Front App and the detherContracts.",
   "main": "lib/index.js",
   "scripts": {
