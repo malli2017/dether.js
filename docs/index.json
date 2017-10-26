@@ -566,29 +566,353 @@
   {
     "__docId__": 48,
     "kind": "file",
-    "name": "src/addSellPoint.js",
-    "content": "import decodeKeystore from './utils/decodeKeystore';\nimport { getSignedContract } from './utils/contractInstance';\nimport add0x from './utils/add0x';\nimport { GAS_PRICE, UTILITYWEB3, DETHER_CONTRACT } from './constants/appConstants';\n\n// gas used = 223319\n// gas price average (mainnet) = 25000000000 wei\n// 250000 * 25000000000 = 0.006250000000000000 ETH\n// need 0.006250000000000000 ETH to process this function\n/**\n * @param {number} lat latitude min -90 max +90\n * @param {number} lng longitude min -180 max +180\n * @param {string} zone geographic zone\n * @param {number} rates Margin (0-100 * 100)\n * @param {number} avatar (1-9)\n * @param {number} currency number (0-4)\n * @param {string} telegam pseudo telegram\n * @param {number} amount escrow\n * @param {string} name username\n * @param {object} keystore deserialize keystore\n * @param {string} password\n * @return {object} Return txs\n */\nconst dtrRegisterPoint = async (\n  lat,\n  lng,\n  zone,\n  rates,\n  avatar,\n  currency,\n  telegram,\n  amount,\n  name,\n  keystore,\n  password,\n) =>\n  new Promise(async (res, rej) => {\n    if (!lat || !lng || !zone || !rates || !avatar || !currency\n      || !telegram || !amount || !name || !keystore || !password) {\n        return rej(new TypeError('Invalid arguments'));\n      }\n    if ((lat < -90 || lat > 90) || (lng < -180 || lng > 180)) {\n      return rej(new TypeError('Invalid lat lng'));\n    }\n    if (rates < 0 || rates > 10000) return rej(new TypeError('Invalid rates'));\n    if (telegram.length < 3 || telegram.length > 32) return rej(new TypeError('Invalid telegram'));\n    if (amount < 0.0025) return rej(new TypeError('Invalid amount'));\n    if (name.length < 3 || name.lenght > 32) return rej(new TypeError('Invalid name'));\n\n    const keys = await decodeKeystore(keystore, password);\n    const dtrContractInstance = await getSignedContract(keys);\n\n    let tsxAmount = parseInt(UTILITYWEB3.toWei(amount, 'ether'), 10);\n    const balance = await UTILITYWEB3.eth.getBalance(keys.address);\n\n    if (balance.toNumber() < (tsxAmount + (GAS_PRICE * 650000))) {\n      // add if tsxAmount < 0.0025 reject\n      tsxAmount = balance.toNumber() - (GAS_PRICE * 650000);\n    }\n\n    const result = await dtrContractInstance.registerPoint(\n      lat,\n      lng,\n      zone,\n      rates,\n      avatar,\n      currency,\n      telegram,\n      name,\n      {\n        from: add0x(keys.address),\n        value: parseInt(tsxAmount, 10),\n        gas: 450000,\n        GAS_PRICE: 25000000000,\n      },\n    );\n    return res({\n        from: add0x(keys.address),\n        to: DETHER_CONTRACT.address,\n        value: amount,\n        date: new Date().toLocaleString('en-US', { hour12: false }),\n        receive: 'no',\n        myEther: 'yes',\n        etherscan: `https://kovan.etherscan.io/tx/${result}`,\n    });\n  });\n\nexport default dtrRegisterPoint;\n",
+    "name": "src/constants/appConstants.js",
+    "content": "import Web3 from 'web3';\nimport contract from 'truffle-contract';\nimport ethToolbox from 'eth-toolbox';\nimport SignerProvider from 'ethjs-provider-signer';\nimport { sign } from 'ethjs-signer';\n\nimport DetherJson from 'dethercontract/contracts/DetherInterface.json';\nimport DetherStorageJson from 'dethercontract/contracts/DetherStorage.json';\nimport { mock, mockStorage } from '../mock/contract-mock';\n\nexport const GAS_PRICE = 25000000000;\n\nexport const PROVIDER_URL = process.env.DETHER_ETHEREUM_PROVIDER;\nexport const UTILITYWEB3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));\n\n/**\n * [getContractInstance description]\n * @param  {[type]} provider [description]\n * @return {[type]}          [description]\n */\nexport const getContractInstance = (provider) =>\n  new Promise(async (res, rej) => {\n    if (!provider) return rej(new TypeError('Invalid provider URL'));\n    if (provider === 'test') return res(mock.deployed());\n\n    const newProvider = new Web3(new Web3.providers.HttpProvider(provider));\n    const DetherContract = contract(DetherJson);\n\n    DetherContract.setProvider(newProvider.currentProvider);\n    return res(DetherContract.deployed());\n});\n\n/**\n * [getContractStorageInstance description]\n * @param  {[type]} provider [description]\n * @return {[type]}          [description]\n */\nexport const getContractStorageInstance = (provider) =>\n  new Promise(async (res, rej) => {\n    if (!provider) return rej(new TypeError('Invalid provider URL'));\n    if (provider === 'test') return res(mockStorage.deployed());\n\n    const newProvider = new Web3(new Web3.providers.HttpProvider(provider));\n    const DetherStorageContract = contract(DetherStorageJson);\n\n    DetherStorageContract.setProvider(newProvider.currentProvider);\n    return res(DetherStorageContract.deployed());\n});\n\n/**\n * [getSignedContractInstance description]\n * @param  {[type]} privateKey [description]\n * @param  {[type]} address [description]\n * @return {[type]}          [description]\n */\nexport const getSignedContractInstance = (privateKey, address, providerUrl) =>\n  new Promise(async (res, rej) => {\n    if (!providerUrl) return rej(new TypeError('Invalid provider URL'));\n    if (providerUrl === 'test') return res(mock.deployed());\n    const DetherContract = contract(DetherJson);\n    const provider = new SignerProvider(providerUrl, {\n      signTransaction: (rawTx, cb) => cb(null, sign(rawTx, ethToolbox.add0x(privateKey))),\n      accounts: cb => cb(null, address),\n    });\n    DetherContract.setProvider(provider);\n    return res(DetherContract.deployed());\n  });\n",
     "static": true,
-    "longname": "/Users/apple/Desktop/detherGateway/src/addSellPoint.js",
+    "longname": "/Users/ishakleghlam/Desktop/detherGateway/src/constants/appConstants.js",
     "access": "public",
     "description": null,
     "lineNumber": 1
   },
   {
     "__docId__": 49,
+    "kind": "variable",
+    "name": "GAS_PRICE",
+    "memberof": "src/constants/appConstants.js",
+    "static": true,
+    "longname": "src/constants/appConstants.js~GAS_PRICE",
+    "access": "public",
+    "export": true,
+    "importPath": "dethergateway/src/constants/appConstants.js",
+    "importStyle": "{GAS_PRICE}",
+    "description": null,
+    "lineNumber": 11,
+    "undocument": true,
+    "type": {
+      "types": [
+        "number"
+      ]
+    }
+  },
+  {
+    "__docId__": 50,
+    "kind": "variable",
+    "name": "PROVIDER_URL",
+    "memberof": "src/constants/appConstants.js",
+    "static": true,
+    "longname": "src/constants/appConstants.js~PROVIDER_URL",
+    "access": "public",
+    "export": true,
+    "importPath": "dethergateway/src/constants/appConstants.js",
+    "importStyle": "{PROVIDER_URL}",
+    "description": null,
+    "lineNumber": 13,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 51,
+    "kind": "variable",
+    "name": "UTILITYWEB3",
+    "memberof": "src/constants/appConstants.js",
+    "static": true,
+    "longname": "src/constants/appConstants.js~UTILITYWEB3",
+    "access": "public",
+    "export": true,
+    "importPath": "dethergateway/src/constants/appConstants.js",
+    "importStyle": "{UTILITYWEB3}",
+    "description": null,
+    "lineNumber": 14,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 52,
+    "kind": "function",
+    "name": "getContractInstance",
+    "memberof": "src/constants/appConstants.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "src/constants/appConstants.js~getContractInstance",
+    "access": "public",
+    "export": true,
+    "importPath": "dethergateway/src/constants/appConstants.js",
+    "importStyle": "{getContractInstance}",
+    "description": "[getContractInstance description]",
+    "lineNumber": 21,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "[type]"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "provider",
+        "description": "[description]"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "[type]"
+      ],
+      "spread": false,
+      "description": "[description]"
+    }
+  },
+  {
+    "__docId__": 53,
+    "kind": "function",
+    "name": "getContractStorageInstance",
+    "memberof": "src/constants/appConstants.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "src/constants/appConstants.js~getContractStorageInstance",
+    "access": "public",
+    "export": true,
+    "importPath": "dethergateway/src/constants/appConstants.js",
+    "importStyle": "{getContractStorageInstance}",
+    "description": "[getContractStorageInstance description]",
+    "lineNumber": 38,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "[type]"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "provider",
+        "description": "[description]"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "[type]"
+      ],
+      "spread": false,
+      "description": "[description]"
+    }
+  },
+  {
+    "__docId__": 54,
+    "kind": "function",
+    "name": "getSignedContractInstance",
+    "memberof": "src/constants/appConstants.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "src/constants/appConstants.js~getSignedContractInstance",
+    "access": "public",
+    "export": true,
+    "importPath": "dethergateway/src/constants/appConstants.js",
+    "importStyle": "{getSignedContractInstance}",
+    "description": "[getSignedContractInstance description]",
+    "lineNumber": 56,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "[type]"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "privateKey",
+        "description": "[description]"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "[type]"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "address",
+        "description": "[description]"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "[type]"
+      ],
+      "spread": false,
+      "description": "[description]"
+    }
+  },
+  {
+    "__docId__": 55,
+    "kind": "file",
+    "name": "src/index.js",
+    "content": "/**\n * detherGateway\n * @author Dether TEAM\n */\n\nimport 'babel-polyfill';\nimport tellers from './tellers';\n\nexport default {\n  // tellers\n  tellers,\n};\n",
+    "static": true,
+    "longname": "/Users/ishakleghlam/Desktop/detherGateway/src/index.js",
+    "access": "public",
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 56,
+    "kind": "file",
+    "name": "src/mock/contract-mock.js",
+    "content": "import BigNumber from 'bignumber.js';\n\nconst instance = {\n  getTellerPos: () =>\n      new Promise(resolve => {\n        resolve([new BigNumber(123444), new BigNumber(123444),\n          new BigNumber(123444), new BigNumber(123444)]);\n      }),\n  getTellerProfile: () =>\n      new Promise(resolve => {\n        resolve([new BigNumber(123444), new BigNumber(123444), new BigNumber(123444), '0x4861727279000000000000000000000000000000000000000000000000000000', new BigNumber(123444), new BigNumber(123444), '0x4861727279000000000000000000000000000000000000000000000000000000']);\n      }),\n  sendCoin: () =>\n      new Promise(resolve => {\n        resolve({\n          logs: [{\n          event: 'SendCoin',\n          args: {\n            _from: '0x000000000000', _to: '0x100000000000', amount: 10000000, lat: 123000, lng: 321000,\n          },\n        }],\n      });\n    }),\n  withdrawAll: () =>\n      new Promise(resolve => {\n        resolve({\n          logs: [{\n            event: 'Withdraw',\n            args: {\n              amount: 12300000, lat: 123000, lng: 321000,\n            },\n          }],\n        });\n      }),\n  getTellerBalances: {\n    call: () =>\n      new Promise(resolve => {\n          resolve(new BigNumber(1000000000000000000000));\n      }),\n  },\n  registerPoint: () =>\n    new Promise(resolve => {\n      resolve('0x000000000000000000000000000');\n  }),\n};\n\nexport const mock = {\n  setProvider: () => {},\n  at: () => instance,\n  deployed: () => instance,\n};\n\n\nconst storageInstance = {\n  getAllTellers: () =>\n    new Promise(res => {\n      res([\n        '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',\n        '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',\n        '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',\n        '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',\n        '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',\n        '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',\n        '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb621',\n      ]);\n    }),\n  getZone: {\n    call: () =>\n      new Promise(res => {\n        res([\n          '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',\n          '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',\n          '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',\n          '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',\n          '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',\n          '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',\n          '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb621',\n        ]);\n      }),\n  },\n};\n\nexport const mockStorage = {\n  setProvider: () => {},\n  at: () => storageInstance,\n  deployed: () => storageInstance,\n};\n",
+    "static": true,
+    "longname": "/Users/ishakleghlam/Desktop/detherGateway/src/mock/contract-mock.js",
+    "access": "public",
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 57,
+    "kind": "variable",
+    "name": "instance",
+    "memberof": "src/mock/contract-mock.js",
+    "static": true,
+    "longname": "src/mock/contract-mock.js~instance",
+    "access": "public",
+    "export": false,
+    "importPath": "dethergateway/src/mock/contract-mock.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 3,
+    "undocument": true,
+    "type": {
+      "types": [
+        "{\"getTellerPos\": *, \"getTellerProfile\": *, \"sendCoin\": *, \"withdrawAll\": *, \"getTellerBalances\": *, \"registerPoint\": *}"
+      ]
+    },
+    "ignore": true
+  },
+  {
+    "__docId__": 58,
+    "kind": "variable",
+    "name": "mock",
+    "memberof": "src/mock/contract-mock.js",
+    "static": true,
+    "longname": "src/mock/contract-mock.js~mock",
+    "access": "public",
+    "export": true,
+    "importPath": "dethergateway/src/mock/contract-mock.js",
+    "importStyle": "{mock}",
+    "description": null,
+    "lineNumber": 47,
+    "undocument": true,
+    "type": {
+      "types": [
+        "{\"setProvider\": *, \"at\": *, \"deployed\": *}"
+      ]
+    }
+  },
+  {
+    "__docId__": 59,
+    "kind": "variable",
+    "name": "storageInstance",
+    "memberof": "src/mock/contract-mock.js",
+    "static": true,
+    "longname": "src/mock/contract-mock.js~storageInstance",
+    "access": "public",
+    "export": false,
+    "importPath": "dethergateway/src/mock/contract-mock.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 54,
+    "undocument": true,
+    "type": {
+      "types": [
+        "{\"getAllTellers\": *, \"getZone\": *}"
+      ]
+    },
+    "ignore": true
+  },
+  {
+    "__docId__": 60,
+    "kind": "variable",
+    "name": "mockStorage",
+    "memberof": "src/mock/contract-mock.js",
+    "static": true,
+    "longname": "src/mock/contract-mock.js~mockStorage",
+    "access": "public",
+    "export": true,
+    "importPath": "dethergateway/src/mock/contract-mock.js",
+    "importStyle": "{mockStorage}",
+    "description": null,
+    "lineNumber": 83,
+    "undocument": true,
+    "type": {
+      "types": [
+        "{\"setProvider\": *, \"at\": *, \"deployed\": *}"
+      ]
+    }
+  },
+  {
+    "__docId__": 61,
+    "kind": "file",
+    "name": "src/tellers/addTellers.js",
+    "content": "import ethToolbox from 'eth-toolbox';\nimport Web3 from 'web3';\n\nimport { GAS_PRICE, getSignedContractInstance } from '../constants/appConstants';\n\nconst check = (teller) => {\n  if (!teller.lat || Number.isNaN(teller.lat) || teller.lat > 90 || teller.lat < -90) {\n    return { error: true, msg: 'Invalid latitude' };\n  }\n  if (!teller.lng || Number.isNaN(teller.lng) || teller.lng > 180 || teller.lng < -180) {\n    return { error: true, msg: 'Invalid longitude' };\n  }\n  if (!teller.zone || !Number.isInteger(teller.zone)) {\n    return { error: true, msg: 'Invalid zone' };\n  }\n  if (!teller.rates || teller.rates <= 0 || teller.rates > 100) {\n    return { error: true, msg: 'Invalid rates' };\n  }\n  if (!teller.avatar || !Number.isInteger(teller.avatar) || teller.avatar < 0) {\n    return { error: true, msg: 'Invalid avatar' };\n  }\n  if (!teller.currency || !Number.isInteger(teller.currency) || teller.currency < 0) {\n    return { error: true, msg: 'Invalid currency' };\n  }\n  if (!teller.telegram || teller.telegram.length < 3 || teller.telegram.length > 30) {\n    return { error: true, msg: 'Invalid telegram' };\n  }\n  if (!teller.amount || Number.isNaN(teller.amount) || teller.amount < 0.01) {\n    return { error: true, msg: 'Invalid amount' };\n  }\n  if (!teller.username || teller.username.length < 3 || teller.username.length > 30) {\n    return { error: true, msg: 'Invalid username' };\n  }\n  if (!teller.keystore) {\n    return { error: true, msg: 'Invalid keystore' };\n  }\n  if (!teller.password || teller.password.length < 1) {\n    return { error: true, msg: 'Invalid password' };\n  }\n  if (!teller.providerUrl) {\n    return { error: true, msg: 'Invalid provider url' };\n  }\n  // if (!teller.gasPrice || teller.gasPrice < 0) {\n  //   return { error: true, msg: 'Invalid gas Price' };\n  // }\n  return {};\n};\n\n// gas used = 223319\n// gas price average (mainnet) = 25000000000 wei\n// 250000 * 25000000000 = 0.006250000000000000 ETH\n// need 0.006250000000000000 ETH to process this function\n/**\n * @param {number} lat latitude min -90 max +90\n * @param {number} lng longitude min -180 max +180\n * @param {string} zone geographic zone\n * @param {number} rates Margin (0-100 * 100)\n * @param {number} avatar (1-9)\n * @param {number} currency number (0-4)\n * @param {string} telegam pseudo telegram\n * @param {number} amount escrow\n * @param {string} username username\n * @param {object} keystore deserialize keystore\n * @param {string} password\n * @param {string} providerUrl\n * @return {object} Return txs\n */\nconst dtrRegisterPoint = async (teller) =>\n  new Promise(async (res, rej) => {\n    const secu = check(teller);\n    if (secu.error) return rej(new TypeError(secu.msg));\n\n    try {\n      const key = await ethToolbox.decodeKeystore(teller.keystore, teller.password);\n      if (!key || !key.privateKey || !key.address || !ethToolbox.utils.isAddr(key.address)) {\n        return rej(new TypeError('Invalid keystore or password'));\n      }\n\n      const dtrContractInstance =\n        await getSignedContractInstance(key.privateKey, key.address, teller.providerUrl);\n\n      const utilityWeb3 = new Web3(new Web3.providers.HttpProvider(teller.providerUrl));\n\n      let tsxAmount = parseInt(utilityWeb3.toWei(teller.amount, 'ether'), 10);\n\n      if (teller.providerUrl !== 'test') {\n        const balance = await utilityWeb3.eth.getBalance(key.address);\n         // check if enough gas is present to sendCoin once after registering\n         if (balance.toNumber() < (tsxAmount + (GAS_PRICE * 650000))) {\n           tsxAmount = balance.toNumber() - (GAS_PRICE * 650000);\n           if (tsxAmount < 0.0025) return rej(new TypeError('Insufficient funds'));\n         }\n      }\n      const result = await dtrContractInstance.registerPoint(\n        teller.lat.toFixed(6) * (10 ** 5),\n        teller.lng.toFixed(6) * (10 ** 5),\n        teller.zone,\n        teller.rates * 100,\n        teller.avatar,\n        teller.currency,\n        teller.telegram,\n        teller.username,\n        {\n          from: ethToolbox.utils.add0x(key.address),\n          value: parseInt(tsxAmount, 10),\n          gas: 450000,\n          gasPrice: GAS_PRICE,\n        },\n      );\n      return res({\n          from: ethToolbox.utils.add0x(key.address),\n          to: dtrContractInstance.address,\n          value: teller.amount,\n          date: new Date().toLocaleString('en-US', { hour12: false }),\n          dether: {\n            detherContract: true,\n            receive: false,\n          },\n          etherscan: {\n            kovan: `https://kovan.etherscan.io/tx/${result}`,\n            ropsten: `https://ropsten.etherscan.io/tx/${result}`,\n            ether: `https://etherscan.io/tx/${result}`,\n          },\n      });\n    } catch (e) {\n      return rej(new TypeError(e));\n    }\n  });\n\nexport default dtrRegisterPoint;\n",
+    "static": true,
+    "longname": "/Users/ishakleghlam/Desktop/detherGateway/src/tellers/addTellers.js",
+    "access": "public",
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 62,
+    "kind": "function",
+    "name": "check",
+    "memberof": "src/tellers/addTellers.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "src/tellers/addTellers.js~check",
+    "access": "public",
+    "export": false,
+    "importPath": "dethergateway/src/tellers/addTellers.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 6,
+    "undocument": true,
+    "params": [
+      {
+        "name": "teller",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "{}"
+      ]
+    },
+    "ignore": true
+  },
+  {
+    "__docId__": 63,
     "kind": "function",
     "name": "dtrRegisterPoint",
-    "memberof": "src/addSellPoint.js",
+    "memberof": "src/tellers/addTellers.js",
     "generator": false,
     "async": true,
     "static": true,
-    "longname": "src/addSellPoint.js~dtrRegisterPoint",
+    "longname": "src/tellers/addTellers.js~dtrRegisterPoint",
     "access": "public",
     "export": true,
-    "importPath": "dethergateway/src/addSellPoint.js",
+    "importPath": "dethergateway/src/tellers/addTellers.js",
     "importStyle": "dtrRegisterPoint",
     "description": "",
-    "lineNumber": 24,
+    "lineNumber": 68,
     "params": [
       {
         "nullable": null,
@@ -677,7 +1001,7 @@
         ],
         "spread": false,
         "optional": false,
-        "name": "name",
+        "name": "username",
         "description": "username"
       },
       {
@@ -699,6 +1023,16 @@
         "optional": false,
         "name": "password",
         "description": ""
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "providerUrl",
+        "description": ""
       }
     ],
     "return": {
@@ -711,216 +1045,31 @@
     }
   },
   {
-    "__docId__": 50,
+    "__docId__": 64,
     "kind": "file",
-    "name": "src/constants/appConstants.js",
-    "content": "import Web3 from 'web3';\nimport contract from 'truffle-contract';\nimport DetherJson from 'dethercontract/contracts/DetherInterface.json';\nimport DetherStorageJson from 'dethercontract/contracts/DetherStorage.json';\n\nexport const GAS_PRICE = 25000000000;\n\nexport const PROVIDER_URL = process.env.DETHER_ETHEREUM_PROVIDER;\nexport const UTILITYWEB3 = new Web3(new Web3.providers.HttpProvider(PROVIDER_URL));\n\n/**\n * [DetherContract description]\n * @type {[type]}\n */\nconst DetherContract = contract(DetherJson);\nDetherContract.setProvider(UTILITYWEB3.currentProvider);\nconst DetherStorageContract = contract(DetherStorageJson);\nDetherStorageContract.setProvider(UTILITYWEB3.currentProvider);\n\n/**\n * [getContractStorageInstance description]\n * @return {[type]} [description]\n */\nexport const getContractStorageInstance = () => DetherStorageContract.deployed();\n\n/**\n * [getContractInstance description]\n * @return {[type]} [description]\n */\nexport const getContractInstance = () => DetherContract.deployed();\nexport const DETHER_CONTRACT = DetherContract;\n",
+    "name": "src/tellers/deleteSellPoint.js",
+    "content": "import ethToolbox from 'eth-toolbox';\n\nimport { getSignedContractInstance } from '../constants/appConstants';\n\n// gas used = 26497\n// gas price average (mainnet) = 25000000000 wei\n// 50000 * 25000000000 = 0.001250000000000000 ETH\n// need 0.001250000000000000 ETH to process this function\n/**\n * Delete sell point, this function withdraw automatically balance escrow to owner\n * @param  {object}  keystore deserialize keystore\n * @param  {string}  password\n * @return {Promise}\n */\nconst withdrawAll = (keystore, password, providerUrl) =>\n  new Promise(async (res, rej) => {\n    if (!keystore) return rej(new TypeError('Invalid keystore'));\n    if (!password) return rej(new TypeError('Invalid password'));\n    if (!providerUrl) return rej(new TypeError('Invalid provider Url'));\n\n    try {\n      const key = await ethToolbox.decodeKeystore(keystore, password);\n\n      if (!key || !key.privateKey || !key.address || !ethToolbox.utils.isAddr(key.address)) {\n        return rej(new TypeError('Invalid keystore or password'));\n      }\n\n      const dtrContractInstance =\n        await getSignedContractInstance(key.privateKey, key.address, providerUrl);\n\n      return res(dtrContractInstance\n        .withdrawAll({\n            from: key.address,\n            gas: 100000,\n            gasPrice: 25000000000,\n          }));\n    } catch (e) {\n      return rej(new TypeError(e));\n    }\n  });\n\nexport default withdrawAll;\n",
     "static": true,
-    "longname": "/Users/apple/Desktop/detherGateway/src/constants/appConstants.js",
+    "longname": "/Users/ishakleghlam/Desktop/detherGateway/src/tellers/deleteSellPoint.js",
     "access": "public",
     "description": null,
     "lineNumber": 1
   },
   {
-    "__docId__": 51,
-    "kind": "variable",
-    "name": "GAS_PRICE",
-    "memberof": "src/constants/appConstants.js",
-    "static": true,
-    "longname": "src/constants/appConstants.js~GAS_PRICE",
-    "access": "public",
-    "export": true,
-    "importPath": "dethergateway/src/constants/appConstants.js",
-    "importStyle": "{GAS_PRICE}",
-    "description": null,
-    "lineNumber": 6,
-    "undocument": true,
-    "type": {
-      "types": [
-        "number"
-      ]
-    }
-  },
-  {
-    "__docId__": 52,
-    "kind": "variable",
-    "name": "PROVIDER_URL",
-    "memberof": "src/constants/appConstants.js",
-    "static": true,
-    "longname": "src/constants/appConstants.js~PROVIDER_URL",
-    "access": "public",
-    "export": true,
-    "importPath": "dethergateway/src/constants/appConstants.js",
-    "importStyle": "{PROVIDER_URL}",
-    "description": null,
-    "lineNumber": 8,
-    "undocument": true,
-    "type": {
-      "types": [
-        "*"
-      ]
-    }
-  },
-  {
-    "__docId__": 53,
-    "kind": "variable",
-    "name": "UTILITYWEB3",
-    "memberof": "src/constants/appConstants.js",
-    "static": true,
-    "longname": "src/constants/appConstants.js~UTILITYWEB3",
-    "access": "public",
-    "export": true,
-    "importPath": "dethergateway/src/constants/appConstants.js",
-    "importStyle": "{UTILITYWEB3}",
-    "description": null,
-    "lineNumber": 9,
-    "undocument": true,
-    "type": {
-      "types": [
-        "*"
-      ]
-    }
-  },
-  {
-    "__docId__": 54,
-    "kind": "variable",
-    "name": "DetherContract",
-    "memberof": "src/constants/appConstants.js",
-    "static": true,
-    "longname": "src/constants/appConstants.js~DetherContract",
-    "access": "public",
-    "export": false,
-    "importPath": "dethergateway/src/constants/appConstants.js",
-    "importStyle": null,
-    "description": "[DetherContract description]",
-    "lineNumber": 15,
-    "type": {
-      "nullable": null,
-      "types": [
-        "[type]"
-      ],
-      "spread": false,
-      "description": null
-    },
-    "ignore": true
-  },
-  {
-    "__docId__": 55,
-    "kind": "variable",
-    "name": "DetherStorageContract",
-    "memberof": "src/constants/appConstants.js",
-    "static": true,
-    "longname": "src/constants/appConstants.js~DetherStorageContract",
-    "access": "public",
-    "export": false,
-    "importPath": "dethergateway/src/constants/appConstants.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 17,
-    "undocument": true,
-    "type": {
-      "types": [
-        "*"
-      ]
-    },
-    "ignore": true
-  },
-  {
-    "__docId__": 56,
-    "kind": "function",
-    "name": "getContractStorageInstance",
-    "memberof": "src/constants/appConstants.js",
-    "generator": false,
-    "async": false,
-    "static": true,
-    "longname": "src/constants/appConstants.js~getContractStorageInstance",
-    "access": "public",
-    "export": true,
-    "importPath": "dethergateway/src/constants/appConstants.js",
-    "importStyle": "{getContractStorageInstance}",
-    "description": "[getContractStorageInstance description]",
-    "lineNumber": 24,
-    "return": {
-      "nullable": null,
-      "types": [
-        "[type]"
-      ],
-      "spread": false,
-      "description": "[description]"
-    },
-    "params": []
-  },
-  {
-    "__docId__": 57,
-    "kind": "function",
-    "name": "getContractInstance",
-    "memberof": "src/constants/appConstants.js",
-    "generator": false,
-    "async": false,
-    "static": true,
-    "longname": "src/constants/appConstants.js~getContractInstance",
-    "access": "public",
-    "export": true,
-    "importPath": "dethergateway/src/constants/appConstants.js",
-    "importStyle": "{getContractInstance}",
-    "description": "[getContractInstance description]",
-    "lineNumber": 30,
-    "return": {
-      "nullable": null,
-      "types": [
-        "[type]"
-      ],
-      "spread": false,
-      "description": "[description]"
-    },
-    "params": []
-  },
-  {
-    "__docId__": 58,
-    "kind": "variable",
-    "name": "DETHER_CONTRACT",
-    "memberof": "src/constants/appConstants.js",
-    "static": true,
-    "longname": "src/constants/appConstants.js~DETHER_CONTRACT",
-    "access": "public",
-    "export": true,
-    "importPath": "dethergateway/src/constants/appConstants.js",
-    "importStyle": "{DETHER_CONTRACT}",
-    "description": null,
-    "lineNumber": 31,
-    "undocument": true,
-    "type": {
-      "types": [
-        "*"
-      ]
-    }
-  },
-  {
-    "__docId__": 59,
-    "kind": "file",
-    "name": "src/deleteSellPoint.js",
-    "content": "import decodeKeystore from './utils/decodeKeystore';\nimport { getSignedContract } from './utils/contractInstance';\n\n// gas used = 26497\n// gas price average (mainnet) = 25000000000 wei\n// 50000 * 25000000000 = 0.001250000000000000 ETH\n// need 0.001250000000000000 ETH to process this function\n/**\n * Delete sell point, this function withdraw automatically balance escrow to owner\n * @param  {object}  keystore deserialize keystore\n * @param  {string}  password\n * @return {Promise}\n */\nconst withdrawAll = async (keystore, password) => {\n  const keys = await decodeKeystore(keystore, password);\n  const dtrContractInstance = await getSignedContract(keys);\n\n  return dtrContractInstance\n    .withdrawAll({\n        from: keys.address,\n        gas: 100000,\n        gasPrice: 25000000000,\n      });\n};\n\nexport default withdrawAll;\n",
-    "static": true,
-    "longname": "/Users/apple/Desktop/detherGateway/src/deleteSellPoint.js",
-    "access": "public",
-    "description": null,
-    "lineNumber": 1
-  },
-  {
-    "__docId__": 60,
+    "__docId__": 65,
     "kind": "function",
     "name": "withdrawAll",
-    "memberof": "src/deleteSellPoint.js",
+    "memberof": "src/tellers/deleteSellPoint.js",
     "generator": false,
-    "async": true,
+    "async": false,
     "static": true,
-    "longname": "src/deleteSellPoint.js~withdrawAll",
+    "longname": "src/tellers/deleteSellPoint.js~withdrawAll",
     "access": "public",
     "export": true,
-    "importPath": "dethergateway/src/deleteSellPoint.js",
+    "importPath": "dethergateway/src/tellers/deleteSellPoint.js",
     "importStyle": "withdrawAll",
     "description": "Delete sell point, this function withdraw automatically balance escrow to owner",
-    "lineNumber": 14,
+    "lineNumber": 15,
     "params": [
       {
         "nullable": null,
@@ -953,78 +1102,62 @@
     }
   },
   {
-    "__docId__": 61,
+    "__docId__": 66,
     "kind": "file",
-    "name": "src/dtrGetTellerbalances.js",
-    "content": "import { UTILITYWEB3, getContractInstance } from './constants/appConstants';\nimport add0x from './utils/add0x';\n\n/**\n * get dtr balance\n * @param  {string}  address ethereum address\n * @return {Promise}\n */\nexport const dtrGetTellerbalances = async (address) => {\n  const dtrContractInstance = await getContractInstance();\n  const result = await dtrContractInstance.getTellerBalances.call(add0x(address));\n  return UTILITYWEB3.fromWei(result.toNumber(), 'ether');\n};\n",
+    "name": "src/tellers/dtrSendCoin.js",
+    "content": "import ethToolbox from 'eth-toolbox';\n\nimport { UTILITYWEB3, getSignedContractInstance } from '../constants/appConstants';\n\nconst check = (tsx) => {\n  if (!tsx.receiver) {\n    return { error: true, msg: 'Invalid receiver' };\n  }\n  if (!tsx.amount || Number.isNaN(tsx.amount) || tsx.amount < 0.001) {\n    return { error: true, msg: 'Invalid amount' };\n  }\n  if (!tsx.keystore || (typeof tsx.keystore) !== 'object') {\n    return { error: true, msg: 'No keystore provided' };\n  }\n  if (!tsx.password || (typeof tsx.password) !== 'string' || tsx.password.length < 1) {\n    return { error: true, msg: 'Invalid password' };\n  }\n  if (!tsx.provider) {\n    return { error: true, msg: 'No provider provided' };\n  }\n  return {};\n};\n\n// gas used = 95481\n// gas price average (mainnet) = 25000000000 wei\n// 115000 * 25000000000 = 0.002875000000000000 ETH\n// need 0.006250000000000000 ETH to process this function\n/**\n * Send eth from escrow\n * @param  {string}  receiver ethereum address\n * @param  {number}  amount   max balance\n * @param  {object}  keystore deserialise keystore\n * @param  {string}  password\n * @param  {string}  provider\n * @return {Promise}\n */\n// const dtrSendCoin = async (receiver, amount, keystore, password, provider) =>\nconst dtrSendCoin = async (tsx) =>\n  new Promise(async (res, rej) => {\n    const secu = check(tsx);\n    if (secu.error) return rej(new TypeError(secu.msg));\n\n    const key = await ethToolbox.decodeKeystore(tsx.keystore, tsx.password);\n    if (!key || !key.privateKey || !key.address || !ethToolbox.utils.isAddr(key.address)) {\n      return rej(new TypeError('Invalid keystore or password'));\n    }\n\n    try {\n      const dtrContractInstance =\n        await getSignedContractInstance(key.privateKey, key.address, tsx.provider);\n      return res(dtrContractInstance.sendCoin(\n        ethToolbox.utils.add0x(tsx.receiver),\n        parseInt(UTILITYWEB3.toWei(tsx.amount, 'ether'), 10),\n        {\n          from: key.address,\n          gas: 200000,\n          gasPrice: 25000000000,\n        },\n      ));\n    } catch (e) {\n      return rej(new TypeError(e));\n    }\n  });\n\nexport default dtrSendCoin;\n",
     "static": true,
-    "longname": "/Users/apple/Desktop/detherGateway/src/dtrGetTellerbalances.js",
+    "longname": "/Users/ishakleghlam/Desktop/detherGateway/src/tellers/dtrSendCoin.js",
     "access": "public",
     "description": null,
     "lineNumber": 1
   },
   {
-    "__docId__": 62,
+    "__docId__": 67,
     "kind": "function",
-    "name": "dtrGetTellerbalances",
-    "memberof": "src/dtrGetTellerbalances.js",
+    "name": "check",
+    "memberof": "src/tellers/dtrSendCoin.js",
     "generator": false,
-    "async": true,
+    "async": false,
     "static": true,
-    "longname": "src/dtrGetTellerbalances.js~dtrGetTellerbalances",
+    "longname": "src/tellers/dtrSendCoin.js~check",
     "access": "public",
-    "export": true,
-    "importPath": "dethergateway/src/dtrGetTellerbalances.js",
-    "importStyle": "{dtrGetTellerbalances}",
-    "description": "get dtr balance",
-    "lineNumber": 9,
+    "export": false,
+    "importPath": "dethergateway/src/tellers/dtrSendCoin.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 5,
+    "undocument": true,
     "params": [
       {
-        "nullable": null,
+        "name": "tsx",
         "types": [
-          "string"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "address",
-        "description": "ethereum address"
+          "*"
+        ]
       }
     ],
     "return": {
-      "nullable": null,
       "types": [
-        "Promise"
-      ],
-      "spread": false,
-      "description": ""
-    }
+        "{}"
+      ]
+    },
+    "ignore": true
   },
   {
-    "__docId__": 63,
-    "kind": "file",
-    "name": "src/dtrSendCoin.js",
-    "content": "import decodeKeystore from './utils/decodeKeystore';\nimport { getSignedContract } from './utils/contractInstance';\nimport add0x from './utils/add0x';\nimport { UTILITYWEB3 } from './constants/appConstants';\n\n// gas used = 95481\n// gas price average (mainnet) = 25000000000 wei\n// 115000 * 25000000000 = 0.002875000000000000 ETH\n// need 0.006250000000000000 ETH to process this function\n/**\n * Send eth from escrow\n * @param  {string}  receiver ethereum address\n * @param  {number}  amount   max balance\n * @param  {object}  keystore deserialise keystore\n * @param  {string}  password\n * @return {Promise}\n */\nexport const dtrSendCoin = async (receiver, amount, keystore, password) => {\n  const keys = await decodeKeystore(keystore, password);\n  try {\n    const dtrContractInstance = await getSignedContract(keys);\n    return dtrContractInstance.sendCoin(\n      add0x(receiver),\n      parseInt(UTILITYWEB3.toWei(amount, 'ether'), 10),\n      {\n        from: keys.address,\n        gas: 200000,\n        gasPrice: 25000000000,\n      },\n    );\n  } catch (e) {\n    return new TypeError(e);\n  }\n};\n",
-    "static": true,
-    "longname": "/Users/apple/Desktop/detherGateway/src/dtrSendCoin.js",
-    "access": "public",
-    "description": null,
-    "lineNumber": 1
-  },
-  {
-    "__docId__": 64,
+    "__docId__": 68,
     "kind": "function",
     "name": "dtrSendCoin",
-    "memberof": "src/dtrSendCoin.js",
+    "memberof": "src/tellers/dtrSendCoin.js",
     "generator": false,
     "async": true,
     "static": true,
-    "longname": "src/dtrSendCoin.js~dtrSendCoin",
+    "longname": "src/tellers/dtrSendCoin.js~dtrSendCoin",
     "access": "public",
     "export": true,
-    "importPath": "dethergateway/src/dtrSendCoin.js",
-    "importStyle": "{dtrSendCoin}",
+    "importPath": "dethergateway/src/tellers/dtrSendCoin.js",
+    "importStyle": "dtrSendCoin",
     "description": "Send eth from escrow",
-    "lineNumber": 18,
+    "lineNumber": 38,
     "params": [
       {
         "nullable": null,
@@ -1065,6 +1198,16 @@
         "optional": false,
         "name": "password",
         "description": ""
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "provider",
+        "description": ""
       }
     ],
     "return": {
@@ -1077,156 +1220,78 @@
     }
   },
   {
-    "__docId__": 65,
-    "kind": "file",
-    "name": "src/getAllTsx.js",
-    "content": "import fetch from 'isomorphic-fetch';\nimport DetherJson from 'dethercontract/contracts/DetherInterface.json';\nimport DetherStorageJson from 'dethercontract/contracts/DetherStorage.json';\n\nimport { UTILITYWEB3 } from './constants/appConstants';\n\nconst etherScanKey = process.env.DETHER_ETHERSCAN_KEY;\n\n/**\n * Get all tsx\n * @param  {string} address ethereum address\n * @param  {number} network network ethereum\n * @return {array} all tsx\n */\nconst getAllTsx = (address, network) =>\n  new Promise((resolve, reject) => {\n    const dtr = DetherJson.networks[network.networkNumber].address;\n    const storage = DetherStorageJson.networks[network.networkNumber].address;\n\n    fetch(`https://kovan.etherscan.io/api?module=account&action=txlist&address=\n      ${address}&startblock=0&endblock=99999999&sort=asc&apikey=${etherScanKey}`)\n      .then(res => res.json()).then((transac) => {\n        const formatedTsx = transac.result.map((tsx) => ({\n          etherscan: `https://kovan.etherscan.io/tx/${tsx.hash}`,\n          value: UTILITYWEB3.fromWei(tsx.value, 'ether'),\n          to: tsx.to,\n          from: tsx.from,\n          date: new Date(parseInt(tsx.timeStamp * 1000, 10)).toLocaleString('en-US', { hour12: false }),\n          timeStamp: tsx.timeStamp,\n          error: tsx.isError === '1',\n          receive: tsx.from === address,\n          myEther: tsx.contractAddress === dtr || tsx.contractAddress === storage || tsx.to === dtr,\n        }));\n        fetch(`https://kovan.etherscan.io/api?module=account&action=txlistinternal&address=\n          ${address}&startblock=0&endblock=99999999&sort=asc&apikey=${etherScanKey}`)\n          .then(res => res.json()).then((iTransac) => {\n            const formatedTsx2 = iTransac.result.map((tsx2) => ({\n              etherscan: `https://kovan.etherscan.io/tx/${tsx2.hash}`,\n              value: UTILITYWEB3.fromWei(tsx2.value, 'ether'),\n              to: tsx2.to,\n              from: tsx2.from,\n              date: new Date(parseInt(tsx2.timeStamp * 1000, 10)).toLocaleString('en-US', { hour12: false }),\n              timeStamp: tsx2.timeStamp,\n              error: tsx2.isError === '1',\n              receive: tsx2.from === address,\n              myEther: tsx2.contractAddress === dtr ||\n                tsx2.contractAddress === storage || tsx2.to === dtr,\n            }));\n\n            const allTsx = formatedTsx2.concat(formatedTsx);\n            allTsx.sort((a, b) => b.timeStamp - a.timeStamp);\n            resolve(allTsx);\n          });\n      }).catch((msg) => {\n        reject(msg);\n      });\n  });\n\nexport default getAllTsx;\n",
-    "static": true,
-    "longname": "/Users/apple/Desktop/detherGateway/src/getAllTsx.js",
-    "access": "public",
-    "description": null,
-    "lineNumber": 1
-  },
-  {
-    "__docId__": 66,
-    "kind": "variable",
-    "name": "etherScanKey",
-    "memberof": "src/getAllTsx.js",
-    "static": true,
-    "longname": "src/getAllTsx.js~etherScanKey",
-    "access": "public",
-    "export": false,
-    "importPath": "dethergateway/src/getAllTsx.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 7,
-    "undocument": true,
-    "type": {
-      "types": [
-        "*"
-      ]
-    },
-    "ignore": true
-  },
-  {
-    "__docId__": 67,
-    "kind": "function",
-    "name": "getAllTsx",
-    "memberof": "src/getAllTsx.js",
-    "generator": false,
-    "async": false,
-    "static": true,
-    "longname": "src/getAllTsx.js~getAllTsx",
-    "access": "public",
-    "export": true,
-    "importPath": "dethergateway/src/getAllTsx.js",
-    "importStyle": "getAllTsx",
-    "description": "Get all tsx",
-    "lineNumber": 15,
-    "params": [
-      {
-        "nullable": null,
-        "types": [
-          "string"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "address",
-        "description": "ethereum address"
-      },
-      {
-        "nullable": null,
-        "types": [
-          "number"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "network",
-        "description": "network ethereum"
-      }
-    ],
-    "return": {
-      "nullable": null,
-      "types": [
-        "array"
-      ],
-      "spread": false,
-      "description": "all tsx"
-    }
-  },
-  {
-    "__docId__": 68,
-    "kind": "file",
-    "name": "src/getEthBalance.js",
-    "content": "import { UTILITYWEB3 } from './constants/appConstants';\n\n/**\n * Get eth Balance\n * @param  {string} address ethereum address\n * @return {number} return balance\n */\nconst getEthBalance = address =>\n  new Promise((resolve, reject) => {\n    UTILITYWEB3.eth.getBalance(address, (err, res) => {\n      if (!err) {\n        resolve(UTILITYWEB3.fromWei(res, 'ether').toNumber());\n      } else {\n        reject(new TypeError({ message: err, arg: address }));\n      }\n    });\n  });\n\nexport default getEthBalance;\n",
-    "static": true,
-    "longname": "/Users/apple/Desktop/detherGateway/src/getEthBalance.js",
-    "access": "public",
-    "description": null,
-    "lineNumber": 1
-  },
-  {
     "__docId__": 69,
-    "kind": "function",
-    "name": "getEthBalance",
-    "memberof": "src/getEthBalance.js",
-    "generator": false,
-    "async": false,
+    "kind": "file",
+    "name": "src/tellers/getBalance.js",
+    "content": "import ethToolbox from 'eth-toolbox';\n\nimport { UTILITYWEB3, getContractInstance } from '../constants/appConstants';\n\n\n/**\n * get dtr balance\n * @param  {string}  address ethereum address\n * @return {Promise}\n */\nconst getBalance = async (address, providerUrl) =>\n  new Promise(async (res, rej) => {\n    if (!ethToolbox.utils.isAddr(address)) return rej(new TypeError('Invalid ETH address'));\n    if (!providerUrl) return rej(new TypeError('No provider url'));\n\n    try {\n      const dtrContractInstance = await getContractInstance(providerUrl);\n\n      if (!dtrContractInstance) return rej(new TypeError('Invalid provider URL'));\n\n      const result = await dtrContractInstance.getTellerBalances\n        .call(ethToolbox.utils.add0x(address));\n\n      if (Number.isNaN(Number(result))) return res(0);\n\n      return res(Number(UTILITYWEB3.fromWei(result.toNumber(), 'ether')));\n    } catch (e) {\n      return rej(new TypeError(e));\n    }\n  });\n\nexport default getBalance;\n",
     "static": true,
-    "longname": "src/getEthBalance.js~getEthBalance",
+    "longname": "/Users/ishakleghlam/Desktop/detherGateway/src/tellers/getBalance.js",
     "access": "public",
-    "export": true,
-    "importPath": "dethergateway/src/getEthBalance.js",
-    "importStyle": "getEthBalance",
-    "description": "Get eth Balance",
-    "lineNumber": 8,
-    "params": [
-      {
-        "nullable": null,
-        "types": [
-          "string"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "address",
-        "description": "ethereum address"
-      }
-    ],
-    "return": {
-      "nullable": null,
-      "types": [
-        "number"
-      ],
-      "spread": false,
-      "description": "return balance"
-    }
+    "description": null,
+    "lineNumber": 1
   },
   {
     "__docId__": 70,
-    "kind": "file",
-    "name": "src/getTellers.js",
-    "content": "import { getContractStorageInstance, getContractInstance, UTILITYWEB3 } from './constants/appConstants';\n\n/**\n * get teller by address\n * @param  {string}  address ethereum address\n * @return {object} return teller\n */\nexport const dtrGetTeller = async (address) => {\n  const teller = {};\n  const dtrContractInstance = await getContractInstance();\n  const tellerPos = await dtrContractInstance.getTellerPos(address);\n  if (tellerPos[3].toNumber() === 0) return null;\n  const tellerProfile = await dtrContractInstance.getTellerProfile(address);\n  try {\n    teller.name = UTILITYWEB3.toUtf8(tellerProfile[3]);\n  } catch (e) {\n    teller.name = 'Dether';\n  }\n  try {\n    teller.messengerAddr = UTILITYWEB3.toUtf8(tellerProfile[6]);\n  } catch (e) {\n    teller.messengerAddr = 'Dether';\n  }\n  return {\n    messengerAddr: teller.name,\n    name: teller.messengerAddr,\n    lat: tellerPos[0].toNumber(),\n    lng: tellerPos[1].toNumber(),\n    zoneId: tellerPos[2].toNumber(),\n    escrowBalance: UTILITYWEB3.fromWei(tellerPos[3].toNumber(), 'ether'),\n    rates: tellerProfile[0].toNumber(),\n    volumeTrade: UTILITYWEB3.fromWei(tellerProfile[1].toNumber(), 'ether'),\n    nbTrade: tellerProfile[2].toNumber(),\n    currencyId: tellerProfile[4].toNumber(),\n    avatarId: tellerProfile[5].toNumber(),\n    ethAddress: address,\n    id: address,\n  };\n};\n\n/**\n * Get All tellers per zone\n * @param  {string}  zone\n * @return {array} return array of tellers\n */\nexport const getTellersPerZone = async (zone) => {\n  const dtrContractStorageInstance = await getContractStorageInstance();\n  const tellersAddressesInZone = await dtrContractStorageInstance.getZone.call(zone);\n  const tellers = [];\n  await Promise.all(tellersAddressesInZone.map(async (data) => {\n    const teller = await dtrGetTeller(data);\n    if (teller && teller.zoneId === parseInt(zone, 10) && tellers.indexOf(teller)) {\n      tellers.push(teller);\n    }\n  }));\n  return tellers;\n};\n\n/**\n * Get All tellers on the map\n * @return {array} return array of tellers\n */\nexport const getAllTellers = async () => {\n  const dtrContractStorageInstance = await getContractStorageInstance();\n  const tellersAddressesInZone = await dtrContractStorageInstance.getAllTellers();\n  const tellers = [];\n  await Promise.all(tellersAddressesInZone.map(async (data) => {\n    const teller = await dtrGetTeller(data);\n    if (teller && tellers.indexOf(teller)) tellers.push(teller);\n  }));\n  return tellers;\n};\n",
+    "kind": "function",
+    "name": "getBalance",
+    "memberof": "src/tellers/getBalance.js",
+    "generator": false,
+    "async": true,
     "static": true,
-    "longname": "/Users/apple/Desktop/detherGateway/src/getTellers.js",
+    "longname": "src/tellers/getBalance.js~getBalance",
+    "access": "public",
+    "export": true,
+    "importPath": "dethergateway/src/tellers/getBalance.js",
+    "importStyle": "getBalance",
+    "description": "get dtr balance",
+    "lineNumber": 11,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "address",
+        "description": "ethereum address"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise"
+      ],
+      "spread": false,
+      "description": ""
+    }
+  },
+  {
+    "__docId__": 71,
+    "kind": "file",
+    "name": "src/tellers/getTellers.js",
+    "content": "import {\n  getContractStorageInstance,\n  getContractInstance,\n  UTILITYWEB3,\n} from '../constants/appConstants';\n\n/**\n * get teller by address\n * @param  {string}  address ethereum address\n * @return {object} return teller\n */\nexport const dtrGetTeller = (address, providerUrl) =>\n  new Promise(async (res, rej) => {\n    try {\n      const dtrContractInstance = await getContractInstance(providerUrl);\n      if (!dtrContractInstance) return rej(new TypeError('Invalid provider URL'));\n\n      const tellerPos = await dtrContractInstance.getTellerPos(address);\n      if (!tellerPos) return rej(new TypeError('Invalid Teller Position'));\n\n      if (tellerPos[3].toNumber() === 0) return res(null);\n\n      const tellerProfile = await dtrContractInstance.getTellerProfile(address);\n      if (!tellerProfile) return rej(new TypeError('Invalid Teller Profile'));\n\n      return res({\n        name: UTILITYWEB3.toUtf8(tellerProfile[3]) || 'Dether',\n        messengerAddr: UTILITYWEB3.toUtf8(tellerProfile[6]) || 'Dether_io',\n        lat: tellerPos[0].toNumber() / (10 ** 5) || 48.864716,\n        lng: tellerPos[1].toNumber() / (10 ** 5) || 2.349014,\n        zoneId: tellerPos[2].toNumber(),\n        escrowBalance: Number(UTILITYWEB3.fromWei(tellerPos[3].toNumber(), 'ether')) || 0,\n        rates: tellerProfile[0].toNumber(),\n        volumeTrade: Number(UTILITYWEB3.fromWei(tellerProfile[1].toNumber(), 'ether')) || 0,\n        nbTrade: tellerProfile[2].toNumber(),\n        currencyId: tellerProfile[4].toNumber(),\n        avatarId: tellerProfile[5].toNumber(),\n        ethAddress: address,\n        id: address,\n      });\n    } catch (e) {\n      return rej(new TypeError(e));\n    }\n  });\n\n/**\n * Get All tellers per zone\n * @param  {string}  zone\n * @return {array} return array of tellers\n */\nexport const getTellersPerZone = (zone, providerUrl) =>\n  new Promise(async (res, rej) => {\n    try {\n      const dtrContractStorageInstance = await getContractStorageInstance(providerUrl);\n      if (!dtrContractStorageInstance) return rej(new TypeError('Invalid provider URL'));\n\n      const tellersAddressesInZone = await dtrContractStorageInstance.getZone.call(zone);\n      if (!tellersAddressesInZone || !tellersAddressesInZone.length) return res([]);\n\n      const tellers = [];\n\n      await Promise.all(tellersAddressesInZone.map(async (addr) => {\n        const teller = await dtrGetTeller(addr, providerUrl);\n\n        if (teller\n            && teller.zoneId === parseInt(zone, 10)\n            && !tellers.find((tel) => tel.ethAddress === teller.ethAddress)) {\n          tellers.push(teller);\n        }\n      }));\n\n      return res(tellers);\n    } catch (e) {\n      return rej(new TypeError(e));\n    }\n  });\n\n/**\n * Get All tellers on the map\n * @return {array} return array of tellers\n */\nexport const getAllTellers = (providerUrl) =>\n  new Promise(async (res, rej) => {\n    try {\n      const dtrContractStorageInstance = await getContractStorageInstance(providerUrl);\n      if (!dtrContractStorageInstance) return rej(new TypeError('Invalid provider URL'));\n\n      const tellersAddresses = await dtrContractStorageInstance.getAllTellers();\n      if (!tellersAddresses || !tellersAddresses.length) return res([]);\n\n      const tellers = [];\n\n      await Promise.all(tellersAddresses.map(async (addr) => {\n        const teller = await dtrGetTeller(addr, providerUrl);\n\n        if (teller && !tellers.find((tel) => tel.ethAddress === teller.ethAddress)) {\n          tellers.push(teller);\n        }\n      }));\n\n      return res(tellers);\n    } catch (e) {\n      return rej(new TypeError(e));\n    }\n  });\n",
+    "static": true,
+    "longname": "/Users/ishakleghlam/Desktop/detherGateway/src/tellers/getTellers.js",
     "access": "public",
     "description": null,
     "lineNumber": 1
   },
   {
-    "__docId__": 71,
+    "__docId__": 72,
     "kind": "function",
     "name": "dtrGetTeller",
-    "memberof": "src/getTellers.js",
+    "memberof": "src/tellers/getTellers.js",
     "generator": false,
-    "async": true,
+    "async": false,
     "static": true,
-    "longname": "src/getTellers.js~dtrGetTeller",
+    "longname": "src/tellers/getTellers.js~dtrGetTeller",
     "access": "public",
     "export": true,
-    "importPath": "dethergateway/src/getTellers.js",
+    "importPath": "dethergateway/src/tellers/getTellers.js",
     "importStyle": "{dtrGetTeller}",
     "description": "get teller by address",
-    "lineNumber": 8,
+    "lineNumber": 12,
     "params": [
       {
         "nullable": null,
@@ -1249,20 +1314,20 @@
     }
   },
   {
-    "__docId__": 72,
+    "__docId__": 73,
     "kind": "function",
     "name": "getTellersPerZone",
-    "memberof": "src/getTellers.js",
+    "memberof": "src/tellers/getTellers.js",
     "generator": false,
-    "async": true,
+    "async": false,
     "static": true,
-    "longname": "src/getTellers.js~getTellersPerZone",
+    "longname": "src/tellers/getTellers.js~getTellersPerZone",
     "access": "public",
     "export": true,
-    "importPath": "dethergateway/src/getTellers.js",
+    "importPath": "dethergateway/src/tellers/getTellers.js",
     "importStyle": "{getTellersPerZone}",
     "description": "Get All tellers per zone",
-    "lineNumber": 46,
+    "lineNumber": 51,
     "params": [
       {
         "nullable": null,
@@ -1285,20 +1350,20 @@
     }
   },
   {
-    "__docId__": 73,
+    "__docId__": 74,
     "kind": "function",
     "name": "getAllTellers",
-    "memberof": "src/getTellers.js",
+    "memberof": "src/tellers/getTellers.js",
     "generator": false,
-    "async": true,
+    "async": false,
     "static": true,
-    "longname": "src/getTellers.js~getAllTellers",
+    "longname": "src/tellers/getTellers.js~getAllTellers",
     "access": "public",
     "export": true,
-    "importPath": "dethergateway/src/getTellers.js",
+    "importPath": "dethergateway/src/tellers/getTellers.js",
     "importStyle": "{getAllTellers}",
     "description": "Get All tellers on the map",
-    "lineNumber": 63,
+    "lineNumber": 82,
     "return": {
       "nullable": null,
       "types": [
@@ -1307,326 +1372,58 @@
       "spread": false,
       "description": "return array of tellers"
     },
-    "params": []
-  },
-  {
-    "__docId__": 74,
-    "kind": "file",
-    "name": "src/index.js",
-    "content": "require('dotenv').config({ path: '.env' });\n",
-    "static": true,
-    "longname": "/Users/apple/Desktop/detherGateway/src/index.js",
-    "access": "public",
-    "description": null,
-    "lineNumber": 1
+    "params": [
+      {
+        "name": "providerUrl",
+        "types": [
+          "*"
+        ]
+      }
+    ]
   },
   {
     "__docId__": 75,
     "kind": "file",
-    "name": "src/sendEth.js",
-    "content": "import decodeKeystore from './utils/decodeKeystore';\nimport getSignedWeb3 from './utils/contractInstance';\nimport { GAS_PRICE, UTILITYWEB3 } from './constants/appConstants';\nimport add0x from './utils/add0x';\n\n/**\n * Send eth\n * @param  {string} address eth address\n * @param  {number} amount max balance\n * @param  {object} keystore deserialize keystore\n * @param  {string} password\n * @return {object} Return txs\n */\nconst sendEther = (address, amount, keystore, password) => (\n  new Promise(async (resolve, reject) => {\n    try {\n      const keys = await decodeKeystore(keystore, password);\n      const signedWeb3 = getSignedWeb3(keys);\n      const balance = await UTILITYWEB3.eth.getBalance(keys.address);\n\n      let tsxAmount = parseInt(UTILITYWEB3.toWei(amount, 'ether'), 10);\n\n      if (balance.toNumber() < (tsxAmount + (GAS_PRICE * 21000))) {\n        tsxAmount = balance.toNumber() - (GAS_PRICE * 21000);\n      }\n\n      signedWeb3.eth.sendTransaction({\n        from: add0x(keys.address),\n        to: add0x(address),\n        value: parseInt(tsxAmount, 10),\n        gas: 21000,\n        GAS_PRICE,\n      }, (error, hash) => {\n        if (!error) {\n          const retvalue = {\n            from: add0x(keys.address),\n            to: add0x(address),\n            value: amount,\n            date: new Date().toLocaleString('en-US', { hour12: false }),\n            receive: 'no',\n            myEther: 'no',\n            etherscan: `https://kovan.etherscan.io/tx/${hash}`,\n          };\n          resolve(retvalue);\n        } else {\n          console.log(error);\n          reject(error);\n        }\n      });\n    } catch (error) {\n      reject(error);\n    }\n  })\n);\n\nexport default sendEther;\n",
+    "name": "src/tellers/index.js",
+    "content": "import dtrRegisterPoint from './addTellers';\nimport getBalance from './getBalance';\nimport withdrawAll from './deleteSellPoint';\nimport {\n  dtrGetTeller,\n  getTellersPerZone,\n  getAllTellers,\n} from './getTellers';\n\nconst tellers = {\n  // Add teller\n  add: dtrRegisterPoint,\n\n  // Get Tellers\n  get: dtrGetTeller,\n  getZone: getTellersPerZone,\n  getAll: getAllTellers,\n\n  // Get Teller balance\n  balance: getBalance,\n\n  // Remove teller\n  del: withdrawAll,\n};\n\nexport default tellers;\n",
     "static": true,
-    "longname": "/Users/apple/Desktop/detherGateway/src/sendEth.js",
+    "longname": "/Users/ishakleghlam/Desktop/detherGateway/src/tellers/index.js",
     "access": "public",
     "description": null,
     "lineNumber": 1
   },
   {
     "__docId__": 76,
-    "kind": "function",
-    "name": "sendEther",
-    "memberof": "src/sendEth.js",
-    "generator": false,
-    "async": false,
-    "static": true,
-    "longname": "src/sendEth.js~sendEther",
-    "access": "public",
-    "export": true,
-    "importPath": "dethergateway/src/sendEth.js",
-    "importStyle": "sendEther",
-    "description": "Send eth",
-    "lineNumber": 14,
-    "params": [
-      {
-        "nullable": null,
-        "types": [
-          "string"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "address",
-        "description": "eth address"
-      },
-      {
-        "nullable": null,
-        "types": [
-          "number"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "amount",
-        "description": "max balance"
-      },
-      {
-        "nullable": null,
-        "types": [
-          "object"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "keystore",
-        "description": "deserialize keystore"
-      },
-      {
-        "nullable": null,
-        "types": [
-          "string"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "password",
-        "description": ""
-      }
-    ],
-    "return": {
-      "nullable": null,
-      "types": [
-        "object"
-      ],
-      "spread": false,
-      "description": "Return txs"
-    }
-  },
-  {
-    "__docId__": 77,
-    "kind": "file",
-    "name": "src/utils/add0x.js",
-    "content": "/**\n * @param {string} input address ethereum\n * @return {string} formated address ethereum\n */\nconst add0x = (input) => {\n  if (typeof (input) !== 'string') return input;\n  else if (input.length < 2 || input.slice(0, 2) !== '0x') return `0x${input}`;\n  return input;\n};\n\nexport default add0x;\n",
-    "static": true,
-    "longname": "/Users/apple/Desktop/detherGateway/src/utils/add0x.js",
-    "access": "public",
-    "description": null,
-    "lineNumber": 1
-  },
-  {
-    "__docId__": 78,
-    "kind": "function",
-    "name": "add0x",
-    "memberof": "src/utils/add0x.js",
-    "generator": false,
-    "async": false,
-    "static": true,
-    "longname": "src/utils/add0x.js~add0x",
-    "access": "public",
-    "export": true,
-    "importPath": "dethergateway/src/utils/add0x.js",
-    "importStyle": "add0x",
-    "description": "",
-    "lineNumber": 5,
-    "params": [
-      {
-        "nullable": null,
-        "types": [
-          "string"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "input",
-        "description": "address ethereum"
-      }
-    ],
-    "return": {
-      "nullable": null,
-      "types": [
-        "string"
-      ],
-      "spread": false,
-      "description": "formated address ethereum"
-    }
-  },
-  {
-    "__docId__": 79,
-    "kind": "file",
-    "name": "src/utils/contractInstance.js",
-    "content": "import Web3 from 'web3';\nimport contract from 'truffle-contract';\nimport DetherJson from 'dethercontract/contracts/DetherInterface.json';\nimport SignerProvider from 'ethjs-provider-signer';\nimport { sign } from 'ethjs-signer';\n\nimport add0x from './add0x';\n\nconst providerUrl = process.env.DETHER_ETHEREUM_PROVIDER;\n\n/**\n * @param {string} privateKey ethereum private key\n * @param {string} address ethereum address\n * @return {object} return dtrContract instance\n */\nexport const getSignedContract = (privateKey, address) => {\n  if (!privateKey || !address) return null;\n  const dtrContract = contract(DetherJson);\n  const provider = new SignerProvider(providerUrl, {\n    signTransaction: (rawTx, cb) => cb(null, sign(rawTx, add0x(privateKey))),\n    accounts: cb => cb(null, address),\n  });\n  dtrContract.setProvider(provider);\n  return dtrContract.deployed();\n};\n\n/**\n * get signed web3\n * @param\n * @param.privateKey  {string} privateKey\n * @param.address  {string} address\n * @return {object}\n */\nexport const getSignedWeb3 = ({ privateKey, address }) => {\n  if (!privateKey || !address) return null;\n  const provider = new SignerProvider(providerUrl, {\n    signTransaction: (rawTx, cb) => cb(null, sign(rawTx, add0x(privateKey))),\n    accounts: cb => cb(null, address),\n  });\n  return new Web3(provider);\n};\n",
-    "static": true,
-    "longname": "/Users/apple/Desktop/detherGateway/src/utils/contractInstance.js",
-    "access": "public",
-    "description": null,
-    "lineNumber": 1
-  },
-  {
-    "__docId__": 80,
     "kind": "variable",
-    "name": "providerUrl",
-    "memberof": "src/utils/contractInstance.js",
+    "name": "tellers",
+    "memberof": "src/tellers/index.js",
     "static": true,
-    "longname": "src/utils/contractInstance.js~providerUrl",
+    "longname": "src/tellers/index.js~tellers",
     "access": "public",
-    "export": false,
-    "importPath": "dethergateway/src/utils/contractInstance.js",
-    "importStyle": null,
+    "export": true,
+    "importPath": "dethergateway/src/tellers/index.js",
+    "importStyle": "tellers",
     "description": null,
-    "lineNumber": 9,
+    "lineNumber": 10,
     "undocument": true,
     "type": {
       "types": [
-        "*"
+        "{\"add\": *, \"get\": *, \"getZone\": *, \"getAll\": *, \"balance\": *, \"del\": *}"
       ]
-    },
-    "ignore": true
-  },
-  {
-    "__docId__": 81,
-    "kind": "function",
-    "name": "getSignedContract",
-    "memberof": "src/utils/contractInstance.js",
-    "generator": false,
-    "async": false,
-    "static": true,
-    "longname": "src/utils/contractInstance.js~getSignedContract",
-    "access": "public",
-    "export": true,
-    "importPath": "dethergateway/src/utils/contractInstance.js",
-    "importStyle": "{getSignedContract}",
-    "description": "",
-    "lineNumber": 16,
-    "params": [
-      {
-        "nullable": null,
-        "types": [
-          "string"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "privateKey",
-        "description": "ethereum private key"
-      },
-      {
-        "nullable": null,
-        "types": [
-          "string"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "address",
-        "description": "ethereum address"
-      }
-    ],
-    "return": {
-      "nullable": null,
-      "types": [
-        "object"
-      ],
-      "spread": false,
-      "description": "return dtrContract instance"
-    }
-  },
-  {
-    "__docId__": 82,
-    "kind": "function",
-    "name": "getSignedWeb3",
-    "memberof": "src/utils/contractInstance.js",
-    "generator": false,
-    "async": false,
-    "static": true,
-    "longname": "src/utils/contractInstance.js~getSignedWeb3",
-    "access": "public",
-    "export": true,
-    "importPath": "dethergateway/src/utils/contractInstance.js",
-    "importStyle": "{getSignedWeb3}",
-    "description": "get signed web3",
-    "lineNumber": 34,
-    "params": [
-      {
-        "nullable": null,
-        "types": [
-          "*"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "@param.privateKey",
-        "description": "{string} privateKey\n@param.address  {string} address"
-      }
-    ],
-    "return": {
-      "nullable": null,
-      "types": [
-        "object"
-      ],
-      "spread": false,
-      "description": ""
-    }
-  },
-  {
-    "__docId__": 83,
-    "kind": "file",
-    "name": "src/utils/decodeKeystore.js",
-    "content": "/**\n * @param {object} keystore\n * @param {string} password\n * @return {object} return privateKey and ethereum address\n */\nconst decodeKeystore = (keystore, password) =>\n  new Promise((resolve, reject) => {\n    if (!keystore || !password) return reject(new TypeError('Invalid arguments'));\n\n    return keystore.keyFromPassword(password, (err, pwDerivedKey) => {\n      if (err) return reject(err);\n\n      if (!keystore.isDerivedKeyCorrect(pwDerivedKey)) {\n        return reject(new TypeError('Invalid password'));\n      }\n\n      const address = keystore.getAddresses()[0];\n      const privateKey = keystore.exportPrivateKey(address, pwDerivedKey);\n\n      return resolve({\n        address,\n        privateKey,\n      });\n    });\n  });\n\nexport default decodeKeystore;\n",
-    "static": true,
-    "longname": "/Users/apple/Desktop/detherGateway/src/utils/decodeKeystore.js",
-    "access": "public",
-    "description": null,
-    "lineNumber": 1
-  },
-  {
-    "__docId__": 84,
-    "kind": "function",
-    "name": "decodeKeystore",
-    "memberof": "src/utils/decodeKeystore.js",
-    "generator": false,
-    "async": false,
-    "static": true,
-    "longname": "src/utils/decodeKeystore.js~decodeKeystore",
-    "access": "public",
-    "export": true,
-    "importPath": "dethergateway/src/utils/decodeKeystore.js",
-    "importStyle": "decodeKeystore",
-    "description": "",
-    "lineNumber": 6,
-    "params": [
-      {
-        "nullable": null,
-        "types": [
-          "object"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "keystore",
-        "description": ""
-      },
-      {
-        "nullable": null,
-        "types": [
-          "string"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "password",
-        "description": ""
-      }
-    ],
-    "return": {
-      "nullable": null,
-      "types": [
-        "object"
-      ],
-      "spread": false,
-      "description": "return privateKey and ethereum address"
     }
   },
   {
     "kind": "index",
-    "content": "# detherGateway\nGateway between Front App and the detherContracts.\n\n### Build doc\n```\n# Run ESDoc.\n./node_modules/.bin/esdoc\n\n# View a documentation\nopen ./docs/index.html\n```\n",
-    "longname": "/Users/apple/Desktop/detherGateway/README.md",
+    "content": "# detherGateway [![Build Status](https://travis-ci.com/dethertech/detherGateway.svg?token=kdsX9Y3G2xZ5ptCyzuYL&branch=master)](https://travis-ci.com/dethertech/detherGateway) ![npm](https://img.shields.io/npm/v/detherGateway.svg)\nDether Gateway\n\n## Table of Contents\n\n* [Get Started](#get-started)\n* [Usages](#usages)\n    * [Add tellers](#add-tellers)\n    * [Get teller](#get-teller)\n    * [Get zone](#get-zone)\n    * [Get all](#get-all)\n    * [Get balance](#get-balance)\n    * [Delete teller](#delete-teller)\n* [Install](#install)\n* [Example](#example)\n* [Dev](#dev)\n* [Test](#test)\n* [Build doc](#build-doc)\n* [Dependencies](#dependencies)\n* [Dev Dependencies](#dev-dependencies)\n* [Bugs](#bugs)\n* [License](#license)\n* [Donation](#donation)\n\n## Usages\n\n### Add tellers\n```javascript\nconst tellers = detherGateway.tellers.add(teller);\n```\n\n#### Inputs\n\n* `teller`: Ethereum address\n* `lat` latitude min -90 max +90\n* `lng` longitude min -180 max +180\n* `zone` geographic zone\n* `rates` Margin (0-100 * 100)\n* `avatar` (1-9)\n* `currency` number (0-4)\n* `telegam` pseudo telegram\n* `amount` escrow\n* `username` username\n* `keystore` deserialize keystore\n* `password` string\n* `providerUrl`string\n\n#### Return value\n```javascript\n{\n    from: ethToolbox.utils.add0x(key.address),\n    to: dtrContractInstance.address,\n    value: teller.amount,\n    date: new Date().toLocaleString('en-US', { hour12: false }),\n    dether: {\n      detherContract: true,\n      receive: false,\n    },\n    etherscan: {\n      kovan: `https://kovan.etherscan.io/tx/${result}`,\n      ropsten: `https://ropsten.etherscan.io/tx/${result}`,\n      ether: `https://etherscan.io/tx/${result}`,\n    }\n  }\n```\n\n### Get teller\n```javascript\nconst tellers = detherGateway.tellers.get(address);\n```\n\n#### Inputs\n\n* `address`: Ethereum address\n\n#### Return value\n```javascript\n{\n  name: UTILITYWEB3.toUtf8(tellerProfile[3]) || 'Dether',\n  messengerAddr: UTILITYWEB3.toUtf8(tellerProfile[6]) || 'Dether_io',\n  lat: tellerPos[0].toNumber() / (10 ** 5) || 48.864716,\n  lng: tellerPos[1].toNumber() / (10 ** 5) || 2.349014,\n  zoneId: tellerPos[2].toNumber(),\n  escrowBalance: Number(UTILITYWEB3.fromWei(tellerPos[3].toNumber(), 'ether')) || 0,\n  rates: tellerProfile[0].toNumber(),\n  volumeTrade: Number(UTILITYWEB3.fromWei(tellerProfile[1].toNumber(), 'ether')) || 0,\n  nbTrade: tellerProfile[2].toNumber(),\n  currencyId: tellerProfile[4].toNumber(),\n  avatarId: tellerProfile[5].toNumber(),\n  ethAddress: address,\n  id: address,\n}\n```\n\n### Get zone\n```javascript\nconst tellers = detherGateway.tellers.getZone(countryCode);\n```\n\n#### Inputs\n\n* `countryCode`: Geocoding country CODE (only the digit)\n\n#### Return value\n* {array} array of tellers\n\n\n### Get all\n```javascript\nconst tellers = detherGateway.tellers.getAll();\n```\n\n#### Inputs\n\n* .\n\n#### Return value\n* {array} array of all tellers\n\n\n### Get balance\n```javascript\nconst tellers = detherGateway.tellers.balance(address);\n```\n\n#### Inputs\n\n* `address`: Tellers Ethereum address\n\n#### Return value\n* balance of tellers\n\n\n### Delete teller\n```javascript\nconst tellers = detherGateway.tellers.del(address);\n```\n\n#### Inputs\n\n* `address`: Tellers Ethereum address\n\n#### Return value\n* balance of tellers\n\n\n## Install\n```\n// use npm\nnpm install --save detherGateway\n\n// use yarn\nyarn add detherGateway\n```\n\n## Example\n```\ngit clone https://github.com/dethertech/detherGateway.git\ncd detherGateway/examples\nyarn\nyarn run example\n```\n\n## Dev\n```\ngit clone https://github.com/dethertech/detherGateway.git\ncd detherGateway\nyarn\n```\n\n## Test\n```\nnpm test\n```\n\n## Build doc\n```\n# Install ESDoc\nyarn\n\n# Run ESDoc.\nyarn run:doc\n```\n\n## Dependencies\n\n* [dethercontract](https://github.com/dethertech/dethercontracts.git)\n* [dotenv](https://github.com/motdotla/dotenv)\n* [eth-toolbox](https://github.com/dethertech/eth-toolbox)\n* [ethjs-provider-signer](https://github.com/ethjs/ethjs-provider-signer)\n* [ethjs-signer](https://github.com/ethjs/ethjs-signer)\n* [truffle-contract](https://github.com/trufflesuite/truffle-contract)\n* [web3](https://github.com/ethereum/web3.js/)\n\n\n## Dev Dependencies\n\n* [babel-cli](https://github.com/babel/babel/tree/master/packages/babel-cli)\n* [babel-core](https://github.com/babel/babel/tree/master/packages/babel-core)\n* [babel-eslint](https://github.com/babel/babel-eslint)\n* [babel-polyfill](https://github.com/babel/babel/tree/master/packages/babel-polyfill)\n* [babel-preset-latest](https://github.com/babel/babel/tree/master/packages/babel-preset-latest)\n* [bignumber.js](https://github.com/MikeMcl/bignumber.js)\n* [chai](https://github.com/chaijs/chai)\n* [chai-as-promised](https://github.com/domenic/chai-as-promised)\n* [esdoc](https://github.com/esdoc/esdoc)\n* [esdoc-standard-plugin](https://github.com/esdoc/esdoc-plugins)\n* [eslint](https://github.com/eslint/eslint)\n* [eslint-config-airbnb-base](https://github.com/airbnb/javascript)\n* [eslint-plugin-import](https://github.com/benmosher/eslint-plugin-import)\n* [mocha](https://github.com/mochajs/mocha)\n\n## Bugs\n\nWhen you find issues, please report them:\n\n* web: [https://github.com/dethertech/detherGateway/issues](https://github.com/dethertech/detherGateway/issues)\n\n## License\n\n* __MIT__: [http://opensource.org/licenses/MIT](http://opensource.org/licenses/MIT)\n\n## Donation\n* [Ethereum Fundation](https://ethereum.org/donate)\n* [Etherscan](https://etherscan.io/address/0x71c7656ec7ab88b098defb751b7401b5f6d8976f)\n* [MyEtherWallet](https://etherscan.io/address/0x7cB57B5A97eAbe94205C07890BE4c1aD31E486A8)\n",
+    "longname": "/Users/ishakleghlam/Desktop/detherGateway/README.md",
     "name": "./README.md",
     "static": true,
     "access": "public"
   },
   {
     "kind": "packageJSON",
-    "content": "{\n  \"name\": \"dethergateway\",\n  \"version\": \"1.0.0\",\n  \"description\": \"Gateway between Front App and the detherContracts.\",\n  \"main\": \"lib/index.js\",\n  \"scripts\": {\n    \"test\": \"mocha --compilers js:babel-core/register test/*.js --recursive\"\n  },\n  \"repository\": {\n    \"type\": \"git\",\n    \"url\": \"git+https://github.com/dethertech/detherGateway.git\"\n  },\n  \"keywords\": [\n    \"Dether\",\n    \"ethereum\",\n    \"gateway\"\n  ],\n  \"author\": \"Dether Team\",\n  \"license\": \"ISC\",\n  \"bugs\": {\n    \"url\": \"https://github.com/dethertech/detherGateway/issues\"\n  },\n  \"homepage\": \"https://github.com/dethertech/detherGateway#readme\",\n  \"dependencies\": {\n    \"dethercontract\": \"^1.2.5\",\n    \"dotenv\": \"^4.0.0\",\n    \"es6-promise\": \"^4.1.1\",\n    \"ethjs-provider-signer\": \"^0.1.4\",\n    \"ethjs-signer\": \"^0.1.1\",\n    \"isomorphic-fetch\": \"^2.2.1\",\n    \"truffle-contract\": \"^3.0.0\",\n    \"web3\": \"^0.19.1\"\n  },\n  \"devDependencies\": {\n    \"babel-core\": \"^6.26.0\",\n    \"babel-eslint\": \"^8.0.1\",\n    \"babel-polyfill\": \"^6.26.0\",\n    \"babel-preset-latest\": \"^6.24.1\",\n    \"chai\": \"^4.1.2\",\n    \"chai-as-promised\": \"^7.1.1\",\n    \"esdoc\": \"^1.0.2\",\n    \"esdoc-standard-plugin\": \"^1.0.0\",\n    \"eslint\": \"^4.7.2\",\n    \"eslint-config-airbnb-base\": \"^12.0.1\",\n    \"eslint-plugin-import\": \"^2.7.0\",\n    \"eth-lightwallet\": \"^2.5.6\",\n    \"mocha\": \"^3.5.3\"\n  }\n}\n",
-    "longname": "/Users/apple/Desktop/detherGateway/package.json",
+    "content": "{\n  \"name\": \"dethergateway\",\n  \"version\": \"0.1.2\",\n  \"description\": \"Gateway between Front App and the detherContracts.\",\n  \"main\": \"lib/index.js\",\n  \"scripts\": {\n    \"babel-node\": \"babel-node --presets=es2015\",\n    \"example\": \"npm run babel-node -- examples/app.js\",\n    \"test\": \"mocha --timeout 15000 --compilers js:babel-core/register test/*.js --recursive\",\n    \"prepublish\": \"babel src --out-dir lib\",\n    \"run:doc\": \"./node_modules/.bin/esdoc && open ./docs/index.html\"\n  },\n  \"repository\": {\n    \"type\": \"git\",\n    \"url\": \"git+https://github.com/dethertech/detherGateway.git\"\n  },\n  \"keywords\": [\n    \"Dether\",\n    \"ethereum\",\n    \"gateway\"\n  ],\n  \"author\": \"Dether Team <hello@dether.io>\",\n  \"license\": \"ISC\",\n  \"bugs\": {\n    \"url\": \"https://github.com/dethertech/detherGateway/issues\"\n  },\n  \"homepage\": \"https://github.com/dethertech/detherGateway#readme\",\n  \"dependencies\": {\n    \"babel-polyfill\": \"^6.26.0\",\n    \"bignumber.js\": \"^4.1.0\",\n    \"dethercontract\": \"^1.2.5\",\n    \"eth-toolbox\": \"^0.2.3\",\n    \"ethjs-provider-signer\": \"^0.1.4\",\n    \"ethjs-signer\": \"^0.1.1\",\n    \"truffle-contract\": \"^2.0.1\",\n    \"web3\": \"^0.19.1\"\n  },\n  \"devDependencies\": {\n    \"babel-cli\": \"^6.26.0\",\n    \"babel-core\": \"^6.26.0\",\n    \"babel-eslint\": \"^8.0.1\",\n    \"babel-preset-latest\": \"^6.24.1\",\n    \"chai\": \"^4.1.2\",\n    \"chai-as-promised\": \"^7.1.1\",\n    \"dotenv\": \"^4.0.0\",\n    \"esdoc\": \"^1.0.2\",\n    \"esdoc-standard-plugin\": \"^1.0.0\",\n    \"eslint\": \"^4.7.2\",\n    \"eslint-config-airbnb-base\": \"^12.0.1\",\n    \"eslint-plugin-import\": \"^2.7.0\",\n    \"eth-lightwallet\": \"^2.5.6\",\n    \"mocha\": \"^3.5.3\"\n  }\n}\n",
+    "longname": "/Users/ishakleghlam/Desktop/detherGateway/package.json",
     "name": "package.json",
     "static": true,
     "access": "public"

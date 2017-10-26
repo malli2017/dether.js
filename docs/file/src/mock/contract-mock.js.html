@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">src/index.js | dethergateway</title>
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/mock/contract-mock.js | dethergateway</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -49,18 +49,93 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1 data-ice="title">src/index.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
- * detherGateway
- * @author Dether TEAM
- */
+<div class="content" data-ice="content"><h1 data-ice="title">src/mock/contract-mock.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import BigNumber from &apos;bignumber.js&apos;;
 
-import &apos;babel-polyfill&apos;;
-import tellers from &apos;./tellers&apos;;
+const instance = {
+  getTellerPos: () =&gt;
+      new Promise(resolve =&gt; {
+        resolve([new BigNumber(123444), new BigNumber(123444),
+          new BigNumber(123444), new BigNumber(123444)]);
+      }),
+  getTellerProfile: () =&gt;
+      new Promise(resolve =&gt; {
+        resolve([new BigNumber(123444), new BigNumber(123444), new BigNumber(123444), &apos;0x4861727279000000000000000000000000000000000000000000000000000000&apos;, new BigNumber(123444), new BigNumber(123444), &apos;0x4861727279000000000000000000000000000000000000000000000000000000&apos;]);
+      }),
+  sendCoin: () =&gt;
+      new Promise(resolve =&gt; {
+        resolve({
+          logs: [{
+          event: &apos;SendCoin&apos;,
+          args: {
+            _from: &apos;0x000000000000&apos;, _to: &apos;0x100000000000&apos;, amount: 10000000, lat: 123000, lng: 321000,
+          },
+        }],
+      });
+    }),
+  withdrawAll: () =&gt;
+      new Promise(resolve =&gt; {
+        resolve({
+          logs: [{
+            event: &apos;Withdraw&apos;,
+            args: {
+              amount: 12300000, lat: 123000, lng: 321000,
+            },
+          }],
+        });
+      }),
+  getTellerBalances: {
+    call: () =&gt;
+      new Promise(resolve =&gt; {
+          resolve(new BigNumber(1000000000000000000000));
+      }),
+  },
+  registerPoint: () =&gt;
+    new Promise(resolve =&gt; {
+      resolve(&apos;0x000000000000000000000000000&apos;);
+  }),
+};
 
-export default {
-  // tellers
-  tellers,
+export const mock = {
+  setProvider: () =&gt; {},
+  at: () =&gt; instance,
+  deployed: () =&gt; instance,
+};
+
+
+const storageInstance = {
+  getAllTellers: () =&gt;
+    new Promise(res =&gt; {
+      res([
+        &apos;0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623&apos;,
+        &apos;0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623&apos;,
+        &apos;0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623&apos;,
+        &apos;0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623&apos;,
+        &apos;0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623&apos;,
+        &apos;0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623&apos;,
+        &apos;0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb621&apos;,
+      ]);
+    }),
+  getZone: {
+    call: () =&gt;
+      new Promise(res =&gt; {
+        res([
+          &apos;0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623&apos;,
+          &apos;0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623&apos;,
+          &apos;0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623&apos;,
+          &apos;0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623&apos;,
+          &apos;0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623&apos;,
+          &apos;0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623&apos;,
+          &apos;0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb621&apos;,
+        ]);
+      }),
+  },
+};
+
+export const mockStorage = {
+  setProvider: () =&gt; {},
+  at: () =&gt; storageInstance,
+  deployed: () =&gt; storageInstance,
 };
 </code></pre>
 

@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">src/index.js | dethergateway</title>
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/tellers/getBalance.js | dethergateway</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -49,19 +49,39 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1 data-ice="title">src/index.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
- * detherGateway
- * @author Dether TEAM
+<div class="content" data-ice="content"><h1 data-ice="title">src/tellers/getBalance.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import ethToolbox from &apos;eth-toolbox&apos;;
+
+import { UTILITYWEB3, getContractInstance } from &apos;../constants/appConstants&apos;;
+
+
+/**
+ * get dtr balance
+ * @param  {string}  address ethereum address
+ * @return {Promise}
  */
+const getBalance = async (address, providerUrl) =&gt;
+  new Promise(async (res, rej) =&gt; {
+    if (!ethToolbox.utils.isAddr(address)) return rej(new TypeError(&apos;Invalid ETH address&apos;));
+    if (!providerUrl) return rej(new TypeError(&apos;No provider url&apos;));
 
-import &apos;babel-polyfill&apos;;
-import tellers from &apos;./tellers&apos;;
+    try {
+      const dtrContractInstance = await getContractInstance(providerUrl);
 
-export default {
-  // tellers
-  tellers,
-};
+      if (!dtrContractInstance) return rej(new TypeError(&apos;Invalid provider URL&apos;));
+
+      const result = await dtrContractInstance.getTellerBalances
+        .call(ethToolbox.utils.add0x(address));
+
+      if (Number.isNaN(Number(result))) return res(0);
+
+      return res(Number(UTILITYWEB3.fromWei(result.toNumber(), &apos;ether&apos;)));
+    } catch (e) {
+      return rej(new TypeError(e));
+    }
+  });
+
+export default getBalance;
 </code></pre>
 
 </div>

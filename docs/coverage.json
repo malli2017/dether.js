@@ -1,77 +1,62 @@
 {
-  "coverage": "70.83%",
-  "expectCount": 24,
-  "actualCount": 17,
+  "coverage": "50%",
+  "expectCount": 20,
+  "actualCount": 10,
   "files": {
-    "src/addSellPoint.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
-    },
     "src/constants/appConstants.js": {
-      "expectCount": 8,
+      "expectCount": 6,
       "actualCount": 3,
       "undocumentLines": [
-        6,
-        8,
-        9,
-        17,
-        31
+        11,
+        13,
+        14
       ]
     },
-    "src/deleteSellPoint.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
+    "src/mock/contract-mock.js": {
+      "expectCount": 4,
+      "actualCount": 0,
+      "undocumentLines": [
+        3,
+        47,
+        54,
+        83
+      ]
     },
-    "src/dtrGetTellerbalances.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
-    },
-    "src/dtrSendCoin.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
-    },
-    "src/getAllTsx.js": {
+    "src/tellers/addTellers.js": {
       "expectCount": 2,
       "actualCount": 1,
       "undocumentLines": [
-        7
+        6
       ]
     },
-    "src/getEthBalance.js": {
+    "src/tellers/deleteSellPoint.js": {
       "expectCount": 1,
       "actualCount": 1,
       "undocumentLines": []
     },
-    "src/getTellers.js": {
+    "src/tellers/dtrSendCoin.js": {
+      "expectCount": 2,
+      "actualCount": 1,
+      "undocumentLines": [
+        5
+      ]
+    },
+    "src/tellers/getBalance.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/tellers/getTellers.js": {
       "expectCount": 3,
       "actualCount": 3,
       "undocumentLines": []
     },
-    "src/sendEth.js": {
+    "src/tellers/index.js": {
       "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
-    },
-    "src/utils/add0x.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
-    },
-    "src/utils/contractInstance.js": {
-      "expectCount": 3,
-      "actualCount": 2,
+      "actualCount": 0,
       "undocumentLines": [
-        9
+        10
       ]
-    },
-    "src/utils/decodeKeystore.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
     }
   }
 }

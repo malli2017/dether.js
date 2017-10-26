@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/constants/appConstants.js | dethergateway</title>
+  <title data-ice="title">src/tellers/addTellers.js | dethergateway</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -49,74 +49,137 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1 data-ice="title">src/constants/appConstants.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import Web3 from &apos;web3&apos;;
-import contract from &apos;truffle-contract&apos;;
-import ethToolbox from &apos;eth-toolbox&apos;;
-import SignerProvider from &apos;ethjs-provider-signer&apos;;
-import { sign } from &apos;ethjs-signer&apos;;
+<div class="content" data-ice="content"><h1 data-ice="title">src/tellers/addTellers.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import ethToolbox from &apos;eth-toolbox&apos;;
+import Web3 from &apos;web3&apos;;
 
-import DetherJson from &apos;dethercontract/contracts/DetherInterface.json&apos;;
-import DetherStorageJson from &apos;dethercontract/contracts/DetherStorage.json&apos;;
-import { mock, mockStorage } from &apos;../mock/contract-mock&apos;;
+import { GAS_PRICE, getSignedContractInstance } from &apos;../constants/appConstants&apos;;
 
-export const GAS_PRICE = 25000000000;
+const check = (teller) =&gt; {
+  if (!teller.lat || Number.isNaN(teller.lat) || teller.lat &gt; 90 || teller.lat &lt; -90) {
+    return { error: true, msg: &apos;Invalid latitude&apos; };
+  }
+  if (!teller.lng || Number.isNaN(teller.lng) || teller.lng &gt; 180 || teller.lng &lt; -180) {
+    return { error: true, msg: &apos;Invalid longitude&apos; };
+  }
+  if (!teller.zone || !Number.isInteger(teller.zone)) {
+    return { error: true, msg: &apos;Invalid zone&apos; };
+  }
+  if (!teller.rates || teller.rates &lt;= 0 || teller.rates &gt; 100) {
+    return { error: true, msg: &apos;Invalid rates&apos; };
+  }
+  if (!teller.avatar || !Number.isInteger(teller.avatar) || teller.avatar &lt; 0) {
+    return { error: true, msg: &apos;Invalid avatar&apos; };
+  }
+  if (!teller.currency || !Number.isInteger(teller.currency) || teller.currency &lt; 0) {
+    return { error: true, msg: &apos;Invalid currency&apos; };
+  }
+  if (!teller.telegram || teller.telegram.length &lt; 3 || teller.telegram.length &gt; 30) {
+    return { error: true, msg: &apos;Invalid telegram&apos; };
+  }
+  if (!teller.amount || Number.isNaN(teller.amount) || teller.amount &lt; 0.01) {
+    return { error: true, msg: &apos;Invalid amount&apos; };
+  }
+  if (!teller.username || teller.username.length &lt; 3 || teller.username.length &gt; 30) {
+    return { error: true, msg: &apos;Invalid username&apos; };
+  }
+  if (!teller.keystore) {
+    return { error: true, msg: &apos;Invalid keystore&apos; };
+  }
+  if (!teller.password || teller.password.length &lt; 1) {
+    return { error: true, msg: &apos;Invalid password&apos; };
+  }
+  if (!teller.providerUrl) {
+    return { error: true, msg: &apos;Invalid provider url&apos; };
+  }
+  // if (!teller.gasPrice || teller.gasPrice &lt; 0) {
+  //   return { error: true, msg: &apos;Invalid gas Price&apos; };
+  // }
+  return {};
+};
 
-export const PROVIDER_URL = process.env.DETHER_ETHEREUM_PROVIDER;
-export const UTILITYWEB3 = new Web3(new Web3.providers.HttpProvider(&apos;http://localhost:8545&apos;));
-
+// gas used = 223319
+// gas price average (mainnet) = 25000000000 wei
+// 250000 * 25000000000 = 0.006250000000000000 ETH
+// need 0.006250000000000000 ETH to process this function
 /**
- * [getContractInstance description]
- * @param  {[type]} provider [description]
- * @return {[type]}          [description]
+ * @param {number} lat latitude min -90 max +90
+ * @param {number} lng longitude min -180 max +180
+ * @param {string} zone geographic zone
+ * @param {number} rates Margin (0-100 * 100)
+ * @param {number} avatar (1-9)
+ * @param {number} currency number (0-4)
+ * @param {string} telegam pseudo telegram
+ * @param {number} amount escrow
+ * @param {string} username username
+ * @param {object} keystore deserialize keystore
+ * @param {string} password
+ * @param {string} providerUrl
+ * @return {object} Return txs
  */
-export const getContractInstance = (provider) =&gt;
+const dtrRegisterPoint = async (teller) =&gt;
   new Promise(async (res, rej) =&gt; {
-    if (!provider) return rej(new TypeError(&apos;Invalid provider URL&apos;));
-    if (provider === &apos;test&apos;) return res(mock.deployed());
+    const secu = check(teller);
+    if (secu.error) return rej(new TypeError(secu.msg));
 
-    const newProvider = new Web3(new Web3.providers.HttpProvider(provider));
-    const DetherContract = contract(DetherJson);
+    try {
+      const key = await ethToolbox.decodeKeystore(teller.keystore, teller.password);
+      if (!key || !key.privateKey || !key.address || !ethToolbox.utils.isAddr(key.address)) {
+        return rej(new TypeError(&apos;Invalid keystore or password&apos;));
+      }
 
-    DetherContract.setProvider(newProvider.currentProvider);
-    return res(DetherContract.deployed());
-});
+      const dtrContractInstance =
+        await getSignedContractInstance(key.privateKey, key.address, teller.providerUrl);
 
-/**
- * [getContractStorageInstance description]
- * @param  {[type]} provider [description]
- * @return {[type]}          [description]
- */
-export const getContractStorageInstance = (provider) =&gt;
-  new Promise(async (res, rej) =&gt; {
-    if (!provider) return rej(new TypeError(&apos;Invalid provider URL&apos;));
-    if (provider === &apos;test&apos;) return res(mockStorage.deployed());
+      const utilityWeb3 = new Web3(new Web3.providers.HttpProvider(teller.providerUrl));
 
-    const newProvider = new Web3(new Web3.providers.HttpProvider(provider));
-    const DetherStorageContract = contract(DetherStorageJson);
+      let tsxAmount = parseInt(utilityWeb3.toWei(teller.amount, &apos;ether&apos;), 10);
 
-    DetherStorageContract.setProvider(newProvider.currentProvider);
-    return res(DetherStorageContract.deployed());
-});
-
-/**
- * [getSignedContractInstance description]
- * @param  {[type]} privateKey [description]
- * @param  {[type]} address [description]
- * @return {[type]}          [description]
- */
-export const getSignedContractInstance = (privateKey, address, providerUrl) =&gt;
-  new Promise(async (res, rej) =&gt; {
-    if (!providerUrl) return rej(new TypeError(&apos;Invalid provider URL&apos;));
-    if (providerUrl === &apos;test&apos;) return res(mock.deployed());
-    const DetherContract = contract(DetherJson);
-    const provider = new SignerProvider(providerUrl, {
-      signTransaction: (rawTx, cb) =&gt; cb(null, sign(rawTx, ethToolbox.add0x(privateKey))),
-      accounts: cb =&gt; cb(null, address),
-    });
-    DetherContract.setProvider(provider);
-    return res(DetherContract.deployed());
+      if (teller.providerUrl !== &apos;test&apos;) {
+        const balance = await utilityWeb3.eth.getBalance(key.address);
+         // check if enough gas is present to sendCoin once after registering
+         if (balance.toNumber() &lt; (tsxAmount + (GAS_PRICE * 650000))) {
+           tsxAmount = balance.toNumber() - (GAS_PRICE * 650000);
+           if (tsxAmount &lt; 0.0025) return rej(new TypeError(&apos;Insufficient funds&apos;));
+         }
+      }
+      const result = await dtrContractInstance.registerPoint(
+        teller.lat.toFixed(6) * (10 ** 5),
+        teller.lng.toFixed(6) * (10 ** 5),
+        teller.zone,
+        teller.rates * 100,
+        teller.avatar,
+        teller.currency,
+        teller.telegram,
+        teller.username,
+        {
+          from: ethToolbox.utils.add0x(key.address),
+          value: parseInt(tsxAmount, 10),
+          gas: 450000,
+          gasPrice: GAS_PRICE,
+        },
+      );
+      return res({
+          from: ethToolbox.utils.add0x(key.address),
+          to: dtrContractInstance.address,
+          value: teller.amount,
+          date: new Date().toLocaleString(&apos;en-US&apos;, { hour12: false }),
+          dether: {
+            detherContract: true,
+            receive: false,
+          },
+          etherscan: {
+            kovan: `https://kovan.etherscan.io/tx/${result}`,
+            ropsten: `https://ropsten.etherscan.io/tx/${result}`,
+            ether: `https://etherscan.io/tx/${result}`,
+          },
+      });
+    } catch (e) {
+      return rej(new TypeError(e));
+    }
   });
+
+export default dtrRegisterPoint;
 </code></pre>
 
 </div>
