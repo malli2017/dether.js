@@ -1,12 +1,7 @@
 /* global describe it */
-import 'babel-polyfill';
 import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 
-import { getTellersPerZone, getAllTellers } from '../src/tellers/getTellers';
-
-chai.use(chaiAsPromised);
-chai.should();
+import { getTellersPerZone, getAllTellers } from '../../src/tellers/getTellers';
 
 const { expect } = chai;
 
