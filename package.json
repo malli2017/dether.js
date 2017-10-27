@@ -8,6 +8,7 @@
     "example": "npm run babel-node -- examples/app.js",
     "test": "mocha --compilers js:babel-core/register test/test.config.js test/specs/**/*.js",
     "prepublish": "babel src --out-dir lib",
+    "build": "babel src --out-dir lib",
     "esdoc": "./node_modules/.bin/esdoc && open ./esdoc/index.html"
   },
   "repository": {
@@ -32,6 +33,7 @@
     "eth-toolbox": "^0.2.3",
     "ethjs-provider-signer": "^0.1.4",
     "ethjs-signer": "^0.1.1",
+    "sinon": "^4.0.2",
     "truffle-contract": "^2.0.1",
     "web3": "^0.19.1"
   },

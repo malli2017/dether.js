@@ -4,8 +4,9 @@
  */
 
 import 'babel-polyfill';
-import tellers from './tellers';
+import DetherJS from './detherJs';
+import Wallet from './wallet';
 
-export default {
-  tellers,
-};
+DetherJS.Wallet = Wallet;
+
+module.exports = DetherJS;

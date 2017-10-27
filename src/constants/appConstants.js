@@ -6,61 +6,59 @@ import { sign } from 'ethjs-signer';
 
 import DetherJson from 'dethercontract/contracts/DetherInterface.json';
 import DetherStorageJson from 'dethercontract/contracts/DetherStorage.json';
-import { mock, mockStorage } from '../mock/contract-mock';
 
 export const GAS_PRICE = 25000000000;
 
-export const UTILITYWEB3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
+const Contracts = {
+  async getDeployedContract(contractJson, providerUrl) {
+    const web3 = new Web3(new Web3.providers.HttpProvider(providerUrl));
 
-/**
- * [getContractInstance description]
- * @param  {[type]} provider [description]
- * @return {[type]}          [description]
- */
-export const getContractInstance = (provider) =>
-  new Promise(async (res, rej) => {
-    if (!provider) return rej(new TypeError('Invalid provider URL'));
-    if (provider === 'test') return res(mock.deployed());
+    const Contract = contract(contractJson);
+    Contract.setProvider(web3.currentProvider);
 
-    const newProvider = new Web3(new Web3.providers.HttpProvider(provider));
-    const DetherContract = contract(DetherJson);
+    return Contract.deployed();
+  },
 
-    DetherContract.setProvider(newProvider.currentProvider);
-    return res(DetherContract.deployed());
-});
+  /**
+   * [getDetherContract description]
+   * @param  {[type]} providerUrl [description]
+   * @return {[type]}          [description]
+   */
+  async getDetherContract(providerUrl) {
+    if (!providerUrl) throw new TypeError('Invalid provider URL');
 
-/**
- * [getContractStorageInstance description]
- * @param  {[type]} provider [description]
- * @return {[type]}          [description]
- */
-export const getContractStorageInstance = (provider) =>
-  new Promise(async (res, rej) => {
-    if (!provider) return rej(new TypeError('Invalid provider URL'));
-    if (provider === 'test') return res(mockStorage.deployed());
+    return Contracts.getDeployedContract(DetherJson, providerUrl);
+  },
+  /**
+   * [getStorageContract description]
+   * @param  {[type]} providerUrl [description]
+   * @return {[type]}             [description]
+   */
+  async getStorageContract(providerUrl) {
+    if (!providerUrl) throw new TypeError('Invalid provider URL');
 
-    const newProvider = new Web3(new Web3.providers.HttpProvider(provider));
-    const DetherStorageContract = contract(DetherStorageJson);
+    return Contracts.getDeployedContract(DetherStorageJson, providerUrl);
+  },
 
-    DetherStorageContract.setProvider(newProvider.currentProvider);
-    return res(DetherStorageContract.deployed());
-});
+  /**
+   * [getSignedContractInstance description]
+   * @param  {[type]} privateKey [description]
+   * @param  {[type]} address [description]
+   * @return {[type]}          [description]
+   */
+  async getSignedDetherContract(privateKey, address, providerUrl) {
+    if (!providerUrl) throw new TypeError('Invalid provider URL');
 
-/**
- * [getSignedContractInstance description]
- * @param  {[type]} privateKey [description]
- * @param  {[type]} address [description]
- * @return {[type]}          [description]
- */
-export const getSignedContractInstance = (privateKey, address, providerUrl) =>
-  new Promise(async (res, rej) => {
-    if (!providerUrl) return rej(new TypeError('Invalid provider URL'));
-    if (providerUrl === 'test') return res(mock.deployed());
     const DetherContract = contract(DetherJson);
     const provider = new SignerProvider(providerUrl, {
       signTransaction: (rawTx, cb) => cb(null, sign(rawTx, ethToolbox.add0x(privateKey))),
       accounts: cb => cb(null, address),
     });
     DetherContract.setProvider(provider);
+    // TODO
+
     return res(DetherContract.deployed());
-  });
+  },
+};
+
+export default Contracts;
