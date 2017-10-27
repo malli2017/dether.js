@@ -1,13 +1,8 @@
 /* global describe it before */
-import 'babel-polyfill';
 import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import ethToolbox from 'eth-toolbox';
 
-import withdrawAll from '../src/tellers/deleteSellPoint';
-
-chai.use(chaiAsPromised);
-chai.should();
+import withdrawAll from '../../src/tellers/deleteSellPoint';
 
 const { expect } = chai;
 let keystore = null;

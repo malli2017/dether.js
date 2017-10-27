@@ -1,13 +1,8 @@
 /* global describe it before */
-import 'babel-polyfill';
 import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import ethToolbox from 'eth-toolbox';
 
-import dtrSendCoin from '../src/tellers/dtrSendCoin';
-
-chai.use(chaiAsPromised);
-chai.should();
+import dtrSendCoin from '../../src/tellers/dtrSendCoin';
 
 const { expect } = chai;
 let keystore = null;
