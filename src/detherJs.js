@@ -1,4 +1,5 @@
 import Web3 from 'web3';
+import ethToolbox from 'eth-toolbox';
 
 import DetherUser from './detherUser';
 import Contracts from './constants/appConstants';
@@ -126,6 +127,22 @@ class DetherJS {
       keystore,
       dether: this,
     });
+  }
+
+  /**
+   * get dtr balance
+   * @param  {string}  address ethereum address
+   * @return {Promise}
+   */
+  async getBalance(address) {
+    if (!ethToolbox.utils.isAddr(address)) throw new TypeError('Invalid ETH address');
+
+    const result = await this.contractInstance.getTellerBalances
+      .call(ethToolbox.utils.add0x(address));
+
+    if (Number.isNaN(Number(result))) return 0;
+
+    return Number(this.web3.fromWei(result.toNumber(), 'ether'));
   }
 }
 

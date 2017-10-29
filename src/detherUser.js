@@ -4,13 +4,29 @@ import { GAS_PRICE, getSignedDetherContract } from './constants/appConstants';
 
 class DetherUser {
   constructor(opts) {
+    if (!opts.dether || !opts.keystore) {
+      throw new Error('Need dether instance and keystore');
+    }
     this.dether = opts.dether;
     this.keystore = opts.keystore;
   }
 
+  /**
+   * get user info
+   * @return {Promise}
+   */
   async getInfo() {
     const address = this.keystore.address();
     return this.dether.getTeller(address);
+  }
+
+  /**
+   * get dtr balance
+   * @return {Promise}
+   */
+  async getBalance() {
+    const address = this.keystore.address();
+    return this.dether.getBalance(address);
   }
 
   async _getSignedContract(password) {
@@ -97,6 +113,7 @@ class DetherUser {
       },
     };
   }
+
 }
 
 

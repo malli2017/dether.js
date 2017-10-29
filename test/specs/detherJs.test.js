@@ -9,10 +9,11 @@ import Contracts from '../../src/constants/appConstants';
 import contractMock from '../mock/contract';
 import storageMock from '../mock/storage';
 
-let dether, provider;
 
-describe.only('detherjs', () => {
+describe('dether js', () => {
   describe('instanciation', () => {
+    let dether, provider;
+
     it('should instanciate with provider', () => {
       provider = TestRPC.provider();
       dether = new DetherJS({
@@ -53,7 +54,7 @@ describe.only('detherjs', () => {
   });
 
   describe('mocked', () => {
-    let dether, stubs = [];
+    let dether, provider, stubs = [];
 
     beforeEach(async () => {
       stubs = [];
@@ -63,10 +64,8 @@ describe.only('detherjs', () => {
         provider,
       });
 
-      stubs.push(sinon.stub(Contracts, 'getDetherContract').returns(contractMock));
-      stubs.push(sinon.stub(Contracts, 'getStorageContract').returns(storageMock));
-
-      await dether.init();
+      dether.contractInstance = contractMock;
+      dether.storageInstance = storageMock;
     });
 
     afterEach(() => {
@@ -93,8 +92,8 @@ describe.only('detherjs', () => {
 
       const teller = await dether.getTeller('addr');
 
-      expect(stubs[2].calledWith('addr')).to.be.true;
-      expect(stubs[3].calledWith('addr')).to.be.true;
+      expect(stubs[0].calledWith('addr')).to.be.true;
+      expect(stubs[1].calledWith('addr')).to.be.true;
 
       expect(teller.id).to.eq('addr');
       expect(teller.ethAddress).to.eq('addr');
@@ -200,5 +199,17 @@ describe.only('detherjs', () => {
     teller detail
 
      */
+
+    it('should get user escrow balance', async () => {
+      const spy = sinon.spy(dether, 'getBalance');
+      const balance = await dether.getBalance('0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623');
+      expect(balance).to.eq(1000);
+      expect(spy.calledWith('0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623')).to.be.true;
+    });
+
+    it('should get user escrow balance throw invalid address', async () => {
+      expect(dether.getBalance).to.throw;
+      expect(dether.getBalance.bind(dether, 'fiezfij')).to.throw;
+    });
   });
 });
