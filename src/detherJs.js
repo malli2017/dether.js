@@ -5,15 +5,26 @@ import Contracts from './constants/appConstants';
 
 class DetherJS {
   constructor(opts) {
-    this.providerUrl = opts.providerUrl;
-    this.web3 = new Web3(new Web3.providers.HttpProvider(this.providerUrl));
+    if (!opts.provider && !opts.providerUrl) {
+      throw new Error('Need to provide provider or providerUrl in options');
+    }
+
+    if (opts.providerUrl) {
+      this.providerUrl = opts.providerUrl;
+      this.provider = new Web3.providers.HttpProvider(opts.providerUrl);
+    } else if (opts.provider) {
+      this.provider = opts.provider;
+    }
+
+    this.web3 = new Web3(this.provider);
+    this.contractGetter = Contracts;
   }
 
   async init() {
-    this.contractInstance = await Contracts.getDetherContract(this.providerUrl);
-    this.storageInstance = await Contracts.getStorageContract(this.providerUrl);
+    this.contractInstance = await Contracts.getDetherContract(this.provider);
+    this.storageInstance = await Contracts.getStorageContract(this.provider);
 
-    if (!this.contractInstance || !this.storageInstance) throw new Error('Invalid provider URL');
+    if (!this.contractInstance || !this.storageInstance) throw new Error('Unable to load contracts');
   }
   /**
    * get teller by address
@@ -72,6 +83,17 @@ class DetherJS {
     return parsedTeller;
   }
 
+  static _filterTellerList(list) {
+    // Removes null and duplicates
+    return list
+      .filter(teller => !!teller)
+      .reduce(
+        (acc, teller) =>
+          (!acc.some(t => t.ethAddress === teller.ethAddress) ? [...acc, teller] : acc),
+        [],
+      );
+  }
+
   /**
    * Get All tellers on the map
    * @return {array} return array of tellers
@@ -80,9 +102,23 @@ class DetherJS {
     const tellersAddresses = await this.storageInstance.getAllTellers();
     if (!tellersAddresses || !tellersAddresses.length) return [];
 
-    return (await Promise.all(tellersAddresses.map(this.getTeller.bind(this))))
-      .filter(t => !!t);
-    // TODO uniqueness
+    const tellers = await Promise.all(tellersAddresses.map(this.getTeller.bind(this)));
+
+    return DetherJS._filterTellerList(tellers);
+  }
+  /**
+   * Get All tellers per zone
+   * @param  {string}  zone
+   * @return {array} return array of tellers
+   */
+  async getTellersInZone(zone) {
+    const tellersAddressesInZone = await this.storageInstance.getZone.call(zone);
+    if (!tellersAddressesInZone || !tellersAddressesInZone.length) return [];
+
+    const zoneInt = parseInt(zone, 10);
+    const tellers = await Promise.all(tellersAddressesInZone.map(this.getTeller.bind(this)));
+
+    return DetherJS._filterTellerList(tellers).filter(t => t.zoneId === zoneInt);
   }
 
   getUser(keystore) {
