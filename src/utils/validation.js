@@ -1,4 +1,4 @@
-const validateSellPoint = (teller) => {
+export const validateSellPoint = (teller) => {
   if (!teller.lat || Number.isNaN(teller.lat) || teller.lat > 90 || teller.lat < -90) {
     return { error: true, msg: 'Invalid latitude' };
   }
@@ -41,8 +41,23 @@ const validateSellPoint = (teller) => {
   return {};
 };
 
-const validators = {
-  validateSellPoint,
+export const validateSendCoin = (tsx) => {
+  if (!tsx.receiver) {
+    return { error: true, msg: 'Invalid receiver' };
+  }
+  if (!tsx.amount || Number.isNaN(tsx.amount) || tsx.amount < 0.001) {
+    return { error: true, msg: 'Invalid amount' };
+  }
+  if (!tsx.password || (typeof tsx.password) !== 'string' || tsx.password.length < 1) {
+    return { error: true, msg: 'Invalid password' };
+  }
+  return {};
 };
 
-export default validators;
+
+export const validatePassword = (password) => {
+  if (!password || (typeof password) !== 'string' || password.length < 1) {
+    return { error: true, msg: 'Invalid password' };
+  }
+  return {};
+};

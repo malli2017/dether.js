@@ -1,5 +1,5 @@
 import ethToolbox from 'eth-toolbox';
-import { validateSellPoint } from './utils/validation';
+import { validateSellPoint, validateSendCoin, validatePassword } from './utils/validation';
 import { GAS_PRICE, getSignedDetherContract } from './constants/appConstants';
 
 class DetherUser {
@@ -67,8 +67,9 @@ class DetherUser {
    */
   async addSellPoint(sellPoint, password) {
     const secu = validateSellPoint(sellPoint);
-
     if (secu.error) throw new TypeError(secu.msg);
+    const secuPass = validatePassword(password);
+    if (secuPass.error) throw new TypeError(secuPass.msg);
 
     const { dtrContractInstance, address } = await this._getSignedContract(password);
 
@@ -114,6 +115,63 @@ class DetherUser {
     };
   }
 
+// gas used = 95481
+// gas price average (mainnet) = 25000000000 wei
+// 115000 * 25000000000 = 0.002875000000000000 ETH
+// need 0.006250000000000000 ETH to process this function
+  /**
+   * Send eth from escrow
+   * @param  {string}  receiver ethereum address
+   * @param  {number}  amount   max balance
+   * @param  {object}  keystore deserialise keystore
+   * @param  {string}  password
+   * @param  {string}  provider
+   * @return {Promise}
+   */
+  async sendCoin(opts, password) {
+    const secu = validateSendCoin(opts);
+    if (secu.error) throw new TypeError(secu.msg);
+    const secuPass = validatePassword(password);
+    if (secuPass.error) throw new TypeError(secuPass.msg);
+
+    const { amount, receiver } = opts;
+    const { dtrContractInstance, address } = await this._getSignedContract(password);
+
+    return dtrContractInstance.sendCoin(
+      ethToolbox.utils.add0x(receiver),
+      parseInt(this.dether.web3.toWei(amount, 'ether'), 10),
+      {
+        from: address,
+        gas: 200000,
+        gasPrice: 25000000000,
+      },
+    );
+  }
+
+
+// gas used = 26497
+// gas price average (mainnet) = 25000000000 wei
+// 50000 * 25000000000 = 0.001250000000000000 ETH
+// need 0.001250000000000000 ETH to process this function
+  /**
+   * Delete sell point, this function withdraw automatically balance escrow to owner
+   * @param  {object}  keystore deserialize keystore
+   * @param  {string}  password
+   * @return {Promise}
+   */
+  async withdrawAll(password) {
+    const secuPass = validatePassword(password);
+    if (secuPass.error) throw new TypeError(secuPass.msg);
+
+    const { dtrContractInstance, address } = await this._getSignedContract(password);
+
+    return dtrContractInstance
+      .withdrawAll({
+        from: address,
+        gas: 100000,
+        gasPrice: 25000000000,
+      });
+  }
 }
 
 
