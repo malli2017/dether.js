@@ -16,6 +16,7 @@ const DetherJS = require('../src/index');
   // Get list of all tellers
   const allTellers = await dether.getAllTellers();
   console.log('All tellers: ', allTellers.length);
+  // console.log('All tellers: ', allTellers);
 
   return;
 
