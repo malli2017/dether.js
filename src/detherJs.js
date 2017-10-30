@@ -2,28 +2,19 @@ import Web3 from 'web3';
 import ethToolbox from 'eth-toolbox';
 
 import DetherUser from './detherUser';
-import Contracts from './constants/appConstants';
+import Contracts from './utils/contracts';
+import { getProvider } from './utils/providers';
+
 
 class DetherJS {
   constructor(opts) {
-    if (!opts.provider && !opts.providerUrl) {
-      throw new Error('Need to provide provider or providerUrl in options');
-    }
-
-    if (opts.providerUrl) {
-      this.providerUrl = opts.providerUrl;
-      this.provider = new Web3.providers.HttpProvider(opts.providerUrl);
-    } else if (opts.provider) {
-      this.provider = opts.provider;
-    }
-
-    this.web3 = new Web3(this.provider);
-    this.contractGetter = Contracts;
+    this.provider = getProvider(opts);
+    this.web3 = new Web3();
   }
 
   async init() {
     this.contractInstance = await Contracts.getDetherContract(this.provider);
-    this.storageInstance = await Contracts.getStorageContract(this.provider);
+    this.storageInstance = await Contracts.getDetherStorageContract(this.provider);
 
     if (!this.contractInstance || !this.storageInstance) throw new Error('Unable to load contracts');
   }
@@ -100,7 +91,7 @@ class DetherJS {
    * @return {array} return array of tellers
    */
   async getAllTellers() {
-    const tellersAddresses = await this.storageInstance.getAllTellers();
+    const tellersAddresses = await this.storageInstance.getAllTellers.call();
     if (!tellersAddresses || !tellersAddresses.length) return [];
 
     const tellers = await Promise.all(tellersAddresses.map(this.getTeller.bind(this)));

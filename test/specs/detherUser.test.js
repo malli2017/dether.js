@@ -1,11 +1,8 @@
 /* global describe it */
 import { expect } from 'chai';
 import sinon  from 'sinon';
-import TestRPC  from 'ethereumjs-testrpc';
-import BigNumber from 'bignumber.js';
 import DetherJS from '../../src/detherJs';
 import DetherUser from '../../src/detherUser';
-import Contracts from '../../src/constants/appConstants';
 
 import contractMock from '../mock/contract';
 import storageMock from '../mock/storage';
@@ -13,14 +10,13 @@ import storageMock from '../mock/storage';
 
 describe('dether user', () => {
 
-  let dether, provider, user, stubs = [];
+  let dether, user, stubs = [];
 
   beforeEach(async () => {
     stubs = [];
 
-    provider = TestRPC.provider();
     dether = new DetherJS({
-      provider,
+      network: 'ropsten',
     });
 
     dether.contractInstance = contractMock;

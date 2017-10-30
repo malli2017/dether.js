@@ -5,7 +5,7 @@ const DetherJS = require('../src/index');
   console.log('DetherJS example');
 
   const dether = new DetherJS({
-    providerUrl: 'https://kovan.infura.io/v604Wu8pXGoPC41ARh0B',
+    network: 'kovan',
   });
 
   await dether.init();
