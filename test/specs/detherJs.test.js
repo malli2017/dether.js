@@ -3,6 +3,7 @@ import { expect } from 'chai';
 import sinon  from 'sinon';
 import BigNumber from 'bignumber.js';
 import DetherJS from '../../src/detherJs';
+import Wallet from '../../src/wallet';
 import Contracts from '../../src/utils/contracts';
 import Providers from '../../src/utils/providers';
 
@@ -39,6 +40,7 @@ describe('dether js', () => {
       c.restore();
       s.restore();
     });
+
   });
 
   describe('calls', () => {
@@ -58,6 +60,15 @@ describe('dether js', () => {
     afterEach(() => {
       stubs.forEach(s => s.restore());
       stubs = [];
+    });
+
+
+    it('should get user', () => {
+      const wallet = Wallet.createRandom();
+      const user = dether.getUser(wallet);
+
+      expect(user.dether).to.eq(dether);
+      expect(user.wallet).to.eq(wallet);
     });
 
     describe('getTeller', () => {

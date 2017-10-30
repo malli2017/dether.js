@@ -25,6 +25,7 @@ const instance = {
         _from: '0x000000000000', _to: '0x100000000000', amount: 10000000, lat: 123000, lng: 321000,
       },
     }],
+    ok: 1,
   }),
   withdrawAll: async () => ({
     logs: [{
@@ -33,6 +34,7 @@ const instance = {
         amount: 12300000, lat: 123000, lng: 321000,
       },
     }],
+    ok: 1,
   }),
   getTellerBalances: {
     call: async () => new BigNumber(1000000000000000000000),

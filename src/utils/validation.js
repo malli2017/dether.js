@@ -26,15 +26,6 @@ export const validateSellPoint = (teller) => {
   if (!teller.username || teller.username.length < 3 || teller.username.length > 30) {
     return { error: true, msg: 'Invalid username' };
   }
-  if (!teller.keystore) {
-    return { error: true, msg: 'Invalid keystore' };
-  }
-  if (!teller.password || teller.password.length < 1) {
-    return { error: true, msg: 'Invalid password' };
-  }
-  if (!teller.providerUrl) {
-    return { error: true, msg: 'Invalid provider url' };
-  }
   // if (!teller.gasPrice || teller.gasPrice < 0) {
   //   return { error: true, msg: 'Invalid gas Price' };
   // }
@@ -47,9 +38,6 @@ export const validateSendCoin = (tsx) => {
   }
   if (!tsx.amount || Number.isNaN(tsx.amount) || tsx.amount < 0.001) {
     return { error: true, msg: 'Invalid amount' };
-  }
-  if (!tsx.password || (typeof tsx.password) !== 'string' || tsx.password.length < 1) {
-    return { error: true, msg: 'Invalid password' };
   }
   return {};
 };

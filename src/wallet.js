@@ -1,7 +1,3 @@
-const Wallet = {
-  fromPrivateKey(privateKey, password) {
-    return {};
-  },
-};
+import { Wallet } from 'ethers';
 
 export default Wallet;

@@ -19,12 +19,12 @@ class DetherJS {
 
   /**
    * Get instance of DetherUser linked to this Dether instance
-   * @param  {object}  keystore User keystore
+   * @param  {object}  wallet User Wallet
    * @return {Object} DetherUser
    */
-  getUser(keystore) {
+  getUser(wallet) {
     return new DetherUser({
-      keystore,
+      wallet,
       dether: this,
     });
   }
