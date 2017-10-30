@@ -54,7 +54,6 @@ export const validateSendCoin = (tsx) => {
   return {};
 };
 
-
 export const validatePassword = (password) => {
   if (!password || (typeof password) !== 'string' || password.length < 1) {
     return { error: true, msg: 'Invalid password' };

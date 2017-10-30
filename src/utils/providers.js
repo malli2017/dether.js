@@ -11,7 +11,7 @@ import Ethers from 'ethers';
  * @param {!String} opts.etherscanKey Etherscan API Key
  * @return {Provider}
  */
-export function getProvider(opts) {
+function getProvider(opts) {
   if (!opts.network) throw new TypeError('Unable to get provider, need network');
   const providers = [];
 
@@ -30,3 +30,7 @@ export function getProvider(opts) {
 
   return new Ethers.providers.FallbackProvider(providers);
 }
+
+export default {
+  getProvider,
+};

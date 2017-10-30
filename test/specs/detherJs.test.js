@@ -4,35 +4,26 @@ import sinon  from 'sinon';
 import BigNumber from 'bignumber.js';
 import DetherJS from '../../src/detherJs';
 import Contracts from '../../src/utils/contracts';
+import Providers from '../../src/utils/providers';
 
 import contractMock from '../mock/contract';
 import storageMock from '../mock/storage';
-
 
 describe('dether js', () => {
   describe('instanciation', () => {
     let dether;
 
     it('should instanciate with provider', () => {
+      const s = sinon.stub(Providers, 'getProvider').returns('provider');
+
       dether = new DetherJS({
         network: 'ropsten',
       });
-      expect(dether.provider.constructor.name).to.eq('FallbackProvider');
+
+      expect(dether.provider).to.eq('provider');
       expect(dether.web3.constructor.name).to.eq('Web3');
-    });
 
-    it('should instanciate with provider URL and api keys', () => {
-      dether = new DetherJS({
-        network: 'ropsten',
-        rpcURL: 'http://localhost:8545',
-        etherscanKey: 'etherscan',
-        // infuraKey: 'infura', // TODO re-activate
-      });
-
-      expect(dether.provider.constructor.name).to.eq('FallbackProvider');
-      expect(dether.provider.providers[0].url).to.eq('http://localhost:8545');
-      expect(dether.provider.providers[1].apiKey).to.eq('etherscan');
-      // expect(dether.provider.providers[2].apiKey).to.eq('infura');
+      s.restore();
     });
 
     it('should initialize', async () => {
@@ -58,7 +49,7 @@ describe('dether js', () => {
     });
   });
 
-  describe('mocked', () => {
+  describe('calls', () => {
     let dether, stubs = [];
 
     beforeEach(async () => {

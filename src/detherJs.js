@@ -3,12 +3,12 @@ import ethToolbox from 'eth-toolbox';
 
 import DetherUser from './detherUser';
 import Contracts from './utils/contracts';
-import { getProvider } from './utils/providers';
+import Providers from './utils/providers';
 
 
 class DetherJS {
   constructor(opts) {
-    this.provider = getProvider(opts);
+    this.provider = Providers.getProvider(opts);
     this.web3 = new Web3();
   }
 
