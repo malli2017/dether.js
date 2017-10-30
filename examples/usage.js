@@ -8,8 +8,6 @@ const DetherJS = require('../src/index');
     network: 'kovan',
   });
 
-  await dether.init();
-
   // //////////////////////////////
   // Public data
 

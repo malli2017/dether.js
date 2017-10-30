@@ -10,15 +10,9 @@ class DetherJS {
   constructor(opts) {
     this.provider = Providers.getProvider(opts);
     this.web3 = new Web3();
-  }
 
-  /**
-   * Asynchronously initialize this instance
-   */
-  // TODO put in constructor
-  async init() {
-    this.contractInstance = await Contracts.getDetherContract(this.provider);
-    this.storageInstance = await Contracts.getDetherStorageContract(this.provider);
+    this.contractInstance = Contracts.getDetherContract(this.provider);
+    this.storageInstance = Contracts.getDetherStorageContract(this.provider);
 
     if (!this.contractInstance || !this.storageInstance) throw new Error('Unable to load contracts');
   }

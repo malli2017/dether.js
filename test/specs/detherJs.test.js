@@ -14,7 +14,13 @@ describe('dether js', () => {
     let dether;
 
     it('should instanciate with provider', () => {
-      const s = sinon.stub(Providers, 'getProvider').returns('provider');
+      const p = sinon.stub(Providers, 'getProvider');
+      const c = sinon.stub(Contracts, 'getDetherContract');
+      const s = sinon.stub(Contracts, 'getDetherStorageContract');
+
+      p.returns('provider');
+      c.returns('contractInstance');
+      s.returns('storageInstance');
 
       dether = new DetherJS({
         network: 'ropsten',
@@ -23,27 +29,13 @@ describe('dether js', () => {
       expect(dether.provider).to.eq('provider');
       expect(dether.web3.constructor.name).to.eq('Web3');
 
-      s.restore();
-    });
-
-    it('should initialize', async () => {
-      dether = new DetherJS({
-        network: 'ropsten',
-      });
-
-      const c = sinon.stub(Contracts, 'getDetherContract');
-      const s = sinon.stub(Contracts, 'getDetherStorageContract');
-      c.returns('contractInstance');
-      s.returns('storageInstance');
-
-      await dether.init();
-
       expect(dether.contractInstance).to.equal('contractInstance');
       expect(dether.storageInstance).to.equal('storageInstance');
 
       expect(c.calledWith(dether.provider)).to.be.true;
       expect(s.calledWith(dether.provider)).to.be.true;
 
+      p.restore();
       c.restore();
       s.restore();
     });
@@ -56,7 +48,7 @@ describe('dether js', () => {
       stubs = [];
 
       dether = new DetherJS({
-        network: 'ropsten',
+        network: 'kovan',
       });
 
       dether.contractInstance = contractMock;

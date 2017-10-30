@@ -16,7 +16,7 @@ describe('dether user', () => {
     stubs = [];
 
     dether = new DetherJS({
-      network: 'ropsten',
+      network: 'kovan',
     });
 
     dether.contractInstance = contractMock;
