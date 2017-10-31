@@ -5,7 +5,7 @@ import DetherStorageJson from 'dethercontract/contracts/DetherStorage.json';
 
 function getContract(ContractJson, provider) {
   let chainId = null;
-  if (provider instanceof Ethers.Wallet) {
+  if (provider.provider) {
     chainId = provider.provider.chainId;
   } else {
     chainId = provider.chainId;

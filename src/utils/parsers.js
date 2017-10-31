@@ -1,9 +1,12 @@
+import Ethers from 'ethers';
 import Web3 from 'web3';
 import BigNumber from 'bignumber.js';
 
 const COORD_PRECISION = 5;
 
 const web3 = new Web3();
+
+// TODO rename to formatter
 
 function tellerPosFromContract(rawTellerPos) {
   const tellerPos = {};
@@ -37,7 +40,26 @@ function tellerProfileFromContract(rawTellerProfile) {
   return tellerProfile;
 }
 
+function sellPointToContract(rawSellPoint) {
+  const sellPoint = {};
+
+  try {
+    sellPoint.lat = Math.floor(rawSellPoint.lat.toFixed(6) * (10 ** COORD_PRECISION));
+    sellPoint.lng = Math.floor(rawSellPoint.lng.toFixed(6) * (10 ** COORD_PRECISION));
+    sellPoint.zone = rawSellPoint.zone;
+    sellPoint.rates = rawSellPoint.rates * 100;
+    sellPoint.avatar = rawSellPoint.avatar;
+    sellPoint.currency = rawSellPoint.currency;
+    sellPoint.telegram = Ethers.utils.toUtf8Bytes(rawSellPoint.telegram);
+    sellPoint.username = Ethers.utils.toUtf8Bytes(rawSellPoint.username);
+  } catch (e) {
+    console.error(e);
+    throw new TypeError(`Invalid teller profile: ${e.message}`);
+  }
+  return sellPoint;
+}
 export default {
   tellerPosFromContract,
   tellerProfileFromContract,
+  sellPointToContract,
 };

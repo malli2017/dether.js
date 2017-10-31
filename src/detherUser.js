@@ -1,7 +1,9 @@
+import Ethers from 'ethers';
 import ethToolbox from 'eth-toolbox';
 import { validateSellPoint, validateSendCoin, validatePassword } from './utils/validation';
 import Contracts from './utils/contracts';
-import { GAS_PRICE } from './constants/appConstants';
+import Formatters from './utils/parsers';
+// import { GAS_PRICE } from './constants/appConstants';
 
 class DetherUser {
   constructor(opts) {
@@ -13,6 +15,14 @@ class DetherUser {
     this.wallet.provider = this.dether.provider;
 
     this.signedDetherContract = Contracts.getDetherContract(this.wallet);
+  }
+
+  /**
+   * Get user ethereum address
+   * @return {string} user ethereum address
+   */
+  getAddress() {
+    return this.wallet.getAddress();
   }
 
   /**
@@ -38,17 +48,17 @@ class DetherUser {
   /**
    * Register a sell point
    * @param {object} sellPoint
-   * @param {number} sellPoint.lat      latitude min -90 max +90
-   * @param {number} sellPoint.lng      longitude min -180 max +180
-   * @param {string} sellPoint.zone     geographic zone
-   * @param {number} sellPoint.rates    Margin (0-100)
-   * @param {number} sellPoint.avatar   avatar id (1-9)
-   * @param {number} sellPoint.currency currency id (0-4)
-   * @param {string} sellPoint.telegram  telegram address
-   * @param {number} sellPoint.amount   Ether amount to put on escrow
-   * @param {string} sellPoint.username username
-   * @param {string} password           user password
-   * @return {object} Transaction informations
+   * @param {number} sellPoint.lat        latitude min -90 max +90
+   * @param {number} sellPoint.lng        longitude min -180 max +180
+   * @param {string} sellPoint.zone       geographic zone
+   * @param {number} sellPoint.rates      Margin (0-100)
+   * @param {number} sellPoint.avatar     avatar id (1-9)
+   * @param {number} sellPoint.currency   currency id (0-4)
+   * @param {string} sellPoint.telegram   Telegram address
+   * @param {number} sellPoint.amount     Ether amount to put on escrow
+   * @param {string} sellPoint.username   username
+   * @param {string} password             user password
+   * @return {Promise<string>} Transaction hash
    */
   async addSellPoint(sellPoint, password) {
     const secu = validateSellPoint(sellPoint);
@@ -56,28 +66,43 @@ class DetherUser {
     const secuPass = validatePassword(password);
     if (secuPass.error) throw new TypeError(secuPass.msg);
 
-    let tsxAmount = parseInt(this.dether.web3.toWei(sellPoint.amount, 'ether'), 10);
+    const tsxAmount = Ethers.utils.parseEther(sellPoint.amount.toString());
 
-    const balance = await this.getBalance();
-
+    // const balance = await this.wallet.getBalance();
+    // TODO subtract fees if not enough balance
     // check if enough gas is present to sendCoin once after registering
-    if (balance.toNumber() < (tsxAmount + (GAS_PRICE * 650000))) {
-      tsxAmount = balance.toNumber() - (GAS_PRICE * 650000);
-      if (tsxAmount < 0.0025) throw new TypeError('Insufficient funds');
-    }
+    // if (balance.greaterThan(tsxAmount + (GAS_PRICE * 650000))) {
+    //   tsxAmount = balance.toNumber() - (GAS_PRICE * 650000);
+    //   if (tsxAmount < 0.0025) throw new TypeError('Insufficient funds');
+    // }
 
-    // TODO create transaction to send ether
-    const result = await this.signedDetherContract.registerPoint(
-      sellPoint.lat.toFixed(6) * (10 ** 5),
-      sellPoint.lng.toFixed(6) * (10 ** 5),
-      sellPoint.zone,
-      sellPoint.rates * 100,
-      sellPoint.avatar,
-      sellPoint.currency,
-      sellPoint.telegram,
-      sellPoint.username,
+    const customProvider = {
+      getAddress: this.wallet.getAddress.bind(this.wallet),
+      provider: this.dether.provider,
+      sendTransaction: (transaction) => {
+        transaction.value = tsxAmount;
+        return this.wallet.sendTransaction(transaction);
+      },
+    };
+
+    const customContract = Contracts.getDetherContract(customProvider);
+    const formattedSellPoint = Formatters.sellPointToContract(sellPoint);
+
+    const transaction = await customContract.registerPoint(
+      formattedSellPoint.lat,
+      formattedSellPoint.lng,
+      formattedSellPoint.zone,
+      formattedSellPoint.rates,
+      formattedSellPoint.avatar,
+      formattedSellPoint.currency,
+      formattedSellPoint.telegram,
+      formattedSellPoint.username,
     );
 
+    const { hash } = transaction;
+
+    return hash;
+    /* TODO ??
     return {
       from: ethToolbox.utils.add0x(this.wallet.address),
       to: this.signedDetherContract,
@@ -88,11 +113,12 @@ class DetherUser {
         receive: false,
       },
       etherscan: {
-        kovan: `https://kovan.etherscan.io/tx/${result}`,
-        ropsten: `https://ropsten.etherscan.io/tx/${result}`,
-        ether: `https://etherscan.io/tx/${result}`,
+        kovan: `https://kovan.etherscan.io/tx/${hash}`,
+        ropsten: `https://ropsten.etherscan.io/tx/${hash}`,
+        ether: `https://etherscan.io/tx/${hash}`,
       },
     };
+    */
   }
 
 // gas used = 95481
@@ -105,7 +131,7 @@ class DetherUser {
    * @param  {string}  opts.receiver Receiver ethereum address
    * @param  {number}  opts.amount   Amount to send
    * @param  {string}  password      Wallet password
-   * @return {Promise}
+   * @return {Promise<string>} Transaction hash
    */
   async sendCoin(opts, password) {
     const secu = validateSendCoin(opts);
@@ -115,11 +141,13 @@ class DetherUser {
 
     const { amount, receiver } = opts;
 
-    return this.signedDetherContract
+    const transaction = await this.signedDetherContract
       .sendCoin(
         ethToolbox.utils.add0x(receiver),
         parseInt(this.dether.web3.toWei(amount, 'ether'), 10),
       );
+
+    return transaction.hash;
   }
 
 
@@ -129,15 +157,16 @@ class DetherUser {
 // need 0.001250000000000000 ETH to process this function
   /**
    * Delete sell point, this function withdraw automatically balance escrow to owner
-   * @param  {string}  password
-   * @return {Promise}
+   * @param  {string} password  Wallet password
+   * @return {Promise<string>}  Transaction hash
    */
   async withdrawAll(password) {
     const secuPass = validatePassword(password);
     if (secuPass.error) throw new TypeError(secuPass.msg);
 
-    return this.signedDetherContract
-      .withdrawAll();
+    const transaction = await this.signedDetherContract.withdrawAll();
+
+    return transaction.hash;
   }
 }
 

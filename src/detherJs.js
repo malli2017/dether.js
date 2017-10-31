@@ -40,6 +40,7 @@ class DetherJS {
       this.contractInstance.getTellerProfile(address),
     ]);
 
+    // TODO real result from contract
     //     if (tellerPos[3].toNumber() === 0) return null; TODO
 
     const teller = {};
@@ -89,7 +90,7 @@ class DetherJS {
   }
   /**
    * Get All tellers per zone
-   * @param  {string}  zone
+   * @param  {Integer}  zone
    * @return {Promise<Array>} array of tellers in zone
    */
   async getTellersInZone(zone) {
@@ -112,12 +113,14 @@ class DetherJS {
   async getBalance(address) {
     if (!ethToolbox.utils.isAddr(address)) throw new TypeError('Invalid ETH address');
 
-    const result = await this.contractInstance.getTellerBalances
-      .call(ethToolbox.utils.add0x(address));
+    const fullAddress = ethToolbox.utils.add0x(address);
+    const result = await this.contractInstance.getTellerBalances(fullAddress);
 
-    if (Number.isNaN(Number(result))) return 0;
+    const balance = result[0]; // TODO pourquoi ??
 
-    return Number(this.web3.fromWei(result.toNumber(), 'ether'));
+    if (Number.isNaN(Number(balance))) return 0;
+
+    return Number(this.web3.fromWei(balance.toNumber(), 'ether'));
   }
 }
 

@@ -40,4 +40,31 @@ describe('parsers', () => {
     expect(tellerProfile.currencyId).to.eq(5);
     expect(tellerProfile.avatarId).to.eq(6);
   });
+
+  it('sellPointToContract', () => {
+    const rawSellPoint = {
+      lat: 1.233,
+      lng: 2.233,
+      zone: 42,
+      rates: 23.13,
+      avatar: 2,
+      currency: 1,
+      telegram: 'ab',
+      username: 'ba',
+      };
+    const sellPoint = Parsers.sellPointToContract(rawSellPoint);
+
+    expect(sellPoint.lat).to.eq(123300);
+    expect(sellPoint.lng).to.eq(223300);
+    expect(sellPoint.zone).to.eq(42);
+    expect(sellPoint.rates).to.eq(2313);
+    expect(sellPoint.avatar).to.eq(2);
+    expect(sellPoint.currency).to.eq(1);
+    expect(sellPoint.telegram.constructor.name).to.eq('Uint8Array');
+    expect(sellPoint.telegram[0]).to.eq(97);
+    expect(sellPoint.telegram[1]).to.eq(98);
+    expect(sellPoint.username.constructor.name).to.eq('Uint8Array');
+    expect(sellPoint.username[0]).to.eq(98);
+    expect(sellPoint.username[1]).to.eq(97);
+  });
 });

@@ -19,27 +19,15 @@ const instance = {
       '0x4861727279000000000000000000000000000000000000000000000000000000',
     ],
   sendCoin: async () => ({
-    logs: [{
-      event: 'SendCoin',
-      args: {
-        _from: '0x000000000000', _to: '0x100000000000', amount: 10000000, lat: 123000, lng: 321000,
-      },
-    }],
-    ok: 1,
+    hash: 'hash',
   }),
   withdrawAll: async () => ({
-    logs: [{
-      event: 'Withdraw',
-      args: {
-        amount: 12300000, lat: 123000, lng: 321000,
-      },
-    }],
-    ok: 1,
+    hash: 'hash',
   }),
-  getTellerBalances: {
-    call: async () => new BigNumber(1000000000000000000000),
-  },
-  registerPoint: async () => '0x000000000000000000000000000',
+  getTellerBalances: async () => ({ 0: new BigNumber(1000000000000000000000) }),
+  registerPoint: async () => ({
+    hash: 'hash',
+  }),
 };
 
 export default instance;

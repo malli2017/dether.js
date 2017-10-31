@@ -72,7 +72,18 @@ describe('dether user', () => {
 
   // TODO
   it.skip('should register point', async () => {
-    const sellPoint = {};
+    const sellPoint = {
+      lat: 1, lng: 2, zone: 42,
+      rates: 20,
+      avatar: 1,
+      currency: 1,
+      telegram: 'bobychou',
+      amount: 0.01,
+      username: 'bob',
+    };
+
+    stubs.push(sinon.stub(user.wallet, 'sendTransaction'));
+
     const result = await user.addSellPoint(sellPoint, 'password');
     expect(result.ok).to.eq(1);
   });
@@ -83,10 +94,12 @@ describe('dether user', () => {
       receiver: '0x085b30734fD4f48369D53225b410d7D04b2d9011',
     };
     const stub = sinon.stub(user.signedDetherContract, 'sendCoin');
-    stub.returns('transaction');
+    stub.returns({
+      hash: 'hash',
+    });
 
     const result = await user.sendCoin(opts, 'password');
-    expect(result).to.eq('transaction');
+    expect(result).to.eq('hash');
 
     expect(stub.calledWith(
       '0x085b30734fD4f48369D53225b410d7D04b2d9011',
@@ -98,6 +111,6 @@ describe('dether user', () => {
 
   it('should withdraw all', async () => {
     const result = await user.withdrawAll('password');
-    expect(result.ok).to.eq(1);
+    expect(result).to.eq('hash');
   });
 });
