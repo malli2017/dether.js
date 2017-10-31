@@ -3,7 +3,7 @@ import ethToolbox from 'eth-toolbox';
 import { validateSellPoint, validateSendCoin, validatePassword } from './utils/validation';
 import Contracts from './utils/contracts';
 import Providers from './utils/providers';
-import Formatters from './utils/parsers';
+import Formatters from './utils/formatters';
 // import { GAS_PRICE } from './constants/appConstants';
 
 class DetherUser {

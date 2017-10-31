@@ -1,10 +1,10 @@
 /* global describe it */
 import { expect } from 'chai';
 import BigNumber from 'bignumber.js';
-import Parsers from '../../../src/utils/parsers';
+import Formatters from '../../../src/utils/formatters';
 
 
-describe('parsers', () => {
+describe('formatters', () => {
   it('tellerPosFromContract', () => {
     const rawTellerPos = [
       new BigNumber(123),
@@ -12,7 +12,7 @@ describe('parsers', () => {
       new BigNumber(789),
       new BigNumber(5000000000),
     ];
-    const tellerPos = Parsers.tellerPosFromContract(rawTellerPos);
+    const tellerPos = Formatters.tellerPosFromContract(rawTellerPos);
 
     expect(tellerPos.lat).to.eq(0.00123);
     expect(tellerPos.lng).to.eq(0.00456);
@@ -30,7 +30,7 @@ describe('parsers', () => {
       new BigNumber(6),
       '0x4861727179000000000000000000000000000000000000000000000000000000',
     ];
-    const tellerProfile = Parsers.tellerProfileFromContract(rawTellerProfile);
+    const tellerProfile = Formatters.tellerProfileFromContract(rawTellerProfile);
 
     expect(tellerProfile.name).to.eq('Haqry');
     expect(tellerProfile.messengerAddr).to.eq('Harqy');
@@ -52,7 +52,7 @@ describe('parsers', () => {
       telegram: 'ab',
       username: 'ba',
       };
-    const sellPoint = Parsers.sellPointToContract(rawSellPoint);
+    const sellPoint = Formatters.sellPointToContract(rawSellPoint);
 
     expect(sellPoint.lat).to.eq(123300);
     expect(sellPoint.lng).to.eq(223300);

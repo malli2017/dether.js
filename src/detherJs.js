@@ -4,7 +4,7 @@ import ethToolbox from 'eth-toolbox';
 import DetherUser from './detherUser';
 import Contracts from './utils/contracts';
 import Providers from './utils/providers';
-import Parsers from './utils/parsers';
+import Formatters from './utils/formatters';
 
 class DetherJS {
   constructor(opts) {
@@ -47,8 +47,8 @@ class DetherJS {
 
     Object.assign(
       teller,
-      Parsers.tellerPosFromContract(rawTellerPos),
-      Parsers.tellerProfileFromContract(rawTellerProfile),
+      Formatters.tellerPosFromContract(rawTellerPos),
+      Formatters.tellerProfileFromContract(rawTellerProfile),
       {
         id: address,
         ethAddress: address,
