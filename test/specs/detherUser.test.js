@@ -1,5 +1,6 @@
 /* global describe it */
 import { expect } from 'chai';
+import Ethers  from 'ethers';
 import sinon  from 'sinon';
 import DetherJS from '../../src/detherJs';
 import DetherUser from '../../src/detherUser';
@@ -27,7 +28,7 @@ describe('dether user', () => {
   });
 
   afterEach(() => {
-    stubs.forEach(s => s.restore());
+    stubs.forEach(s => s.restore && s.restore());
     stubs = [];
   });
 
@@ -71,21 +72,46 @@ describe('dether user', () => {
   });
 
   // TODO
-  it.skip('should register point', async () => {
+  it('should register point', async () => {
     const sellPoint = {
-      lat: 1, lng: 2, zone: 42,
-      rates: 20,
+      lat: 1,
+      lng: 2,
+      zone: 42,
+      rates: 20.20,
       avatar: 1,
-      currency: 1,
-      telegram: 'bobychou',
+      currency: 2,
+      telegram: 'abc',
+      username: 'cba',
       amount: 0.01,
-      username: 'bob',
     };
 
-    stubs.push(sinon.stub(user.wallet, 'sendTransaction'));
+    stubs.push(sinon.stub());
+    stubs[0].returns({
+      hash: 'hash',
+    });
+    stubs.push(sinon.stub(user, 'specialContract'));
+    stubs[1].returns({
+      registerPoint: stubs[0],
+    });
 
     const result = await user.addSellPoint(sellPoint, 'password');
-    expect(result.ok).to.eq(1);
+    expect(result).to.eq('hash');
+
+    expect(stubs[0].args[0][0]).to.eq(100000);
+    expect(stubs[0].args[0][1]).to.eq(200000);
+    expect(stubs[0].args[0][2]).to.eq(42);
+    expect(stubs[0].args[0][3]).to.eq(2020);
+    expect(stubs[0].args[0][4]).to.eq(1);
+    expect(stubs[0].args[0][5]).to.eq(2);
+    expect(stubs[0].args[0][6][0]).to.eq(97);
+    expect(stubs[0].args[0][6][1]).to.eq(98);
+    expect(stubs[0].args[0][6][2]).to.eq(99);
+    expect(stubs[0].args[0][7][0]).to.eq(99);
+    expect(stubs[0].args[0][7][1]).to.eq(98);
+    expect(stubs[0].args[0][7][2]).to.eq(97);
+
+    const t = Ethers.utils.parseEther('0.01');
+    expect(stubs[1].args[0][0].value.eq(t)).to.be.true;
   });
 
   it('should send coin', async () => {

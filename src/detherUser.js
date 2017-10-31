@@ -2,6 +2,7 @@ import Ethers from 'ethers';
 import ethToolbox from 'eth-toolbox';
 import { validateSellPoint, validateSendCoin, validatePassword } from './utils/validation';
 import Contracts from './utils/contracts';
+import Providers from './utils/providers';
 import Formatters from './utils/parsers';
 // import { GAS_PRICE } from './constants/appConstants';
 
@@ -15,6 +16,7 @@ class DetherUser {
     this.wallet.provider = this.dether.provider;
 
     this.signedDetherContract = Contracts.getDetherContract(this.wallet);
+    this.specialContract = o => Contracts.getDetherContract(Providers.advancedProvider(this.wallet)(o));
   }
 
   /**
@@ -76,19 +78,11 @@ class DetherUser {
     //   if (tsxAmount < 0.0025) throw new TypeError('Insufficient funds');
     // }
 
-    const customProvider = {
-      getAddress: this.wallet.getAddress.bind(this.wallet),
-      provider: this.dether.provider,
-      sendTransaction: (transaction) => {
-        transaction.value = tsxAmount;
-        return this.wallet.sendTransaction(transaction);
-      },
-    };
-
-    const customContract = Contracts.getDetherContract(customProvider);
     const formattedSellPoint = Formatters.sellPointToContract(sellPoint);
 
-    const transaction = await customContract.registerPoint(
+    const transaction = await this.specialContract({
+      value: tsxAmount,
+    }).registerPoint(
       formattedSellPoint.lat,
       formattedSellPoint.lng,
       formattedSellPoint.zone,

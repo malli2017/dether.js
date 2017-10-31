@@ -31,6 +31,20 @@ function getProvider(opts) {
   return new Ethers.providers.FallbackProvider(providers);
 }
 
+function advancedProvider(wallet) {
+  return (opts) => ({
+    getAddress: wallet.getAddress.bind(wallet),
+    provider: wallet.provider,
+    sendTransaction: (transaction) => {
+      if (opts.value) {
+        transaction.value = opts.value;
+      }
+      return wallet.sendTransaction(transaction);
+    },
+  });
+}
+
 export default {
   getProvider,
+  advancedProvider,
 };
