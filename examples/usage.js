@@ -16,15 +16,13 @@ const DetherJS = require('../src/index');
   console.log('All tellers: ', allTellers.length);
   // console.log('All tellers: ', allTellers);
 
-  return;
-
   // Get list of teller in a zone
   const zone = 42;
   const tellersInZone = await dether.getTellersInZone(zone);
   console.log('Tellers in zone: ', tellersInZone);
 
   // Get details of a teller
-  const tellerAddress = 'fizejfeoizj';
+  const tellerAddress = '0x085b30734fD4f48369D53225b410d7D04b2d9011';
   const publicTellerInfo = await dether.getTeller(tellerAddress);
   console.log('Public teller: ', publicTellerInfo);
 
@@ -35,30 +33,41 @@ const DetherJS = require('../src/index');
   const privateKey = '0x0123456789012345678901234567890123456789012345678901234567890123';
   const userPassword = 'Dether@1';
 
-  const wallet = DetherJS.Wallet.fromPrivateKey(privateKey, userPassword);
-  const user = await dether.getUser(wallet);
+  const wallet = new DetherJS.Wallet(privateKey);
+  const encryptedWallet = wallet.encrypt(userPassword);
+  const user = await dether.getUser(encryptedWallet);
 
   // User registers as a teller
-  const point = {
-    lat: 1, lng: 2,
+
+  const sellPoint = {
+    lat: 1,
+    lng: 2,
+    zone: 42,
+    rates: 20.20,
+    avatar: 1,
+    currency: 2,
+    telegram: 'abc',
+    username: 'cba',
+    amount: 0.01,
   };
-  const teller = await user.registerPoint(point, userPassword);
+
+  const teller = await user.registerPoint(sellPoint, userPassword);
   console.log('Teller: ', teller);
 
   // Get teller info
-  const tellerInfo = await user.getInfo();
+  const tellerInfo = await user.getInfo(userPassword);
   console.log('Teller info: ', tellerInfo);
 
-  // User remove points and withdraw
-  await user.deleteSellPoint(userPassword);
-
-  // User send coin from escrow account
-  const buyerAddress = 'zioajfeozifjez';
-  const transaction = await user.sendCoin(buyerAddress, userPassword);
-  console.log('Send coin transaction: ', transaction);
-
   // Get teller balance
-  const tellerBalance = await user.getBalance();
+  const tellerBalance = await user.getBalance(userPassword);
   console.log('Teller balance: ', tellerBalance);
 
+  // User remove points and withdraw
+  const withdrawTransaction = await user.withdrawAll(userPassword);
+  console.log('Withdraw transaction: ', withdrawTransaction);
+
+  // User send coin from escrow account
+  const buyerAddress = '0x0123456789012345678901234567890123456789012345678901234567890123';
+  const sendCoinTransaction = await user.sendCoin(buyerAddress, userPassword);
+  console.log('Send coin transaction: ', sendCoinTransaction);
 })().catch(console.error);

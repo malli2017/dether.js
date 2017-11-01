@@ -156,7 +156,9 @@ describe('dether user', () => {
     });
 
     const result = await user.addSellPoint(sellPoint, 'password');
-    expect(result).to.eq('hash');
+    expect(result).to.deep.eq({
+      hash: 'hash',
+    });
 
     expect(stubs[0].args[0][0]).to.eq(100000);
     expect(stubs[0].args[0][1]).to.eq(200000);
@@ -192,7 +194,9 @@ describe('dether user', () => {
     });
 
     const result = await user.sendCoin(opts, 'password');
-    expect(result).to.eq('hash');
+    expect(result).to.deep.eq({
+      hash: 'hash',
+    });
 
     expect(stubs[0].calledWith(
       '0x085b30734fD4f48369D53225b410d7D04b2d9011',
@@ -212,7 +216,9 @@ describe('dether user', () => {
     });
 
     const result = await user.withdrawAll('password');
-    expect(result).to.eq('hash');
+    expect(result).to.deep.eq({
+      hash: 'hash',
+    });
     expect(stubs[1].args[0][0].password).to.eq('password');
   });
 });

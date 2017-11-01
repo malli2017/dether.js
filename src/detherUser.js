@@ -152,10 +152,10 @@ class DetherUser {
       formattedSellPoint.username,
     );
 
-    const { hash } = transaction;
-
-    return hash;
+    return transaction;
     // TODO return full transaction
+
+    // const { hash } = transaction;
     /* TODO ??
     return {
       from: ethToolbox.utils.add0x(this.wallet.address),
@@ -205,7 +205,7 @@ class DetherUser {
         Ethers.utils.parseEther(amount.toString()),
       );
 
-    return transaction.hash;
+    return transaction;
   }
 
 
@@ -227,7 +227,7 @@ class DetherUser {
     });
     const transaction = await customContract.withdrawAll();
 
-    return transaction.hash;
+    return transaction;
   }
 }
 
