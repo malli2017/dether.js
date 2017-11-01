@@ -1,0 +1,51 @@
+{
+  "coverage": "86.48%",
+  "expectCount": 37,
+  "actualCount": 32,
+  "files": {
+    "src/constants/appConstants.js": {
+      "expectCount": 2,
+      "actualCount": 0,
+      "undocumentLines": [
+        1,
+        2
+      ]
+    },
+    "src/detherJs.js": {
+      "expectCount": 12,
+      "actualCount": 11,
+      "undocumentLines": [
+        10
+      ]
+    },
+    "src/detherUser.js": {
+      "expectCount": 12,
+      "actualCount": 11,
+      "undocumentLines": [
+        7
+      ]
+    },
+    "src/utils/contracts.js": {
+      "expectCount": 3,
+      "actualCount": 3,
+      "undocumentLines": []
+    },
+    "src/utils/formatters.js": {
+      "expectCount": 4,
+      "actualCount": 3,
+      "undocumentLines": [
+        7
+      ]
+    },
+    "src/utils/providers.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/utils/validation.js": {
+      "expectCount": 3,
+      "actualCount": 3,
+      "undocumentLines": []
+    }
+  }
+}

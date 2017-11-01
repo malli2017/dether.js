@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/tellers/getTellers.js | dethergateway</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="Gateway between Front App and the detherContracts."><meta property="twitter:card" content="summary"><meta property="twitter:title" content="dethergateway"><meta property="twitter:description" content="Gateway between Front App and the detherContracts."></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/dethertech/detherGateway"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#constants">constants</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getContractInstance">getContractInstance</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getContractStorageInstance">getContractStorageInstance</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getSignedContractInstance">getSignedContractInstance</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GAS_PRICE">GAS_PRICE</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UTILITYWEB3">UTILITYWEB3</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#mock">mock</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-mock">mock</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-mockStorage">mockStorage</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#tellers">tellers</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-dtrRegisterPoint">dtrRegisterPoint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-withdrawAll">withdrawAll</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-dtrSendCoin">dtrSendCoin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getBalance">getBalance</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-dtrGetTeller">dtrGetTeller</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getAllTellers">getAllTellers</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getTellersPerZone">getTellersPerZone</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-tellers">tellers</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/tellers/getTellers.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {
+  getContractStorageInstance,
+  getContractInstance,
+  UTILITYWEB3,
+} from &apos;../constants/appConstants&apos;;
+
+/**
+ * get teller by address
+ * @param  {string}  address ethereum address
+ * @return {object} return teller
+ */
+export const dtrGetTeller = (address, providerUrl) =&gt;
+  new Promise(async (res, rej) =&gt; {
+    try {
+      const dtrContractInstance = await getContractInstance(providerUrl);
+      if (!dtrContractInstance) return rej(new TypeError(&apos;Invalid provider URL&apos;));
+
+      const tellerPos = await dtrContractInstance.getTellerPos(address);
+      if (!tellerPos) return rej(new TypeError(&apos;Invalid Teller Position&apos;));
+
+      if (tellerPos[3].toNumber() === 0) return res(null);
+
+      const tellerProfile = await dtrContractInstance.getTellerProfile(address);
+      if (!tellerProfile) return rej(new TypeError(&apos;Invalid Teller Profile&apos;));
+
+      return res({
+        name: UTILITYWEB3.toUtf8(tellerProfile[3]) || &apos;Dether&apos;,
+        messengerAddr: UTILITYWEB3.toUtf8(tellerProfile[6]) || &apos;Dether_io&apos;,
+        lat: tellerPos[0].toNumber() / (10 ** 5) || 48.864716,
+        lng: tellerPos[1].toNumber() / (10 ** 5) || 2.349014,
+        zoneId: tellerPos[2].toNumber(),
+        escrowBalance: Number(UTILITYWEB3.fromWei(tellerPos[3].toNumber(), &apos;ether&apos;)) || 0,
+        rates: tellerProfile[0].toNumber(),
+        volumeTrade: Number(UTILITYWEB3.fromWei(tellerProfile[1].toNumber(), &apos;ether&apos;)) || 0,
+        nbTrade: tellerProfile[2].toNumber(),
+        currencyId: tellerProfile[4].toNumber(),
+        avatarId: tellerProfile[5].toNumber(),
+        ethAddress: address,
+        id: address,
+      });
+    } catch (e) {
+      return rej(new TypeError(e));
+    }
+  });
+
+/**
+ * Get All tellers per zone
+ * @param  {string}  zone
+ * @return {array} return array of tellers
+ */
+export const getTellersPerZone = (zone, providerUrl) =&gt;
+  new Promise(async (res, rej) =&gt; {
+    try {
+      const dtrContractStorageInstance = await getContractStorageInstance(providerUrl);
+      if (!dtrContractStorageInstance) return rej(new TypeError(&apos;Invalid provider URL&apos;));
+
+      const tellersAddressesInZone = await dtrContractStorageInstance.getZone.call(zone);
+      if (!tellersAddressesInZone || !tellersAddressesInZone.length) return res([]);
+
+      const tellers = [];
+
+      await Promise.all(tellersAddressesInZone.map(async (addr) =&gt; {
+        const teller = await dtrGetTeller(addr, providerUrl);
+
+        if (teller
+            &amp;&amp; teller.zoneId === parseInt(zone, 10)
+            &amp;&amp; !tellers.find((tel) =&gt; tel.ethAddress === teller.ethAddress)) {
+          tellers.push(teller);
+        }
+      }));
+
+      return res(tellers);
+    } catch (e) {
+      return rej(new TypeError(e));
+    }
+  });
+
+/**
+ * Get All tellers on the map
+ * @return {array} return array of tellers
+ */
+export const getAllTellers = (providerUrl) =&gt;
+  new Promise(async (res, rej) =&gt; {
+    try {
+      const dtrContractStorageInstance = await getContractStorageInstance(providerUrl);
+      if (!dtrContractStorageInstance) return rej(new TypeError(&apos;Invalid provider URL&apos;));
+
+      const tellersAddresses = await dtrContractStorageInstance.getAllTellers();
+      if (!tellersAddresses || !tellersAddresses.length) return res([]);
+
+      const tellers = [];
+
+      await Promise.all(tellersAddresses.map(async (addr) =&gt; {
+        const teller = await dtrGetTeller(addr, providerUrl);
+
+        if (teller &amp;&amp; !tellers.find((tel) =&gt; tel.ethAddress === teller.ethAddress)) {
+          tellers.push(teller);
+        }
+      }));
+
+      return res(tellers);
+    } catch (e) {
+      return rej(new TypeError(e));
+    }
+  });
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.0.3)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
