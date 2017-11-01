@@ -32,15 +32,20 @@ npm install --save dether.js
 
 Extensive documentation of all the methods can be found on the [API documentation](https://dethertech.github.io/dether.js)
 
-```
-## Example
+## Usage
 
-You can find examples of method usage in [examples/usage.js](https://github.com/dethertech/dether.js/blob/v1.x/examples/usage.js)
+You can find more examples of method usage in [examples/usage.js](https://github.com/dethertech/dether.js/blob/v1.x/examples/usage.js)
 ```
-git clone https://github.com/dethertech/dether.js.git
-cd dether.js
-npm i
-npm run example
+import DetherJS from 'dether.js';
+
+const dether = new DetherJS({ network: 'kovan' });
+const allTellers = await dether.getAllTellers();
+
+const wallet = DetherJS.Wallet.createRandom();
+const encryptedWallet = await wallet.encrypt('password');
+
+const user = dether.getUser(encryptedWallet);
+const info = await dether.getInfo();
 ```
 
 ## Dev

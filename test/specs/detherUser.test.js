@@ -122,7 +122,7 @@ describe('dether user', () => {
   });
 
   it('should get user escrow balance', async () => {
-    const stub = sinon.stub(dether, 'getBalance');
+    const stub = sinon.stub(dether, 'getTellerBalance');
     stub.returns('balance');
 
     const balance = await user.getBalance('password');

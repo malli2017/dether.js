@@ -3,6 +3,7 @@ import Web3 from 'web3';
 import ethToolbox from 'eth-toolbox';
 
 import DetherUser from './detherUser';
+import Wallet from './wallet';
 import Contracts from './utils/contracts';
 import Providers from './utils/providers';
 import Formatters from './utils/formatters';
@@ -138,5 +139,7 @@ class DetherJS {
     return balance;
   }
 }
+
+DetherJS.Wallet = Wallet;
 
 export default DetherJS;

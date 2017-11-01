@@ -101,19 +101,19 @@ describe('dether js', () => {
 
     describe('getBalance', () => {
       it('should getBalance is a function', () => {
-        expect(typeof dether.getBalance).to.equal('function');
+        expect(typeof dether.getTellerBalance).to.equal('function');
       });
 
       it('should get user escrow balance', async () => {
-        const spy = sinon.spy(dether, 'getBalance');
-        const balance = await dether.getBalance('0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623');
+        const spy = sinon.spy(contractMock, 'getTellerBalance');
+        const balance = await dether.getTellerBalance('0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623');
         expect(balance).to.eq('2.2');
         expect(spy.calledWith('0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623')).to.be.true;
       });
 
       it('should get user escrow balance throw invalid address', async () => {
-        expect(dether.getBalance).to.throw;
-        expect(dether.getBalance.bind(dether, 'fiezfij')).to.throw;
+        expect(dether.getTellerBalance).to.throw;
+        expect(dether.getTellerBalance.bind(dether, 'fiezfij')).to.throw;
       });
     });
 
