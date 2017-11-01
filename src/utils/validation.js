@@ -26,9 +26,6 @@ export const validateSellPoint = (teller) => {
   if (!teller.username || teller.username.length < 3 || teller.username.length > 30) {
     return { error: true, msg: 'Invalid username' };
   }
-  // if (!teller.gasPrice || teller.gasPrice < 0) {
-  //   return { error: true, msg: 'Invalid gas Price' };
-  // }
   return {};
 };
 

@@ -13,6 +13,7 @@ describe('dether user', () => {
 
   let dether, wallet, user, stubs = [];
 
+
   beforeEach(async () => {
     stubs = [];
 
@@ -21,7 +22,6 @@ describe('dether user', () => {
     });
 
     wallet = Wallet.createRandom();
-
     user = new DetherUser({ dether, wallet });
 
     user.signedDetherContract = contractMock;
@@ -129,7 +129,7 @@ describe('dether user', () => {
 
     expect(stub.calledWith(
       '0x085b30734fD4f48369D53225b410d7D04b2d9011',
-      1000000000000000000,
+      Ethers.utils.parseEther('1'),
     )).to.be.true;
 
     stub.restore();

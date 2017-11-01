@@ -14,7 +14,7 @@ function getContract(ContractJson, provider) {
     throw new Error('No chain id found');
   }
   const network = ContractJson.networks[chainId];
-  if(!network) {
+  if (!network) {
     throw new Error(`Contract not deployed on network ${chainId}`);
   }
   const contractAddress = ContractJson.networks[chainId].address;

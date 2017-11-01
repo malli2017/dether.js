@@ -4,7 +4,6 @@ import { validateSellPoint, validateSendCoin, validatePassword } from './utils/v
 import Contracts from './utils/contracts';
 import Providers from './utils/providers';
 import Formatters from './utils/formatters';
-// import { GAS_PRICE } from './constants/appConstants';
 
 class DetherUser {
   constructor(opts) {
@@ -80,18 +79,19 @@ class DetherUser {
 
     const formattedSellPoint = Formatters.sellPointToContract(sellPoint);
 
-    const transaction = await this.specialContract({
-      value: tsxAmount,
-    }).registerPoint(
-      formattedSellPoint.lat,
-      formattedSellPoint.lng,
-      formattedSellPoint.zone,
-      formattedSellPoint.rates,
-      formattedSellPoint.avatar,
-      formattedSellPoint.currency,
-      formattedSellPoint.telegram,
-      formattedSellPoint.username,
-    );
+    const transaction = await this
+      .specialContract({
+        value: tsxAmount,
+      }).registerPoint(
+        formattedSellPoint.lat,
+        formattedSellPoint.lng,
+        formattedSellPoint.zone,
+        formattedSellPoint.rates,
+        formattedSellPoint.avatar,
+        formattedSellPoint.currency,
+        formattedSellPoint.telegram,
+        formattedSellPoint.username,
+      );
 
     const { hash } = transaction;
 
@@ -138,7 +138,7 @@ class DetherUser {
     const transaction = await this.signedDetherContract
       .sendCoin(
         ethToolbox.utils.add0x(receiver),
-        parseInt(this.dether.web3.toWei(amount, 'ether'), 10),
+        Ethers.utils.parseEther(amount.toString()),
       );
 
     return transaction.hash;
