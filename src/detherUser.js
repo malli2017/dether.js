@@ -6,6 +6,12 @@ import Providers from './utils/providers';
 import Formatters from './utils/formatters';
 
 class DetherUser {
+  /**
+   *
+   * @param {object} opts
+   * @param {DetherJS} opts.dether dether instance
+   * @param {Wallet} opts.wallet user wallet
+   */
   constructor(opts) {
     if (!opts.dether || !opts.wallet) {
       throw new Error('Need dether instance and wallet');
@@ -15,7 +21,32 @@ class DetherUser {
     this.wallet.provider = this.dether.provider;
 
     this.signedDetherContract = Contracts.getDetherContract(this.wallet);
-    this.specialContract = o => Contracts.getDetherContract(Providers.advancedProvider(this.wallet)(o));
+  }
+
+
+  /**
+   * Returns a custom signed contract
+   * Allows to add value to a transaction
+   *
+   * @param {object}      opts
+   * @param {BigNumber}   opts.value Ether value to send while calling contract
+   * @return {object}     Dether Contract
+   * @private
+   * @ignore
+   */
+  _getCustomContract(opts) {
+    const customProvider = {
+      getAddress: this.wallet.getAddress.bind(this.wallet),
+      provider: this.wallet.provider,
+      sendTransaction: (transaction) => {
+        if (opts.value) {
+          transaction.value = opts.value;
+        }
+        return this.wallet.sendTransaction(transaction);
+      },
+    };
+
+    return Contracts.getDetherContract(customProvider);
   }
 
   /**
@@ -51,12 +82,12 @@ class DetherUser {
    * @param {object} sellPoint
    * @param {number} sellPoint.lat        latitude min -90 max +90
    * @param {number} sellPoint.lng        longitude min -180 max +180
-   * @param {string} sellPoint.zone       geographic zone
+   * @param {number} sellPoint.zone       geographic zone
    * @param {number} sellPoint.rates      Margin (0-100)
    * @param {number} sellPoint.avatar     avatar id (1-9)
    * @param {number} sellPoint.currency   currency id (0-4)
-   * @param {string} sellPoint.telegram   Telegram address
    * @param {number} sellPoint.amount     Ether amount to put on escrow
+   * @param {string} sellPoint.telegram   Telegram address
    * @param {string} sellPoint.username   username
    * @param {string} password             user password
    * @return {Promise<string>} Transaction hash
@@ -80,7 +111,7 @@ class DetherUser {
     const formattedSellPoint = Formatters.sellPointToContract(sellPoint);
 
     const transaction = await this
-      .specialContract({
+      ._getCustomContract({
         value: tsxAmount,
       }).registerPoint(
         formattedSellPoint.lat,
@@ -96,6 +127,7 @@ class DetherUser {
     const { hash } = transaction;
 
     return hash;
+    // TODO return full transaction
     /* TODO ??
     return {
       from: ethToolbox.utils.add0x(this.wallet.address),

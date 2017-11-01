@@ -49,6 +49,33 @@ describe('dether user', () => {
     stub.restore();
   });
 
+  it('should create special contract', async () => {
+    const stub = sinon.stub();
+    stub.returns('result');
+
+    user.wallet = {
+      sendTransaction: stub,
+      getAddress: () => 'address',
+      provider: 'provider',
+    };
+    stubs.push(sinon.stub(Contracts, 'getDetherContract'));
+    stubs[0].returns('res');
+
+    const customContract = user._getCustomContract({
+      value: 1.2,
+    });
+
+    expect(customContract).to.eq('res');
+    const customProvider = stubs[0].args[0][0];
+
+    expect(customProvider.getAddress()).to.eq('address');
+    expect(customProvider.provider).to.eq('provider');
+
+    const transactionResult = customProvider.sendTransaction({});
+    expect(transactionResult).to.eq('result');
+    expect(stub.calledWith({ value: 1.2 })).to.be.true;
+  });
+
   it('should get user info', async () => {
     const stub = sinon.stub(dether, 'getTeller');
     stub.returns('info');
@@ -89,7 +116,7 @@ describe('dether user', () => {
     stubs[0].returns({
       hash: 'hash',
     });
-    stubs.push(sinon.stub(user, 'specialContract'));
+    stubs.push(sinon.stub(user, '_getCustomContract'));
     stubs[1].returns({
       registerPoint: stubs[0],
     });
@@ -110,8 +137,8 @@ describe('dether user', () => {
     expect(stubs[0].args[0][7][1]).to.eq(98);
     expect(stubs[0].args[0][7][2]).to.eq(97);
 
-    const t = Ethers.utils.parseEther('0.01');
-    expect(stubs[1].args[0][0].value.eq(t)).to.be.true;
+    const transactionValue = Ethers.utils.parseEther('0.01');
+    expect(stubs[1].args[0][0].value.eq(transactionValue)).to.be.true;
   });
 
   it('should send coin', async () => {

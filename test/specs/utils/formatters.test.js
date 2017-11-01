@@ -13,7 +13,6 @@ describe('formatters', () => {
         789,
         Ethers.utils.bigNumberify('1200000000000000000'),
       ];
-      console.log(rawTellerPos);
       const tellerPos = Formatters.tellerPosFromContract(rawTellerPos);
 
       expect(tellerPos.lat).to.eq(0.00123);
