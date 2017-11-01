@@ -3,6 +3,9 @@ import Ethers from 'ethers';
 import DetherJson from 'dethercontract/contracts/DetherInterface.json';
 import DetherStorageJson from 'dethercontract/contracts/DetherStorage.json';
 
+/**
+ * @ignore
+ */
 function getContract(ContractJson, provider) {
   let chainId = null;
   if (provider.provider) {
@@ -23,10 +26,17 @@ function getContract(ContractJson, provider) {
   return new Ethers.Contract(contractAddress, contractABI, provider);
 }
 
+/**
+ * @ignore
+ */
 function getDetherContract(provider) {
   return getContract(DetherJson, provider);
 }
 
+
+/**
+ * @ignore
+ */
 function getDetherStorageContract(provider) {
   return getContract(DetherStorageJson, provider);
 }

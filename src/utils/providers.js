@@ -4,12 +4,13 @@ import Ethers from 'ethers';
  * Retrieve ethereum provider
  * Only network is needed
  *
- * @param opts
- * @param {String} opts.network       Name of network ('homestead', 'ropsten', 'rinkeby', 'kovan')
- * @param {!String} opts.rpcURL       JSON RPC provider URL
- * @param {!String} opts.infuraKey    INFURA API Key
- * @param {!String} opts.etherscanKey Etherscan API Key
+ * @param {object}  opts
+ * @param {String}  opts.network       Name of network ('homestead', 'ropsten', 'rinkeby', 'kovan')
+ * @param {?String} opts.rpcURL       JSON RPC provider URL
+ * @param {?String} opts.infuraKey    INFURA API Key
+ * @param {?String} opts.etherscanKey Etherscan API Key
  * @return {Provider}
+ * @ignore
  */
 function getProvider(opts) {
   if (!opts.network) throw new TypeError('Unable to get provider, need network');

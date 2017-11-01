@@ -26,6 +26,10 @@ const DetherJS = require('../src/index');
   const publicTellerInfo = await dether.getTeller(tellerAddress);
   console.log('Public teller: ', publicTellerInfo);
 
+  // Get balance of teller
+  const tellerBalance = await dether.getTellerBalance(tellerAddress);
+  console.log('Teller balance: ', tellerBalance);
+
 
   // //////////////////////////////
   // User data
@@ -40,14 +44,14 @@ const DetherJS = require('../src/index');
   // User registers as a teller
 
   const sellPoint = {
-    lat: 1,
-    lng: 2,
+    lat: 1.12,
+    lng: 2.21,
     zone: 42,
     rates: 20.20,
     avatar: 1,
     currency: 2,
-    telegram: 'abc',
-    username: 'cba',
+    telegram: 'https://telegram.me/boby',
+    username: 'Boby',
     amount: 0.01,
   };
 
@@ -59,8 +63,8 @@ const DetherJS = require('../src/index');
   console.log('Teller info: ', tellerInfo);
 
   // Get teller balance
-  const tellerBalance = await user.getBalance(userPassword);
-  console.log('Teller balance: ', tellerBalance);
+  const userBalance = await user.getBalance(userPassword);
+  console.log('Teller balance: ', userBalance);
 
   // User remove points and withdraw
   const withdrawTransaction = await user.withdrawAll(userPassword);

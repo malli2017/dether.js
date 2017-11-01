@@ -8,6 +8,9 @@ const web3 = new Web3();
 
 // TODO rename to formatter
 
+/**
+ * @ignore
+ */
 function tellerPosFromContract(rawTellerPos) {
   const tellerPos = {};
   try {
@@ -25,6 +28,9 @@ function tellerPosFromContract(rawTellerPos) {
   return tellerPos;
 }
 
+/**
+ * @ignore
+ */
 function tellerProfileFromContract(rawTellerProfile) {
   const tellerProfile = {};
 
@@ -44,6 +50,9 @@ function tellerProfileFromContract(rawTellerProfile) {
   return tellerProfile;
 }
 
+/**
+ * @ignore
+ */
 function sellPointToContract(rawSellPoint) {
   const sellPoint = {};
 

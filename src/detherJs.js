@@ -8,11 +8,25 @@ import Providers from './utils/providers';
 import Formatters from './utils/formatters';
 
 class DetherJS {
-  constructor(opts) {
-    this.provider = Providers.getProvider(opts);
+  /**
+   * Creates an instance of DetherUser
+   * You may not instanciate from here, prefer from DetherJS.getUser method
+   *
+   * @param {object}    providerData
+   * @param {String}    providerData.network      Name of network ('homestead', 'ropsten', 'rinkeby', 'kovan')
+   * @param {?String}   providerData.rpcURL       JSON RPC provider URL
+   * @param {?String}   providerData.infuraKey    INFURA API Key
+   * @param {?String}   providerData.etherscanKey Etherscan API Key
+   */
+  constructor(providerData) {
+    /** @ignore */
+    this.provider = Providers.getProvider(providerData);
+    /** @ignore */
     this.web3 = new Web3();
 
+    /** @ignore */
     this.contractInstance = Contracts.getDetherContract(this.provider);
+    /** @ignore */
     this.storageInstance = Contracts.getDetherStorageContract(this.provider);
 
     if (!this.contractInstance || !this.storageInstance) throw new Error('Unable to load contracts');
@@ -107,11 +121,11 @@ class DetherJS {
   }
 
   /**
-   * get dtr balance
-   * @param  {string}  address ethereum address
+   * Get teller balance in escrow
+   * @param  {string} address  Teller ethereum address
    * @return {Promise<Number>} Escrow balance of teller at address
    */
-  async getBalance(address) {
+  async getTellerBalance(address) {
     if (!ethToolbox.utils.isAddr(address)) throw new TypeError('Invalid ETH address');
 
     const fullAddress = ethToolbox.utils.add0x(address);

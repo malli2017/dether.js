@@ -6,6 +6,9 @@ import Formatters from './utils/formatters';
 
 class DetherUser {
   /**
+   * Creates an instance of DetherUser.
+   *
+   * You may not instanciate from here, prefer from DetherJS.getUser method
    *
    * @param {object} opts
    * @param {DetherJS} opts.dether dether instance
@@ -15,7 +18,9 @@ class DetherUser {
     if (!opts.dether || !opts.encryptedWallet) {
       throw new Error('Need dether instance and wallet');
     }
+    /** @ignore */
     this.dether = opts.dether;
+    /** @ignore */
     this.encryptedWallet = opts.encryptedWallet;
   }
 
@@ -71,7 +76,7 @@ class DetherUser {
   /**
    * Get user ethereum address
    * @param {string} password             user password
-   * @return {string} user ethereum address
+   * @return {Promise<string>} user ethereum address
    */
   async getAddress(password) {
     const wallet = await this._getWallet(password);
@@ -81,7 +86,7 @@ class DetherUser {
   /**
    * Get user teller info
    * @param {string} password             user password
-   * @return {Promise}
+   * @return {Promise<object>}
    */
   async getInfo(password) {
     const wallet = await this._getWallet(password);
@@ -91,7 +96,7 @@ class DetherUser {
   /**
    * Get user balance in escrow
    * @param {string} password             user password
-   * @return {Promise}
+   * @return {Promise<string>}
    */
   async getBalance(password) {
     const wallet = await this._getWallet(password);
@@ -115,7 +120,7 @@ class DetherUser {
    * @param {string} sellPoint.telegram   Telegram address
    * @param {string} sellPoint.username   username
    * @param {string} password             user password
-   * @return {Promise<string>} Transaction hash
+   * @return {Promise<object>} Transaction
    */
   async addSellPoint(sellPoint, password) {
     const secu = validateSellPoint(sellPoint);
@@ -185,7 +190,7 @@ class DetherUser {
    * @param  {string}  opts.receiver Receiver ethereum address
    * @param  {number}  opts.amount   Amount to send
    * @param  {string}  password      Wallet password
-   * @return {Promise<string>} Transaction hash
+   * @return {Promise<object>} Transaction
    */
   async sendCoin(opts, password) {
     const secu = validateSendCoin(opts);
@@ -216,7 +221,7 @@ class DetherUser {
   /**
    * Delete sell point, this function withdraw automatically balance escrow to owner
    * @param  {string} password  Wallet password
-   * @return {Promise<string>}  Transaction hash
+   * @return {Promise<object>}  Transaction
    */
   async withdrawAll(password) {
     const secuPass = validatePassword(password);

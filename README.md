@@ -9,8 +9,8 @@ V1.0.0
 [V0.x](https://github.com/dethertech/dether.js/tree/v0.x)
 ## Table of Contents
 
-* [Get Started](#get-started)
 * [Install](#install)
+* [Docs](#doc)
 * [Example](#example)
 * [Dev](#dev)
 * [Test](#test)
@@ -28,9 +28,14 @@ Use NPM to get the package
 npm install --save dether.js
 ```
 
+## Docs
+
+Extensive documentation of all the methods can be found on the [API documentation](https://dethertech.github.io/dether.js)
+
+```
 ## Example
 
-You can find examples of all methods in [examples/usage.js](https://github.com/dethertech/dether.js/blob/detherclass/examples/usage.js)
+You can find examples of method usage in [examples/usage.js](https://github.com/dethertech/dether.js/blob/v1.x/examples/usage.js)
 ```
 git clone https://github.com/dethertech/dether.js.git
 cd dether.js
