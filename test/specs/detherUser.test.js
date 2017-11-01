@@ -22,7 +22,8 @@ describe('dether user', () => {
     });
 
     wallet = Wallet.createRandom();
-    user = new DetherUser({ dether, wallet });
+    const encryptedWallet = await wallet.encrypt('password');
+    user = new DetherUser({ dether, encryptedWallet });
 
     user.signedDetherContract = contractMock;
   });
@@ -33,36 +34,62 @@ describe('dether user', () => {
   });
 
   it('should instanciate', async () => {
+    const password = 'password';
     const wallet = Wallet.createRandom();
+    const encryptedWallet = await wallet.encrypt(password);
+
     const dether = { provider: { chainId: 42 } };
     const stub = sinon.stub(Contracts, 'getDetherContract').returns('contract');
 
     const detheruser = new DetherUser({
       dether,
-      wallet,
+      encryptedWallet,
     });
     expect(detheruser.dether).to.eq(dether);
-    expect(detheruser.wallet).to.eq(wallet);
-    expect(detheruser.wallet.provider).to.eq(dether.provider);
-    expect(detheruser.signedDetherContract).to.eq('contract');
+    expect(detheruser.encryptedWallet).to.eq(encryptedWallet);
+
+    const decryptedWallet = await Ethers.Wallet.fromEncryptedWallet(detheruser.encryptedWallet, password);
+    expect(decryptedWallet.privateKey).to.eq(wallet.privateKey);
 
     stub.restore();
+  });
+
+  it('should get wallet', async () => {
+    const customWallet = {};
+    dether.provider = 'provider';
+
+    const restore = Ethers.Wallet;
+    Ethers.Wallet = {
+      fromEncryptedWallet: sinon.stub().returns(customWallet),
+    };
+
+    const wallet = await user._getWallet('password');
+
+    expect(Ethers.Wallet.fromEncryptedWallet.calledWith(user.encryptedWallet, 'password')).to.be.true;
+    expect(wallet.provider).to.eq('provider');
+
+    Ethers.Wallet = restore;
   });
 
   it('should create special contract', async () => {
     const stub = sinon.stub();
     stub.returns('result');
 
-    user.wallet = {
+    stubs.push(sinon.stub(Contracts, 'getDetherContract'));
+    stubs[0].returns('res');
+
+    const customWallet = {
       sendTransaction: stub,
       getAddress: () => 'address',
       provider: 'provider',
     };
-    stubs.push(sinon.stub(Contracts, 'getDetherContract'));
-    stubs[0].returns('res');
 
-    const customContract = user._getCustomContract({
+    stubs.push(sinon.stub(user, '_getWallet'));
+    stubs[1].returns(customWallet);
+
+    const customContract = await user._getCustomContract({
       value: 1.2,
+      password: 'password',
     });
 
     expect(customContract).to.eq('res');
@@ -74,13 +101,20 @@ describe('dether user', () => {
     const transactionResult = customProvider.sendTransaction({});
     expect(transactionResult).to.eq('result');
     expect(stub.calledWith({ value: 1.2 })).to.be.true;
+    expect(stubs[1].calledWith('password')).to.be.true;
+
+  });
+
+  it('should get user address', async () => {
+    const address = await user.getAddress('password');
+    expect(address).to.eq(wallet.address);
   });
 
   it('should get user info', async () => {
     const stub = sinon.stub(dether, 'getTeller');
     stub.returns('info');
 
-    const info = await user.getInfo();
+    const info = await user.getInfo('password');
     expect(stub.calledWith(wallet.address)).to.be.true;
     expect(info).to.eq('info');
 
@@ -91,7 +125,7 @@ describe('dether user', () => {
     const stub = sinon.stub(dether, 'getBalance');
     stub.returns('balance');
 
-    const balance = await user.getBalance();
+    const balance = await user.getBalance('password');
     expect(stub.calledWith(wallet.address)).to.be.true;
     expect(balance).to.eq('balance');
 
@@ -139,6 +173,7 @@ describe('dether user', () => {
 
     const transactionValue = Ethers.utils.parseEther('0.01');
     expect(stubs[1].args[0][0].value.eq(transactionValue)).to.be.true;
+    expect(stubs[1].args[0][0].password).to.eq('password');
   });
 
   it('should send coin', async () => {
@@ -146,24 +181,38 @@ describe('dether user', () => {
       amount: 1,
       receiver: '0x085b30734fD4f48369D53225b410d7D04b2d9011',
     };
-    const stub = sinon.stub(user.signedDetherContract, 'sendCoin');
-    stub.returns({
+
+    stubs.push(sinon.stub());
+    stubs[0].returns({
       hash: 'hash',
+    });
+    stubs.push(sinon.stub(user, '_getCustomContract'));
+    stubs[1].returns({
+      sendCoin: stubs[0],
     });
 
     const result = await user.sendCoin(opts, 'password');
     expect(result).to.eq('hash');
 
-    expect(stub.calledWith(
+    expect(stubs[0].calledWith(
       '0x085b30734fD4f48369D53225b410d7D04b2d9011',
       Ethers.utils.parseEther('1'),
     )).to.be.true;
-
-    stub.restore();
+    expect(stubs[1].args[0][0].password).to.eq('password');
   });
 
   it('should withdraw all', async () => {
+    stubs.push(sinon.stub());
+    stubs[0].returns({
+      hash: 'hash',
+    });
+    stubs.push(sinon.stub(user, '_getCustomContract'));
+    stubs[1].returns({
+      withdrawAll: stubs[0],
+    });
+
     const result = await user.withdrawAll('password');
     expect(result).to.eq('hash');
+    expect(stubs[1].args[0][0].password).to.eq('password');
   });
 });

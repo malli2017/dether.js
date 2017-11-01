@@ -2,7 +2,6 @@ import Ethers from 'ethers';
 import ethToolbox from 'eth-toolbox';
 import { validateSellPoint, validateSendCoin, validatePassword } from './utils/validation';
 import Contracts from './utils/contracts';
-import Providers from './utils/providers';
 import Formatters from './utils/formatters';
 
 class DetherUser {
@@ -10,39 +9,59 @@ class DetherUser {
    *
    * @param {object} opts
    * @param {DetherJS} opts.dether dether instance
-   * @param {Wallet} opts.wallet user wallet
+   * @param {object} opts.encryptedWallet user wallet
    */
   constructor(opts) {
-    if (!opts.dether || !opts.wallet) {
+    if (!opts.dether || !opts.encryptedWallet) {
       throw new Error('Need dether instance and wallet');
     }
     this.dether = opts.dether;
-    this.wallet = opts.wallet;
-    this.wallet.provider = this.dether.provider;
-
-    this.signedDetherContract = Contracts.getDetherContract(this.wallet);
+    this.encryptedWallet = opts.encryptedWallet;
   }
 
+  /**
+   * Returns decrypted wallet
+   *
+   * @param {string} password             user password
+   * @return {Wallet}     User wallet
+   * @private
+   * @ignore
+   */
+  async _getWallet(password) {
+    if (!password) {
+      throw new TypeError('Need password to decrypt wallet');
+    }
+    const wallet = await Ethers.Wallet.fromEncryptedWallet(this.encryptedWallet, password);
+    wallet.provider = this.dether.provider;
+
+    return wallet;
+  }
 
   /**
    * Returns a custom signed contract
    * Allows to add value to a transaction
    *
    * @param {object}      opts
-   * @param {BigNumber}   opts.value Ether value to send while calling contract
+   * @param {string}      opts.password password to decrypt wallet
+   * @param {BigNumber}   opts.value    Ether value to send while calling contract
    * @return {object}     Dether Contract
    * @private
    * @ignore
    */
-  _getCustomContract(opts) {
+  async _getCustomContract(opts) {
+    if (!opts.password) {
+      throw new TypeError('Need password to decrypt wallet');
+    }
+    const wallet = await this._getWallet(opts.password);
+
     const customProvider = {
-      getAddress: this.wallet.getAddress.bind(this.wallet),
-      provider: this.wallet.provider,
+      getAddress: wallet.getAddress.bind(wallet),
+      provider: wallet.provider,
       sendTransaction: (transaction) => {
         if (opts.value) {
           transaction.value = opts.value;
         }
-        return this.wallet.sendTransaction(transaction);
+        return wallet.sendTransaction(transaction);
       },
     };
 
@@ -51,26 +70,32 @@ class DetherUser {
 
   /**
    * Get user ethereum address
+   * @param {string} password             user password
    * @return {string} user ethereum address
    */
-  getAddress() {
-    return this.wallet.getAddress();
+  async getAddress(password) {
+    const wallet = await this._getWallet(password);
+    return wallet.getAddress();
   }
 
   /**
    * Get user teller info
+   * @param {string} password             user password
    * @return {Promise}
    */
-  async getInfo() {
-    return this.dether.getTeller(this.wallet.address);
+  async getInfo(password) {
+    const wallet = await this._getWallet(password);
+    return this.dether.getTeller(wallet.address);
   }
 
   /**
    * Get user balance in escrow
+   * @param {string} password             user password
    * @return {Promise}
    */
-  async getBalance() {
-    return this.dether.getBalance(this.wallet.address);
+  async getBalance(password) {
+    const wallet = await this._getWallet(password);
+    return this.dether.getBalance(wallet.address);
   }
 
 // gas used = 223319
@@ -110,19 +135,22 @@ class DetherUser {
 
     const formattedSellPoint = Formatters.sellPointToContract(sellPoint);
 
-    const transaction = await this
+    const customContract = await this
       ._getCustomContract({
         value: tsxAmount,
-      }).registerPoint(
-        formattedSellPoint.lat,
-        formattedSellPoint.lng,
-        formattedSellPoint.zone,
-        formattedSellPoint.rates,
-        formattedSellPoint.avatar,
-        formattedSellPoint.currency,
-        formattedSellPoint.telegram,
-        formattedSellPoint.username,
-      );
+        password,
+      });
+
+    const transaction = await customContract.registerPoint(
+      formattedSellPoint.lat,
+      formattedSellPoint.lng,
+      formattedSellPoint.zone,
+      formattedSellPoint.rates,
+      formattedSellPoint.avatar,
+      formattedSellPoint.currency,
+      formattedSellPoint.telegram,
+      formattedSellPoint.username,
+    );
 
     const { hash } = transaction;
 
@@ -167,7 +195,11 @@ class DetherUser {
 
     const { amount, receiver } = opts;
 
-    const transaction = await this.signedDetherContract
+    const customContract = await this
+      ._getCustomContract({
+        password,
+      });
+    const transaction = await customContract
       .sendCoin(
         ethToolbox.utils.add0x(receiver),
         Ethers.utils.parseEther(amount.toString()),
@@ -190,7 +222,10 @@ class DetherUser {
     const secuPass = validatePassword(password);
     if (secuPass.error) throw new TypeError(secuPass.msg);
 
-    const transaction = await this.signedDetherContract.withdrawAll();
+    const customContract = await this._getCustomContract({
+      password,
+    });
+    const transaction = await customContract.withdrawAll();
 
     return transaction.hash;
   }

@@ -63,12 +63,14 @@ describe('dether js', () => {
     });
 
 
-    it('should get user', () => {
+    it('should get user', async () => {
       const wallet = Wallet.createRandom();
-      const user = dether.getUser(wallet);
+      const encryptedWallet = await wallet.encrypt('password');
+
+      const user = dether.getUser(encryptedWallet);
 
       expect(user.dether).to.eq(dether);
-      expect(user.wallet).to.eq(wallet);
+      expect(user.encryptedWallet).to.eq(encryptedWallet);
     });
 
     describe('getTeller', () => {
