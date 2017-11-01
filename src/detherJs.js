@@ -95,7 +95,7 @@ class DetherJS {
    * @return {Promise<Array>} array of tellers
    */
   async getAllTellers() {
-    const result = await this.storageInstance.getAllTellers.call();
+    const result = await this.storageInstance.getAllTellers();
     if (!result || !result.length) return [];
 
     const tellersAddresses = result[0]; // TODO pourquoi ??
@@ -110,12 +110,12 @@ class DetherJS {
    * @return {Promise<Array>} array of tellers in zone
    */
   async getTellersInZone(zone) {
-    const result = await this.storageInstance.getZone.call();
+    const result = await this.storageInstance.getZone();
     if (!result || !result.length) return [];
 
     const tellersAddressesInZone = result[0]; // TODO pourquoi ??
 
-    const zoneInt = parseInt(zone, 10);
+    const zoneInt = zone;
     const tellers = await Promise.all(tellersAddressesInZone.map(this.getTeller.bind(this)));
 
     return DetherJS._filterTellerList(tellers).filter(t => t.zoneId === zoneInt);

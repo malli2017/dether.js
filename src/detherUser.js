@@ -100,7 +100,7 @@ class DetherUser {
    */
   async getBalance(password) {
     const wallet = await this._getWallet(password);
-    return this.dether.getBalance(wallet.address);
+    return this.dether.getTellerBalance(wallet.address);
   }
 
 // gas used = 223319

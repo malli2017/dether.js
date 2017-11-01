@@ -32,7 +32,6 @@
   },
   "homepage": "https://github.com/dethertech/dether.js#readme",
   "dependencies": {
-    "bignumber.js": "^4.1.0",
     "dethercontract": "^1.2.5",
     "eth-toolbox": "^0.2.3",
     "ethers": "^2.1.2",

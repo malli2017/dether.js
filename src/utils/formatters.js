@@ -1,6 +1,5 @@
 import Ethers from 'ethers';
 import Web3 from 'web3';
-import BigNumber from 'bignumber.js';
 
 import { COORD_PRECISION } from '../constants/appConstants';
 
