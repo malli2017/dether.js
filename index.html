@@ -31,8 +31,11 @@
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/detherJs.js~DetherJS.html">DetherJS</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/detherUser.js~DetherUser.html">DetherUser</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/wallet.js~Wallet.html">Wallet</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#constants">constants</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-COORD_PRECISION">COORD_PRECISION</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GAS_PRICE">GAS_PRICE</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utils">utils</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-add0x">add0x</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isAddr">isAddr</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -43,8 +46,8 @@
 <p>V1.0.0
 <a href="https://github.com/dethertech/dether.js/tree/v0.x">V0.x</a></p>
 <h2 id="table-of-contents">Table of Contents</h2><ul>
-<li><a href="#get-started">Get Started</a></li>
 <li><a href="#install">Install</a></li>
+<li><a href="#doc">Docs</a></li>
 <li><a href="#example">Example</a></li>
 <li><a href="#dev">Dev</a></li>
 <li><a href="#test">Test</a></li>
@@ -56,11 +59,18 @@
 </ul>
 <h2 id="install">Install</h2><p>Use NPM to get the package</p>
 <pre><code><code class="source-code prettyprint">npm install --save dether.js</code>
-</code></pre><h2 id="example">Example</h2><p>You can find examples of all methods in <a href="https://github.com/dethertech/dether.js/blob/detherclass/examples/usage.js">examples/usage.js</a></p>
-<pre><code><code class="source-code prettyprint">git clone https://github.com/dethertech/dether.js.git
-cd dether.js
-npm i
-npm run example</code>
+</code></pre><h2 id="docs">Docs</h2><p>Extensive documentation of all the methods can be found on the <a href="https://dethertech.github.io/dether.js">API documentation</a></p>
+<h2 id="usage">Usage</h2><p>You can find more examples of method usage in <a href="https://github.com/dethertech/dether.js/blob/v1.x/examples/usage.js">examples/usage.js</a></p>
+<pre><code><code class="source-code prettyprint">import DetherJS from &apos;dether.js&apos;;
+
+const dether = new DetherJS({ network: &apos;kovan&apos; });
+const allTellers = await dether.getAllTellers();
+
+const wallet = DetherJS.Wallet.createRandom();
+const encryptedWallet = await wallet.encrypt(&apos;password&apos;);
+
+const user = dether.getUser(encryptedWallet);
+const info = await dether.getInfo();</code>
 </code></pre><h2 id="dev">Dev</h2><pre><code><code class="source-code prettyprint">git clone https://github.com/dethertech/dether.js.git
 cd dether.js
 npm i</code>

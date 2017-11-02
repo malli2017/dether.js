@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/utils/formatters.js | detherjs</title>
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">Wallet | detherjs</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -40,86 +40,60 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1 data-ice="title">src/utils/formatters.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import Ethers from &apos;ethers&apos;;
-import Web3 from &apos;web3&apos;;
+<div class="content" data-ice="content"><div class="header-notice">
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import Wallet from &apos;<span><a href="file/src/wallet.js.html#lineNumber10">detherjs/src/wallet.js</a></span>&apos;</code></pre></div>
+  <span data-ice="access">public</span>
+  <span data-ice="kind">class</span>
+  
+  
+  
+  <span data-ice="source">| <span><a href="file/src/wallet.js.html#lineNumber10">source</a></span></span>
+</div>
 
-import { COORD_PRECISION } from &apos;../constants/appConstants&apos;;
+<div class="self-detail detail">
+  <h1 data-ice="name">Wallet</h1>
 
-const web3 = new Web3();
+  
 
-// TODO rename to formatter
+  
+  
+  <div class="flat-list" data-ice="extendsChain"><h4>Extends:</h4><div><span>ethers~ethers.Wallet</span> &#x2192; Wallet</div></div>
+  
+  
+  
+  
+  
+  
 
-/**
- * @ignore
- */
-function tellerPosFromContract(rawTellerPos) {
-  const tellerPos = {};
-  try {
-    // TODO more resilient
-    // raw : 1234567 -&gt; 1.234567
-    tellerPos.lat = rawTellerPos[0] / (10 ** COORD_PRECISION);
-    tellerPos.lng = rawTellerPos[1] / (10 ** COORD_PRECISION);
-    tellerPos.zoneId = rawTellerPos[2];
+  
+  
+  <div class="description" data-ice="description"><p>User wallet.
+It is directly imported from ethers.js</p>
+<p>See <a href="https://docs.ethers.io/ethers.js/html/api-wallet.html">https://docs.ethers.io/ethers.js/html/api-wallet.html</a> for documentation</p>
+</div>
+  
 
-    tellerPos.escrowBalance = Ethers.utils.formatEther(rawTellerPos[3]);
-  } catch (e) {
-    console.error(e);
-    throw new TypeError(`Invalid teller position: ${e.message}`);
-  }
-  return tellerPos;
-}
+  
 
-/**
- * @ignore
- */
-function tellerProfileFromContract(rawTellerProfile) {
-  const tellerProfile = {};
+  
 
-  // TODO more resilient
-  try {
-    tellerProfile.rates = rawTellerProfile.rates / 100;
-    tellerProfile.volumeTrade = Ethers.utils.formatEther(rawTellerProfile.volumeTrade);
-    tellerProfile.nbTrade = rawTellerProfile.nbTrade.toNumber();
-    tellerProfile.name = web3.toUtf8(rawTellerProfile.name);
-    tellerProfile.currencyId = rawTellerProfile.currency;
-    tellerProfile.avatarId = rawTellerProfile.avatar;
-    tellerProfile.messengerAddr = web3.toUtf8(rawTellerProfile.telAddr);
-  } catch (e) {
-    console.error(e);
-    throw new TypeError(`Invalid teller profile: ${e.message}`);
-  }
-  return tellerProfile;
-}
+  
 
-/**
- * @ignore
- */
-function sellPointToContract(rawSellPoint) {
-  const sellPoint = {};
+  
+</div>
 
-  try {
-    // 1.234567 -&gt; 1234567
-    sellPoint.lat = Math.floor(rawSellPoint.lat.toFixed(COORD_PRECISION + 1) * (10 ** COORD_PRECISION));
-    sellPoint.lng = Math.floor(rawSellPoint.lng.toFixed(COORD_PRECISION + 1) * (10 ** COORD_PRECISION));
-    sellPoint.zone = rawSellPoint.zone;
-    sellPoint.rates = Math.floor(rawSellPoint.rates * 100);
-    sellPoint.avatar = rawSellPoint.avatar;
-    sellPoint.currency = rawSellPoint.currency;
-    sellPoint.telegram = Ethers.utils.toUtf8Bytes(rawSellPoint.telegram);
-    sellPoint.username = Ethers.utils.toUtf8Bytes(rawSellPoint.username);
-  } catch (e) {
-    console.error(e);
-    throw new TypeError(`Invalid teller profile: ${e.message}`);
-  }
-  return sellPoint;
-}
-export default {
-  tellerPosFromContract,
-  tellerProfileFromContract,
-  sellPointToContract,
-};
-</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
 
 </div>
 

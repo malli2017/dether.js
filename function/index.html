@@ -31,11 +31,11 @@
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/detherJs.js~DetherJS.html">DetherJS</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/detherUser.js~DetherUser.html">DetherUser</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/wallet.js~Wallet.html">Wallet</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#constants">constants</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-COORD_PRECISION">COORD_PRECISION</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GAS_PRICE">GAS_PRICE</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utils">utils</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validatePassword">validatePassword</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validateSellPoint">validateSellPoint</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validateSendCoin">validateSendCoin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utils">utils</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-add0x">add0x</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isAddr">isAddr</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -59,13 +59,14 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="function/index.html#static-function-validatePassword">validatePassword</a></span></span><span class="code" data-ice="signature">(password: <span>*</span>): {}</span>
+          <span class="code" data-ice="name"><span><a href="function/index.html#static-function-add0x">add0x</a></span></span><span class="code" data-ice="signature">(input: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Return formated address ethereum</p>
+</div>
       </div>
     </td>
     <td>
@@ -87,41 +88,14 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="function/index.html#static-function-validateSellPoint">validateSellPoint</a></span></span><span class="code" data-ice="signature">(teller: <span>*</span>): {}</span>
+          <span class="code" data-ice="name"><span><a href="function/index.html#static-function-isAddr">isAddr</a></span></span><span class="code" data-ice="signature">(addr: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="function/index.html#static-function-validateSendCoin">validateSendCoin</a></span></span><span class="code" data-ice="signature">(tsx: <span>*</span>): {}</span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
+        <div data-ice="description"><p>Test if addr is ethereum address</p>
+</div>
       </div>
     </td>
     <td>
@@ -135,25 +109,26 @@
 <div data-ice="details"><h2 data-ice="title">Static Public </h2>
 
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="static-function-validatePassword">
+  <h3 data-ice="anchor" id="static-function-add0x">
     <span class="access" data-ice="access">public</span>
     
     
     
     
     
-    <span class="code" data-ice="name">validatePassword</span><span class="code" data-ice="signature">(password: <span>*</span>): {}</span>
+    <span class="code" data-ice="name">add0x</span><span class="code" data-ice="signature">(input: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/utils/validation.js.html#lineNumber42">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/utils/eth.js.html#lineNumber14">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {validatePassword} from &apos;<span><a href="file/src/utils/validation.js.html#lineNumber42">detherjs/src/utils/validation.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {add0x} from &apos;<span><a href="file/src/utils/eth.js.html#lineNumber14">detherjs/src/utils/eth.js</a></span>&apos;</code></pre></div>
   
   
-  
+  <div data-ice="description"><p>Return formated address ethereum</p>
+</div>
 
   
 
@@ -166,10 +141,11 @@
     <tbody>
     
     <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">password</td>
-      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="name" class="code" data-depth="0">input</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>address ethereum</p>
+</td>
     </tr>
 </tbody>
   </table>
@@ -181,8 +157,9 @@
     <table>
       <tbody>
         <tr>
-          <td class="return-type code" data-ice="returnType">{}</td>
-          
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>formated address ethereum or false</p>
+</td>
         </tr>
       </tbody>
     </table>
@@ -206,25 +183,26 @@
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="static-function-validateSellPoint">
+  <h3 data-ice="anchor" id="static-function-isAddr">
     <span class="access" data-ice="access">public</span>
     
     
     
     
     
-    <span class="code" data-ice="name">validateSellPoint</span><span class="code" data-ice="signature">(teller: <span>*</span>): {}</span>
+    <span class="code" data-ice="name">isAddr</span><span class="code" data-ice="signature">(addr: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/utils/validation.js.html#lineNumber1">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/utils/eth.js.html#lineNumber7">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {validateSellPoint} from &apos;<span><a href="file/src/utils/validation.js.html#lineNumber1">detherjs/src/utils/validation.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {isAddr} from &apos;<span><a href="file/src/utils/eth.js.html#lineNumber7">detherjs/src/utils/eth.js</a></span>&apos;</code></pre></div>
   
   
-  
+  <div data-ice="description"><p>Test if addr is ethereum address</p>
+</div>
 
   
 
@@ -237,10 +215,11 @@
     <tbody>
     
     <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">teller</td>
-      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="name" class="code" data-depth="0">addr</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>eth address</p>
+</td>
     </tr>
 </tbody>
   </table>
@@ -252,78 +231,7 @@
     <table>
       <tbody>
         <tr>
-          <td class="return-type code" data-ice="returnType">{}</td>
-          
-        </tr>
-      </tbody>
-    </table>
-    <div data-ice="returnProperties">
-</div>
-  </div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="static-function-validateSendCoin">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    
-    <span class="code" data-ice="name">validateSendCoin</span><span class="code" data-ice="signature">(tsx: <span>*</span>): {}</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/utils/validation.js.html#lineNumber32">source</a></span></span>
-    </span>
-  </h3>
-
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {validateSendCoin} from &apos;<span><a href="file/src/utils/validation.js.html#lineNumber32">detherjs/src/utils/validation.js</a></span>&apos;</code></pre></div>
-  
-  
-  
-
-  
-
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Params:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">tsx</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
-</div>
-
-  <div class="return-params" data-ice="returnParams">
-    <h4>Return:</h4>
-    <table>
-      <tbody>
-        <tr>
-          <td class="return-type code" data-ice="returnType">{}</td>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
           
         </tr>
       </tbody>

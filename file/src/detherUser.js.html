@@ -31,15 +31,19 @@
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/detherJs.js~DetherJS.html">DetherJS</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/detherUser.js~DetherUser.html">DetherUser</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/wallet.js~Wallet.html">Wallet</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#constants">constants</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-COORD_PRECISION">COORD_PRECISION</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GAS_PRICE">GAS_PRICE</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utils">utils</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-add0x">add0x</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isAddr">isAddr</a></span></span></li>
 </ul>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/detherUser.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import Ethers from &apos;ethers&apos;;
-import ethToolbox from &apos;eth-toolbox&apos;;
+
+import { add0x } from &apos;./utils/eth&apos;;
 import { validateSellPoint, validateSendCoin, validatePassword } from &apos;./utils/validation&apos;;
 import Contracts from &apos;./utils/contracts&apos;;
 import Formatters from &apos;./utils/formatters&apos;;
@@ -140,7 +144,7 @@ class DetherUser {
    */
   async getBalance(password) {
     const wallet = await this._getWallet(password);
-    return this.dether.getBalance(wallet.address);
+    return this.dether.getTellerBalance(wallet.address);
   }
 
 // gas used = 223319
@@ -246,7 +250,7 @@ class DetherUser {
       });
     const transaction = await customContract
       .sendCoin(
-        ethToolbox.utils.add0x(receiver),
+        add0x(receiver),
         Ethers.utils.parseEther(amount.toString()),
       );
 
@@ -277,7 +281,8 @@ class DetherUser {
 }
 
 
-export default DetherUser;</code></pre>
+export default DetherUser;
+</code></pre>
 
 </div>
 

@@ -24,6 +24,24 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "detherjs/src/wallet.js~wallet",
+    "class/src/wallet.js~Wallet.html",
+    "<span>Wallet</span> <span class=\"search-result-import-path\">detherjs/src/wallet.js</span>",
+    "class"
+  ],
+  [
+    "detherjs/src/utils/eth.js~add0x",
+    "function/index.html#static-function-add0x",
+    "<span>add0x</span> <span class=\"search-result-import-path\">detherjs/src/utils/eth.js</span>",
+    "function"
+  ],
+  [
+    "detherjs/src/utils/eth.js~isaddr",
+    "function/index.html#static-function-isAddr",
+    "<span>isAddr</span> <span class=\"search-result-import-path\">detherjs/src/utils/eth.js</span>",
+    "function"
+  ],
+  [
     "src/.external-ecmascript.js~array",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
     "src/.external-ecmascript.js~Array",
@@ -411,6 +429,12 @@ window.esdocSearchIndex = [
     "src/utils/contracts.js",
     "file/src/utils/contracts.js.html",
     "src/utils/contracts.js",
+    "file"
+  ],
+  [
+    "src/utils/eth.js",
+    "file/src/utils/eth.js.html",
+    "src/utils/eth.js",
     "file"
   ],
   [

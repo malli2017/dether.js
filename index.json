@@ -618,7 +618,7 @@
     "__docId__": 51,
     "kind": "file",
     "name": "src/detherJs.js",
-    "content": "import Ethers from 'ethers';\nimport Web3 from 'web3';\nimport ethToolbox from 'eth-toolbox';\n\nimport DetherUser from './detherUser';\nimport Contracts from './utils/contracts';\nimport Providers from './utils/providers';\nimport Formatters from './utils/formatters';\n\nclass DetherJS {\n  /**\n   * Creates an instance of DetherUser\n   * You may not instanciate from here, prefer from DetherJS.getUser method\n   *\n   * @param {object}    providerData\n   * @param {String}    providerData.network      Name of network ('homestead', 'ropsten', 'rinkeby', 'kovan')\n   * @param {?String}   providerData.rpcURL       JSON RPC provider URL\n   * @param {?String}   providerData.infuraKey    INFURA API Key\n   * @param {?String}   providerData.etherscanKey Etherscan API Key\n   */\n  constructor(providerData) {\n    /** @ignore */\n    this.provider = Providers.getProvider(providerData);\n    /** @ignore */\n    this.web3 = new Web3();\n\n    /** @ignore */\n    this.contractInstance = Contracts.getDetherContract(this.provider);\n    /** @ignore */\n    this.storageInstance = Contracts.getDetherStorageContract(this.provider);\n\n    if (!this.contractInstance || !this.storageInstance) throw new Error('Unable to load contracts');\n  }\n\n  /**\n   * Get instance of DetherUser linked to this Dether instance\n   * @param  {object}  encryptedWallet Encrypted user wallet\n   * @return {Object} DetherUser\n   */\n  getUser(encryptedWallet) {\n    return new DetherUser({\n      encryptedWallet,\n      dether: this,\n    });\n  }\n\n  /**\n   * get teller by address\n   * @param  {string}  address ethereum address\n   * @return {Promise<Object>} teller\n   */\n  async getTeller(address) {\n    const [rawTellerPos, rawTellerProfile] = await Promise.all([\n      this.contractInstance.getTellerPos(address),\n      this.contractInstance.getTellerProfile(address),\n    ]);\n\n    // TODO real result from contract\n    //     if (tellerPos[3].toNumber() === 0) return null; TODO\n\n    const teller = {};\n\n    Object.assign(\n      teller,\n      Formatters.tellerPosFromContract(rawTellerPos),\n      Formatters.tellerProfileFromContract(rawTellerProfile),\n      {\n        id: address,\n        ethAddress: address,\n      },\n    );\n\n    return teller;\n  }\n\n  /**\n   * @ignore\n   * Filter null and removes tellers with same address\n   * @param {Array} list tellers\n   * @return {Array} filtered tellers\n   */\n  static _filterTellerList(list) {\n    return list\n      .filter(teller => !!teller)\n      .reduce(\n        (acc, teller) =>\n          (!acc.some(t => t.ethAddress === teller.ethAddress) ? [...acc, teller] : acc),\n        [],\n      );\n  }\n\n  /**\n   * Get All tellers on the map\n   * @return {Promise<Array>} array of tellers\n   */\n  async getAllTellers() {\n    const result = await this.storageInstance.getAllTellers.call();\n    if (!result || !result.length) return [];\n\n    const tellersAddresses = result[0]; // TODO pourquoi ??\n\n    const tellers = await Promise.all(tellersAddresses.map(this.getTeller.bind(this)));\n\n    return DetherJS._filterTellerList(tellers);\n  }\n  /**\n   * Get All tellers per zone\n   * @param  {Integer}  zone\n   * @return {Promise<Array>} array of tellers in zone\n   */\n  async getTellersInZone(zone) {\n    const result = await this.storageInstance.getZone.call();\n    if (!result || !result.length) return [];\n\n    const tellersAddressesInZone = result[0]; // TODO pourquoi ??\n\n    const zoneInt = parseInt(zone, 10);\n    const tellers = await Promise.all(tellersAddressesInZone.map(this.getTeller.bind(this)));\n\n    return DetherJS._filterTellerList(tellers).filter(t => t.zoneId === zoneInt);\n  }\n\n  /**\n   * Get teller balance in escrow\n   * @param  {string} address  Teller ethereum address\n   * @return {Promise<Number>} Escrow balance of teller at address\n   */\n  async getTellerBalance(address) {\n    if (!ethToolbox.utils.isAddr(address)) throw new TypeError('Invalid ETH address');\n\n    const fullAddress = ethToolbox.utils.add0x(address);\n    const result = await this.contractInstance.getTellerBalances(fullAddress);\n\n    const balance = Ethers.utils.formatEther(result[0]); // TODO pourquoi ??\n\n    // if (Number.isNaN(balance.toNumber())) return 0; // TODO check if work\n\n    return balance;\n  }\n}\n\nexport default DetherJS;\n",
+    "content": "import Ethers from 'ethers';\nimport Web3 from 'web3';\n\nimport { add0x, isAddr } from './utils/eth';\nimport DetherUser from './detherUser';\nimport Wallet from './wallet';\nimport Contracts from './utils/contracts';\nimport Providers from './utils/providers';\nimport Formatters from './utils/formatters';\n\nclass DetherJS {\n  /**\n   * Creates an instance of DetherUser\n   * You may not instanciate from here, prefer from DetherJS.getUser method\n   *\n   * @param {object}    providerData\n   * @param {String}    providerData.network      Name of network ('homestead', 'ropsten', 'rinkeby', 'kovan')\n   * @param {?String}   providerData.rpcURL       JSON RPC provider URL\n   * @param {?String}   providerData.infuraKey    INFURA API Key\n   * @param {?String}   providerData.etherscanKey Etherscan API Key\n   */\n  constructor(providerData) {\n    /** @ignore */\n    this.provider = Providers.getProvider(providerData);\n    /** @ignore */\n    this.web3 = new Web3();\n\n    /** @ignore */\n    this.contractInstance = Contracts.getDetherContract(this.provider);\n    /** @ignore */\n    this.storageInstance = Contracts.getDetherStorageContract(this.provider);\n\n    if (!this.contractInstance || !this.storageInstance) throw new Error('Unable to load contracts');\n  }\n\n  /**\n   * Get instance of DetherUser linked to this Dether instance\n   * @param  {object}  encryptedWallet Encrypted user wallet\n   * @return {Object} DetherUser\n   */\n  getUser(encryptedWallet) {\n    return new DetherUser({\n      encryptedWallet,\n      dether: this,\n    });\n  }\n\n  /**\n   * get teller by address\n   * @param  {string}  address ethereum address\n   * @return {Promise<Object>} teller\n   */\n  async getTeller(address) {\n    const [rawTellerPos, rawTellerProfile] = await Promise.all([\n      this.contractInstance.getTellerPos(address),\n      this.contractInstance.getTellerProfile(address),\n    ]);\n\n    // TODO real result from contract\n    //     if (tellerPos[3].toNumber() === 0) return null; TODO\n\n    const teller = {};\n\n    Object.assign(\n      teller,\n      Formatters.tellerPosFromContract(rawTellerPos),\n      Formatters.tellerProfileFromContract(rawTellerProfile),\n      {\n        id: address,\n        ethAddress: address,\n      },\n    );\n\n    return teller;\n  }\n\n  /**\n   * @ignore\n   * Filter null and removes tellers with same address\n   * @param {Array} list tellers\n   * @return {Array} filtered tellers\n   */\n  static _filterTellerList(list) {\n    return list\n      .filter(teller => !!teller)\n      .reduce(\n        (acc, teller) =>\n          (!acc.some(t => t.ethAddress === teller.ethAddress) ? [...acc, teller] : acc),\n        [],\n      );\n  }\n\n  /**\n   * Get All tellers on the map\n   * @return {Promise<Array>} array of tellers\n   */\n  async getAllTellers() {\n    const result = await this.storageInstance.getAllTellers();\n    if (!result || !result.length) return [];\n\n    const tellersAddresses = result[0]; // TODO pourquoi ??\n\n    const tellers = await Promise.all(tellersAddresses.map(this.getTeller.bind(this)));\n\n    return DetherJS._filterTellerList(tellers);\n  }\n  /**\n   * Get All tellers per zone\n   * @param  {Integer}  zone\n   * @return {Promise<Array>} array of tellers in zone\n   */\n  async getTellersInZone(zone) {\n    const result = await this.storageInstance.getZone();\n    if (!result || !result.length) return [];\n\n    const tellersAddressesInZone = result[0]; // TODO pourquoi ??\n\n    const zoneInt = zone;\n    const tellers = await Promise.all(tellersAddressesInZone.map(this.getTeller.bind(this)));\n\n    return DetherJS._filterTellerList(tellers).filter(t => t.zoneId === zoneInt);\n  }\n\n  /**\n   * Get teller balance in escrow\n   * @param  {string} address  Teller ethereum address\n   * @return {Promise<Number>} Escrow balance of teller at address\n   */\n  async getTellerBalance(address) {\n    if (!isAddr(address)) throw new TypeError('Invalid ETH address');\n\n    const fullAddress = add0x(address);\n    const result = await this.contractInstance.getTellerBalances(fullAddress);\n\n    const balance = Ethers.utils.formatEther(result[0]); // TODO pourquoi ??\n\n    // if (Number.isNaN(balance.toNumber())) return 0; // TODO check if work\n\n    return balance;\n  }\n}\n\nDetherJS.Wallet = Wallet;\n\nexport default DetherJS;\n",
     "static": true,
     "longname": "/Users/paco/Development/dether/dether.js/src/detherJs.js",
     "access": "public",
@@ -637,7 +637,7 @@
     "importPath": "detherjs/src/detherJs.js",
     "importStyle": "DetherJS",
     "description": null,
-    "lineNumber": 10,
+    "lineNumber": 11,
     "undocument": true,
     "interface": false
   },
@@ -652,7 +652,7 @@
     "longname": "src/detherJs.js~DetherJS#constructor",
     "access": "public",
     "description": "Creates an instance of DetherUser\nYou may not instanciate from here, prefer from DetherJS.getUser method",
-    "lineNumber": 21,
+    "lineNumber": 22,
     "params": [
       {
         "nullable": null,
@@ -715,7 +715,7 @@
     "longname": "src/detherJs.js~DetherJS#provider",
     "access": "public",
     "description": null,
-    "lineNumber": 23,
+    "lineNumber": 24,
     "ignore": true,
     "type": {
       "types": [
@@ -732,7 +732,7 @@
     "longname": "src/detherJs.js~DetherJS#web3",
     "access": "public",
     "description": null,
-    "lineNumber": 25,
+    "lineNumber": 26,
     "ignore": true,
     "type": {
       "types": [
@@ -749,7 +749,7 @@
     "longname": "src/detherJs.js~DetherJS#contractInstance",
     "access": "public",
     "description": null,
-    "lineNumber": 28,
+    "lineNumber": 29,
     "ignore": true,
     "type": {
       "types": [
@@ -766,7 +766,7 @@
     "longname": "src/detherJs.js~DetherJS#storageInstance",
     "access": "public",
     "description": null,
-    "lineNumber": 30,
+    "lineNumber": 31,
     "ignore": true,
     "type": {
       "types": [
@@ -785,7 +785,7 @@
     "longname": "src/detherJs.js~DetherJS#getUser",
     "access": "public",
     "description": "Get instance of DetherUser linked to this Dether instance",
-    "lineNumber": 40,
+    "lineNumber": 41,
     "params": [
       {
         "nullable": null,
@@ -818,7 +818,7 @@
     "longname": "src/detherJs.js~DetherJS#getTeller",
     "access": "public",
     "description": "get teller by address",
-    "lineNumber": 52,
+    "lineNumber": 53,
     "params": [
       {
         "nullable": null,
@@ -851,7 +851,7 @@
     "longname": "src/detherJs.js~DetherJS._filterTellerList",
     "access": "private",
     "description": "",
-    "lineNumber": 82,
+    "lineNumber": 83,
     "ignore": true,
     "params": [
       {
@@ -885,7 +885,7 @@
     "longname": "src/detherJs.js~DetherJS#getAllTellers",
     "access": "public",
     "description": "Get All tellers on the map",
-    "lineNumber": 96,
+    "lineNumber": 97,
     "return": {
       "nullable": null,
       "types": [
@@ -907,7 +907,7 @@
     "longname": "src/detherJs.js~DetherJS#getTellersInZone",
     "access": "public",
     "description": "Get All tellers per zone",
-    "lineNumber": 111,
+    "lineNumber": 112,
     "params": [
       {
         "nullable": null,
@@ -940,7 +940,7 @@
     "longname": "src/detherJs.js~DetherJS#getTellerBalance",
     "access": "public",
     "description": "Get teller balance in escrow",
-    "lineNumber": 128,
+    "lineNumber": 129,
     "params": [
       {
         "nullable": null,
@@ -966,7 +966,7 @@
     "__docId__": 64,
     "kind": "file",
     "name": "src/detherUser.js",
-    "content": "import Ethers from 'ethers';\nimport ethToolbox from 'eth-toolbox';\nimport { validateSellPoint, validateSendCoin, validatePassword } from './utils/validation';\nimport Contracts from './utils/contracts';\nimport Formatters from './utils/formatters';\n\nclass DetherUser {\n  /**\n   * Creates an instance of DetherUser.\n   *\n   * You may not instanciate from here, prefer from DetherJS.getUser method\n   *\n   * @param {object} opts\n   * @param {DetherJS} opts.dether dether instance\n   * @param {object} opts.encryptedWallet user wallet\n   */\n  constructor(opts) {\n    if (!opts.dether || !opts.encryptedWallet) {\n      throw new Error('Need dether instance and wallet');\n    }\n    /** @ignore */\n    this.dether = opts.dether;\n    /** @ignore */\n    this.encryptedWallet = opts.encryptedWallet;\n  }\n\n  /**\n   * Returns decrypted wallet\n   *\n   * @param {string} password             user password\n   * @return {Wallet}     User wallet\n   * @private\n   * @ignore\n   */\n  async _getWallet(password) {\n    if (!password) {\n      throw new TypeError('Need password to decrypt wallet');\n    }\n    const wallet = await Ethers.Wallet.fromEncryptedWallet(this.encryptedWallet, password);\n    wallet.provider = this.dether.provider;\n\n    return wallet;\n  }\n\n  /**\n   * Returns a custom signed contract\n   * Allows to add value to a transaction\n   *\n   * @param {object}      opts\n   * @param {string}      opts.password password to decrypt wallet\n   * @param {BigNumber}   opts.value    Ether value to send while calling contract\n   * @return {object}     Dether Contract\n   * @private\n   * @ignore\n   */\n  async _getCustomContract(opts) {\n    if (!opts.password) {\n      throw new TypeError('Need password to decrypt wallet');\n    }\n    const wallet = await this._getWallet(opts.password);\n\n    const customProvider = {\n      getAddress: wallet.getAddress.bind(wallet),\n      provider: wallet.provider,\n      sendTransaction: (transaction) => {\n        if (opts.value) {\n          transaction.value = opts.value;\n        }\n        return wallet.sendTransaction(transaction);\n      },\n    };\n\n    return Contracts.getDetherContract(customProvider);\n  }\n\n  /**\n   * Get user ethereum address\n   * @param {string} password             user password\n   * @return {Promise<string>} user ethereum address\n   */\n  async getAddress(password) {\n    const wallet = await this._getWallet(password);\n    return wallet.getAddress();\n  }\n\n  /**\n   * Get user teller info\n   * @param {string} password             user password\n   * @return {Promise<object>}\n   */\n  async getInfo(password) {\n    const wallet = await this._getWallet(password);\n    return this.dether.getTeller(wallet.address);\n  }\n\n  /**\n   * Get user balance in escrow\n   * @param {string} password             user password\n   * @return {Promise<string>}\n   */\n  async getBalance(password) {\n    const wallet = await this._getWallet(password);\n    return this.dether.getBalance(wallet.address);\n  }\n\n// gas used = 223319\n// gas price average (mainnet) = 25000000000 wei\n// 250000 * 25000000000 = 0.006250000000000000 ETH\n// need 0.006250000000000000 ETH to process this function\n  /**\n   * Register a sell point\n   * @param {object} sellPoint\n   * @param {number} sellPoint.lat        latitude min -90 max +90\n   * @param {number} sellPoint.lng        longitude min -180 max +180\n   * @param {number} sellPoint.zone       geographic zone\n   * @param {number} sellPoint.rates      Margin (0-100)\n   * @param {number} sellPoint.avatar     avatar id (1-9)\n   * @param {number} sellPoint.currency   currency id (0-4)\n   * @param {number} sellPoint.amount     Ether amount to put on escrow\n   * @param {string} sellPoint.telegram   Telegram address\n   * @param {string} sellPoint.username   username\n   * @param {string} password             user password\n   * @return {Promise<object>} Transaction\n   */\n  async addSellPoint(sellPoint, password) {\n    const secu = validateSellPoint(sellPoint);\n    if (secu.error) throw new TypeError(secu.msg);\n    const secuPass = validatePassword(password);\n    if (secuPass.error) throw new TypeError(secuPass.msg);\n\n    const tsxAmount = Ethers.utils.parseEther(sellPoint.amount.toString());\n\n    // const balance = await this.wallet.getBalance();\n    // TODO subtract fees if not enough balance\n    // check if enough gas is present to sendCoin once after registering\n    // if (balance.greaterThan(tsxAmount + (GAS_PRICE * 650000))) {\n    //   tsxAmount = balance.toNumber() - (GAS_PRICE * 650000);\n    //   if (tsxAmount < 0.0025) throw new TypeError('Insufficient funds');\n    // }\n\n    const formattedSellPoint = Formatters.sellPointToContract(sellPoint);\n\n    const customContract = await this\n      ._getCustomContract({\n        value: tsxAmount,\n        password,\n      });\n\n    const transaction = await customContract.registerPoint(\n      formattedSellPoint.lat,\n      formattedSellPoint.lng,\n      formattedSellPoint.zone,\n      formattedSellPoint.rates,\n      formattedSellPoint.avatar,\n      formattedSellPoint.currency,\n      formattedSellPoint.telegram,\n      formattedSellPoint.username,\n    );\n\n    return transaction;\n    // TODO return full transaction\n\n    // const { hash } = transaction;\n    /* TODO ??\n    return {\n      from: ethToolbox.utils.add0x(this.wallet.address),\n      to: this.signedDetherContract,\n      value: sellPoint.amount,\n      date: new Date().toLocaleString('en-US', { hour12: false }),\n      dether: {\n        detherContract: true,\n        receive: false,\n      },\n      etherscan: {\n        kovan: `https://kovan.etherscan.io/tx/${hash}`,\n        ropsten: `https://ropsten.etherscan.io/tx/${hash}`,\n        ether: `https://etherscan.io/tx/${hash}`,\n      },\n    };\n    */\n  }\n\n// gas used = 95481\n// gas price average (mainnet) = 25000000000 wei\n// 115000 * 25000000000 = 0.002875000000000000 ETH\n// need 0.006250000000000000 ETH to process this function\n  /**\n   * Send eth from escrow\n   * @param  {object}  opts\n   * @param  {string}  opts.receiver Receiver ethereum address\n   * @param  {number}  opts.amount   Amount to send\n   * @param  {string}  password      Wallet password\n   * @return {Promise<object>} Transaction\n   */\n  async sendCoin(opts, password) {\n    const secu = validateSendCoin(opts);\n    if (secu.error) throw new TypeError(secu.msg);\n    const secuPass = validatePassword(password);\n    if (secuPass.error) throw new TypeError(secuPass.msg);\n\n    const { amount, receiver } = opts;\n\n    const customContract = await this\n      ._getCustomContract({\n        password,\n      });\n    const transaction = await customContract\n      .sendCoin(\n        ethToolbox.utils.add0x(receiver),\n        Ethers.utils.parseEther(amount.toString()),\n      );\n\n    return transaction;\n  }\n\n\n// gas used = 26497\n// gas price average (mainnet) = 25000000000 wei\n// 50000 * 25000000000 = 0.001250000000000000 ETH\n// need 0.001250000000000000 ETH to process this function\n  /**\n   * Delete sell point, this function withdraw automatically balance escrow to owner\n   * @param  {string} password  Wallet password\n   * @return {Promise<object>}  Transaction\n   */\n  async withdrawAll(password) {\n    const secuPass = validatePassword(password);\n    if (secuPass.error) throw new TypeError(secuPass.msg);\n\n    const customContract = await this._getCustomContract({\n      password,\n    });\n    const transaction = await customContract.withdrawAll();\n\n    return transaction;\n  }\n}\n\n\nexport default DetherUser;",
+    "content": "import Ethers from 'ethers';\n\nimport { add0x } from './utils/eth';\nimport { validateSellPoint, validateSendCoin, validatePassword } from './utils/validation';\nimport Contracts from './utils/contracts';\nimport Formatters from './utils/formatters';\n\nclass DetherUser {\n  /**\n   * Creates an instance of DetherUser.\n   *\n   * You may not instanciate from here, prefer from DetherJS.getUser method\n   *\n   * @param {object} opts\n   * @param {DetherJS} opts.dether dether instance\n   * @param {object} opts.encryptedWallet user wallet\n   */\n  constructor(opts) {\n    if (!opts.dether || !opts.encryptedWallet) {\n      throw new Error('Need dether instance and wallet');\n    }\n    /** @ignore */\n    this.dether = opts.dether;\n    /** @ignore */\n    this.encryptedWallet = opts.encryptedWallet;\n  }\n\n  /**\n   * Returns decrypted wallet\n   *\n   * @param {string} password             user password\n   * @return {Wallet}     User wallet\n   * @private\n   * @ignore\n   */\n  async _getWallet(password) {\n    if (!password) {\n      throw new TypeError('Need password to decrypt wallet');\n    }\n    const wallet = await Ethers.Wallet.fromEncryptedWallet(this.encryptedWallet, password);\n    wallet.provider = this.dether.provider;\n\n    return wallet;\n  }\n\n  /**\n   * Returns a custom signed contract\n   * Allows to add value to a transaction\n   *\n   * @param {object}      opts\n   * @param {string}      opts.password password to decrypt wallet\n   * @param {BigNumber}   opts.value    Ether value to send while calling contract\n   * @return {object}     Dether Contract\n   * @private\n   * @ignore\n   */\n  async _getCustomContract(opts) {\n    if (!opts.password) {\n      throw new TypeError('Need password to decrypt wallet');\n    }\n    const wallet = await this._getWallet(opts.password);\n\n    const customProvider = {\n      getAddress: wallet.getAddress.bind(wallet),\n      provider: wallet.provider,\n      sendTransaction: (transaction) => {\n        if (opts.value) {\n          transaction.value = opts.value;\n        }\n        return wallet.sendTransaction(transaction);\n      },\n    };\n\n    return Contracts.getDetherContract(customProvider);\n  }\n\n  /**\n   * Get user ethereum address\n   * @param {string} password             user password\n   * @return {Promise<string>} user ethereum address\n   */\n  async getAddress(password) {\n    const wallet = await this._getWallet(password);\n    return wallet.getAddress();\n  }\n\n  /**\n   * Get user teller info\n   * @param {string} password             user password\n   * @return {Promise<object>}\n   */\n  async getInfo(password) {\n    const wallet = await this._getWallet(password);\n    return this.dether.getTeller(wallet.address);\n  }\n\n  /**\n   * Get user balance in escrow\n   * @param {string} password             user password\n   * @return {Promise<string>}\n   */\n  async getBalance(password) {\n    const wallet = await this._getWallet(password);\n    return this.dether.getTellerBalance(wallet.address);\n  }\n\n// gas used = 223319\n// gas price average (mainnet) = 25000000000 wei\n// 250000 * 25000000000 = 0.006250000000000000 ETH\n// need 0.006250000000000000 ETH to process this function\n  /**\n   * Register a sell point\n   * @param {object} sellPoint\n   * @param {number} sellPoint.lat        latitude min -90 max +90\n   * @param {number} sellPoint.lng        longitude min -180 max +180\n   * @param {number} sellPoint.zone       geographic zone\n   * @param {number} sellPoint.rates      Margin (0-100)\n   * @param {number} sellPoint.avatar     avatar id (1-9)\n   * @param {number} sellPoint.currency   currency id (0-4)\n   * @param {number} sellPoint.amount     Ether amount to put on escrow\n   * @param {string} sellPoint.telegram   Telegram address\n   * @param {string} sellPoint.username   username\n   * @param {string} password             user password\n   * @return {Promise<object>} Transaction\n   */\n  async addSellPoint(sellPoint, password) {\n    const secu = validateSellPoint(sellPoint);\n    if (secu.error) throw new TypeError(secu.msg);\n    const secuPass = validatePassword(password);\n    if (secuPass.error) throw new TypeError(secuPass.msg);\n\n    const tsxAmount = Ethers.utils.parseEther(sellPoint.amount.toString());\n\n    // const balance = await this.wallet.getBalance();\n    // TODO subtract fees if not enough balance\n    // check if enough gas is present to sendCoin once after registering\n    // if (balance.greaterThan(tsxAmount + (GAS_PRICE * 650000))) {\n    //   tsxAmount = balance.toNumber() - (GAS_PRICE * 650000);\n    //   if (tsxAmount < 0.0025) throw new TypeError('Insufficient funds');\n    // }\n\n    const formattedSellPoint = Formatters.sellPointToContract(sellPoint);\n\n    const customContract = await this\n      ._getCustomContract({\n        value: tsxAmount,\n        password,\n      });\n\n    const transaction = await customContract.registerPoint(\n      formattedSellPoint.lat,\n      formattedSellPoint.lng,\n      formattedSellPoint.zone,\n      formattedSellPoint.rates,\n      formattedSellPoint.avatar,\n      formattedSellPoint.currency,\n      formattedSellPoint.telegram,\n      formattedSellPoint.username,\n    );\n\n    return transaction;\n    // TODO return full transaction\n\n    // const { hash } = transaction;\n    /* TODO ??\n    return {\n      from: ethToolbox.utils.add0x(this.wallet.address),\n      to: this.signedDetherContract,\n      value: sellPoint.amount,\n      date: new Date().toLocaleString('en-US', { hour12: false }),\n      dether: {\n        detherContract: true,\n        receive: false,\n      },\n      etherscan: {\n        kovan: `https://kovan.etherscan.io/tx/${hash}`,\n        ropsten: `https://ropsten.etherscan.io/tx/${hash}`,\n        ether: `https://etherscan.io/tx/${hash}`,\n      },\n    };\n    */\n  }\n\n// gas used = 95481\n// gas price average (mainnet) = 25000000000 wei\n// 115000 * 25000000000 = 0.002875000000000000 ETH\n// need 0.006250000000000000 ETH to process this function\n  /**\n   * Send eth from escrow\n   * @param  {object}  opts\n   * @param  {string}  opts.receiver Receiver ethereum address\n   * @param  {number}  opts.amount   Amount to send\n   * @param  {string}  password      Wallet password\n   * @return {Promise<object>} Transaction\n   */\n  async sendCoin(opts, password) {\n    const secu = validateSendCoin(opts);\n    if (secu.error) throw new TypeError(secu.msg);\n    const secuPass = validatePassword(password);\n    if (secuPass.error) throw new TypeError(secuPass.msg);\n\n    const { amount, receiver } = opts;\n\n    const customContract = await this\n      ._getCustomContract({\n        password,\n      });\n    const transaction = await customContract\n      .sendCoin(\n        add0x(receiver),\n        Ethers.utils.parseEther(amount.toString()),\n      );\n\n    return transaction;\n  }\n\n\n// gas used = 26497\n// gas price average (mainnet) = 25000000000 wei\n// 50000 * 25000000000 = 0.001250000000000000 ETH\n// need 0.001250000000000000 ETH to process this function\n  /**\n   * Delete sell point, this function withdraw automatically balance escrow to owner\n   * @param  {string} password  Wallet password\n   * @return {Promise<object>}  Transaction\n   */\n  async withdrawAll(password) {\n    const secuPass = validatePassword(password);\n    if (secuPass.error) throw new TypeError(secuPass.msg);\n\n    const customContract = await this._getCustomContract({\n      password,\n    });\n    const transaction = await customContract.withdrawAll();\n\n    return transaction;\n  }\n}\n\n\nexport default DetherUser;\n",
     "static": true,
     "longname": "/Users/paco/Development/dether/dether.js/src/detherUser.js",
     "access": "public",
@@ -985,7 +985,7 @@
     "importPath": "detherjs/src/detherUser.js",
     "importStyle": "DetherUser",
     "description": null,
-    "lineNumber": 7,
+    "lineNumber": 8,
     "undocument": true,
     "interface": false
   },
@@ -1000,7 +1000,7 @@
     "longname": "src/detherUser.js~DetherUser#constructor",
     "access": "public",
     "description": "Creates an instance of DetherUser.\n\nYou may not instanciate from here, prefer from DetherJS.getUser method",
-    "lineNumber": 17,
+    "lineNumber": 18,
     "params": [
       {
         "nullable": null,
@@ -1043,7 +1043,7 @@
     "longname": "src/detherUser.js~DetherUser#dether",
     "access": "public",
     "description": null,
-    "lineNumber": 22,
+    "lineNumber": 23,
     "ignore": true,
     "type": {
       "types": [
@@ -1060,7 +1060,7 @@
     "longname": "src/detherUser.js~DetherUser#encryptedWallet",
     "access": "public",
     "description": null,
-    "lineNumber": 24,
+    "lineNumber": 25,
     "ignore": true,
     "type": {
       "types": [
@@ -1079,7 +1079,7 @@
     "longname": "src/detherUser.js~DetherUser#_getWallet",
     "access": "private",
     "description": "Returns decrypted wallet",
-    "lineNumber": 35,
+    "lineNumber": 36,
     "ignore": true,
     "params": [
       {
@@ -1113,7 +1113,7 @@
     "longname": "src/detherUser.js~DetherUser#_getCustomContract",
     "access": "private",
     "description": "Returns a custom signed contract\nAllows to add value to a transaction",
-    "lineNumber": 56,
+    "lineNumber": 57,
     "ignore": true,
     "params": [
       {
@@ -1167,7 +1167,7 @@
     "longname": "src/detherUser.js~DetherUser#getAddress",
     "access": "public",
     "description": "Get user ethereum address",
-    "lineNumber": 81,
+    "lineNumber": 82,
     "params": [
       {
         "nullable": null,
@@ -1200,7 +1200,7 @@
     "longname": "src/detherUser.js~DetherUser#getInfo",
     "access": "public",
     "description": "Get user teller info",
-    "lineNumber": 91,
+    "lineNumber": 92,
     "params": [
       {
         "nullable": null,
@@ -1233,7 +1233,7 @@
     "longname": "src/detherUser.js~DetherUser#getBalance",
     "access": "public",
     "description": "Get user balance in escrow",
-    "lineNumber": 101,
+    "lineNumber": 102,
     "params": [
       {
         "nullable": null,
@@ -1266,7 +1266,7 @@
     "longname": "src/detherUser.js~DetherUser#addSellPoint",
     "access": "public",
     "description": "Register a sell point",
-    "lineNumber": 125,
+    "lineNumber": 126,
     "params": [
       {
         "nullable": null,
@@ -1399,7 +1399,7 @@
     "longname": "src/detherUser.js~DetherUser#sendCoin",
     "access": "public",
     "description": "Send eth from escrow",
-    "lineNumber": 195,
+    "lineNumber": 196,
     "params": [
       {
         "nullable": null,
@@ -1462,7 +1462,7 @@
     "longname": "src/detherUser.js~DetherUser#withdrawAll",
     "access": "public",
     "description": "Delete sell point, this function withdraw automatically balance escrow to owner",
-    "lineNumber": 226,
+    "lineNumber": 227,
     "params": [
       {
         "nullable": null,
@@ -1488,7 +1488,7 @@
     "__docId__": 77,
     "kind": "file",
     "name": "src/index.js",
-    "content": "/**\n * detherGateway\n * @author Dether TEAM\n */\n\nimport 'babel-polyfill';\nimport DetherJS from './detherJs';\nimport Wallet from './wallet';\n\nDetherJS.Wallet = Wallet;\n\nmodule.exports = DetherJS;\n",
+    "content": "/**\n * detherGateway\n * @author Dether TEAM\n */\n\nimport 'babel-polyfill';\nimport DetherJS from './detherJs';\n\nmodule.exports = DetherJS;\n",
     "static": true,
     "longname": "/Users/paco/Development/dether/dether.js/src/index.js",
     "access": "public",
@@ -1605,8 +1605,91 @@
   {
     "__docId__": 82,
     "kind": "file",
+    "name": "src/utils/eth.js",
+    "content": "\n/**\n * Test if addr is ethereum address\n * @param  {string}  addr eth address\n * @return {Boolean}\n */\nexport const isAddr = addr => /^(0x)?[0-9a-f]{40}$/i.test(addr) || /^(0x)?[0-9a-f]{64}$/i.test(addr);\n\n/**\n * Return formated address ethereum\n * @param {string} input address ethereum\n * @return {string}      formated address ethereum or false\n */\nexport const add0x = (input) => {\n  if (!input || typeof (input) !== typeof '' || !isAddr(input)) return false;\n  return input.slice(0, 2) !== '0x' ? `0x${input}` : input;\n};\n\n",
+    "static": true,
+    "longname": "/Users/paco/Development/dether/dether.js/src/utils/eth.js",
+    "access": "public",
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 83,
+    "kind": "function",
+    "name": "isAddr",
+    "memberof": "src/utils/eth.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "src/utils/eth.js~isAddr",
+    "access": "public",
+    "export": true,
+    "importPath": "detherjs/src/utils/eth.js",
+    "importStyle": "{isAddr}",
+    "description": "Test if addr is ethereum address",
+    "lineNumber": 7,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "addr",
+        "description": "eth address"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Boolean"
+      ],
+      "spread": false,
+      "description": ""
+    }
+  },
+  {
+    "__docId__": 84,
+    "kind": "function",
+    "name": "add0x",
+    "memberof": "src/utils/eth.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "src/utils/eth.js~add0x",
+    "access": "public",
+    "export": true,
+    "importPath": "detherjs/src/utils/eth.js",
+    "importStyle": "{add0x}",
+    "description": "Return formated address ethereum",
+    "lineNumber": 14,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "input",
+        "description": "address ethereum"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "string"
+      ],
+      "spread": false,
+      "description": "formated address ethereum or false"
+    }
+  },
+  {
+    "__docId__": 85,
+    "kind": "file",
     "name": "src/utils/formatters.js",
-    "content": "import Ethers from 'ethers';\nimport Web3 from 'web3';\nimport BigNumber from 'bignumber.js';\n\nimport { COORD_PRECISION } from '../constants/appConstants';\n\nconst web3 = new Web3();\n\n// TODO rename to formatter\n\n/**\n * @ignore\n */\nfunction tellerPosFromContract(rawTellerPos) {\n  const tellerPos = {};\n  try {\n    // TODO more resilient\n    // raw : 1234567 -> 1.234567\n    tellerPos.lat = rawTellerPos[0] / (10 ** COORD_PRECISION);\n    tellerPos.lng = rawTellerPos[1] / (10 ** COORD_PRECISION);\n    tellerPos.zoneId = rawTellerPos[2];\n\n    tellerPos.escrowBalance = Ethers.utils.formatEther(rawTellerPos[3]);\n  } catch (e) {\n    console.error(e);\n    throw new TypeError(`Invalid teller position: ${e.message}`);\n  }\n  return tellerPos;\n}\n\n/**\n * @ignore\n */\nfunction tellerProfileFromContract(rawTellerProfile) {\n  const tellerProfile = {};\n\n  // TODO more resilient\n  try {\n    tellerProfile.rates = rawTellerProfile.rates / 100;\n    tellerProfile.volumeTrade = Ethers.utils.formatEther(rawTellerProfile.volumeTrade);\n    tellerProfile.nbTrade = rawTellerProfile.nbTrade.toNumber();\n    tellerProfile.name = web3.toUtf8(rawTellerProfile.name);\n    tellerProfile.currencyId = rawTellerProfile.currency;\n    tellerProfile.avatarId = rawTellerProfile.avatar;\n    tellerProfile.messengerAddr = web3.toUtf8(rawTellerProfile.telAddr);\n  } catch (e) {\n    console.error(e);\n    throw new TypeError(`Invalid teller profile: ${e.message}`);\n  }\n  return tellerProfile;\n}\n\n/**\n * @ignore\n */\nfunction sellPointToContract(rawSellPoint) {\n  const sellPoint = {};\n\n  try {\n    // 1.234567 -> 1234567\n    sellPoint.lat = Math.floor(rawSellPoint.lat.toFixed(COORD_PRECISION + 1) * (10 ** COORD_PRECISION));\n    sellPoint.lng = Math.floor(rawSellPoint.lng.toFixed(COORD_PRECISION + 1) * (10 ** COORD_PRECISION));\n    sellPoint.zone = rawSellPoint.zone;\n    sellPoint.rates = Math.floor(rawSellPoint.rates * 100);\n    sellPoint.avatar = rawSellPoint.avatar;\n    sellPoint.currency = rawSellPoint.currency;\n    sellPoint.telegram = Ethers.utils.toUtf8Bytes(rawSellPoint.telegram);\n    sellPoint.username = Ethers.utils.toUtf8Bytes(rawSellPoint.username);\n  } catch (e) {\n    console.error(e);\n    throw new TypeError(`Invalid teller profile: ${e.message}`);\n  }\n  return sellPoint;\n}\nexport default {\n  tellerPosFromContract,\n  tellerProfileFromContract,\n  sellPointToContract,\n};\n",
+    "content": "import Ethers from 'ethers';\nimport Web3 from 'web3';\n\nimport { COORD_PRECISION } from '../constants/appConstants';\n\nconst web3 = new Web3();\n\n// TODO rename to formatter\n\n/**\n * @ignore\n */\nfunction tellerPosFromContract(rawTellerPos) {\n  const tellerPos = {};\n  try {\n    // TODO more resilient\n    // raw : 1234567 -> 1.234567\n    tellerPos.lat = rawTellerPos[0] / (10 ** COORD_PRECISION);\n    tellerPos.lng = rawTellerPos[1] / (10 ** COORD_PRECISION);\n    tellerPos.zoneId = rawTellerPos[2];\n\n    tellerPos.escrowBalance = Ethers.utils.formatEther(rawTellerPos[3]);\n  } catch (e) {\n    console.error(e);\n    throw new TypeError(`Invalid teller position: ${e.message}`);\n  }\n  return tellerPos;\n}\n\n/**\n * @ignore\n */\nfunction tellerProfileFromContract(rawTellerProfile) {\n  const tellerProfile = {};\n\n  // TODO more resilient\n  try {\n    tellerProfile.rates = rawTellerProfile.rates / 100;\n    tellerProfile.volumeTrade = Ethers.utils.formatEther(rawTellerProfile.volumeTrade);\n    tellerProfile.nbTrade = rawTellerProfile.nbTrade.toNumber();\n    tellerProfile.name = web3.toUtf8(rawTellerProfile.name);\n    tellerProfile.currencyId = rawTellerProfile.currency;\n    tellerProfile.avatarId = rawTellerProfile.avatar;\n    tellerProfile.messengerAddr = web3.toUtf8(rawTellerProfile.telAddr);\n  } catch (e) {\n    console.error(e);\n    throw new TypeError(`Invalid teller profile: ${e.message}`);\n  }\n  return tellerProfile;\n}\n\n/**\n * @ignore\n */\nfunction sellPointToContract(rawSellPoint) {\n  const sellPoint = {};\n\n  try {\n    // 1.234567 -> 1234567\n    sellPoint.lat = Math.floor(rawSellPoint.lat.toFixed(COORD_PRECISION + 1) * (10 ** COORD_PRECISION));\n    sellPoint.lng = Math.floor(rawSellPoint.lng.toFixed(COORD_PRECISION + 1) * (10 ** COORD_PRECISION));\n    sellPoint.zone = rawSellPoint.zone;\n    sellPoint.rates = Math.floor(rawSellPoint.rates * 100);\n    sellPoint.avatar = rawSellPoint.avatar;\n    sellPoint.currency = rawSellPoint.currency;\n    sellPoint.telegram = Ethers.utils.toUtf8Bytes(rawSellPoint.telegram);\n    sellPoint.username = Ethers.utils.toUtf8Bytes(rawSellPoint.username);\n  } catch (e) {\n    console.error(e);\n    throw new TypeError(`Invalid teller profile: ${e.message}`);\n  }\n  return sellPoint;\n}\nexport default {\n  tellerPosFromContract,\n  tellerProfileFromContract,\n  sellPointToContract,\n};\n",
     "static": true,
     "longname": "/Users/paco/Development/dether/dether.js/src/utils/formatters.js",
     "access": "public",
@@ -1614,7 +1697,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 83,
+    "__docId__": 86,
     "kind": "variable",
     "name": "web3",
     "memberof": "src/utils/formatters.js",
@@ -1625,7 +1708,7 @@
     "importPath": "detherjs/src/utils/formatters.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 7,
+    "lineNumber": 6,
     "undocument": true,
     "type": {
       "types": [
@@ -1635,7 +1718,7 @@
     "ignore": true
   },
   {
-    "__docId__": 84,
+    "__docId__": 87,
     "kind": "function",
     "name": "tellerPosFromContract",
     "memberof": "src/utils/formatters.js",
@@ -1648,7 +1731,7 @@
     "importPath": "detherjs/src/utils/formatters.js",
     "importStyle": null,
     "description": "",
-    "lineNumber": 14,
+    "lineNumber": 13,
     "ignore": true,
     "params": [
       {
@@ -1665,7 +1748,7 @@
     }
   },
   {
-    "__docId__": 85,
+    "__docId__": 88,
     "kind": "function",
     "name": "tellerProfileFromContract",
     "memberof": "src/utils/formatters.js",
@@ -1678,7 +1761,7 @@
     "importPath": "detherjs/src/utils/formatters.js",
     "importStyle": null,
     "description": "",
-    "lineNumber": 34,
+    "lineNumber": 33,
     "ignore": true,
     "params": [
       {
@@ -1695,7 +1778,7 @@
     }
   },
   {
-    "__docId__": 86,
+    "__docId__": 89,
     "kind": "function",
     "name": "sellPointToContract",
     "memberof": "src/utils/formatters.js",
@@ -1708,7 +1791,7 @@
     "importPath": "detherjs/src/utils/formatters.js",
     "importStyle": null,
     "description": "",
-    "lineNumber": 56,
+    "lineNumber": 55,
     "ignore": true,
     "params": [
       {
@@ -1725,7 +1808,7 @@
     }
   },
   {
-    "__docId__": 87,
+    "__docId__": 90,
     "kind": "file",
     "name": "src/utils/providers.js",
     "content": "import Ethers from 'ethers';\n\n/**\n * Retrieve ethereum provider\n * Only network is needed\n *\n * @param {object}  opts\n * @param {String}  opts.network       Name of network ('homestead', 'ropsten', 'rinkeby', 'kovan')\n * @param {?String} opts.rpcURL       JSON RPC provider URL\n * @param {?String} opts.infuraKey    INFURA API Key\n * @param {?String} opts.etherscanKey Etherscan API Key\n * @return {Provider}\n * @ignore\n */\nfunction getProvider(opts) {\n  if (!opts.network) throw new TypeError('Unable to get provider, need network');\n  const providers = [];\n\n  if (opts.rpcURL) {\n    providers.push(new Ethers.providers.JsonRpcProvider(opts.rpcURL, opts.network));\n  }\n  if (opts.etherscanKey) {\n    providers.push(new Ethers.providers.EtherscanProvider(opts.network, opts.etherscanKey));\n  }\n  // TODO activate when lib fixed\n  // if (opts.infuraKey) {\n  //   providers.push(new Ethers.providers.InfuraProvider(opts.network, opts.infuraKey));\n  // }\n\n  providers.push(Ethers.providers.getDefaultProvider(opts.network));\n\n  return new Ethers.providers.FallbackProvider(providers);\n}\n\nexport default {\n  getProvider,\n};",
@@ -1736,7 +1819,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 88,
+    "__docId__": 91,
     "kind": "function",
     "name": "getProvider",
     "memberof": "src/utils/providers.js",
@@ -1813,7 +1896,7 @@
     }
   },
   {
-    "__docId__": 89,
+    "__docId__": 92,
     "kind": "file",
     "name": "src/utils/validation.js",
     "content": "/**\n * @ignore\n */\nexport const validateSellPoint = (teller) => {\n  if (!teller.lat || Number.isNaN(teller.lat) || teller.lat > 90 || teller.lat < -90) {\n    return { error: true, msg: 'Invalid latitude' };\n  }\n  if (!teller.lng || Number.isNaN(teller.lng) || teller.lng > 180 || teller.lng < -180) {\n    return { error: true, msg: 'Invalid longitude' };\n  }\n  if (!teller.zone || !Number.isInteger(teller.zone)) {\n    return { error: true, msg: 'Invalid zone' };\n  }\n  if (!teller.rates || teller.rates <= 0 || teller.rates > 100) {\n    return { error: true, msg: 'Invalid rates' };\n  }\n  if (!teller.avatar || !Number.isInteger(teller.avatar) || teller.avatar < 0) {\n    return { error: true, msg: 'Invalid avatar' };\n  }\n  if (!teller.currency || !Number.isInteger(teller.currency) || teller.currency < 0) {\n    return { error: true, msg: 'Invalid currency' };\n  }\n  if (!teller.telegram || teller.telegram.length < 3 || teller.telegram.length > 30) {\n    return { error: true, msg: 'Invalid telegram' };\n  }\n  if (!teller.amount || Number.isNaN(teller.amount) || teller.amount < 0.01) {\n    return { error: true, msg: 'Invalid amount' };\n  }\n  if (!teller.username || teller.username.length < 3 || teller.username.length > 30) {\n    return { error: true, msg: 'Invalid username' };\n  }\n  return {};\n};\n\n/**\n * @ignore\n */\nexport const validateSendCoin = (tsx) => {\n  if (!tsx.receiver) {\n    return { error: true, msg: 'Invalid receiver' };\n  }\n  if (!tsx.amount || Number.isNaN(tsx.amount) || tsx.amount < 0.001) {\n    return { error: true, msg: 'Invalid amount' };\n  }\n  return {};\n};\n\n/**\n * @ignore\n */\nexport const validatePassword = (password) => {\n  if (!password || (typeof password) !== 'string' || password.length < 1) {\n    return { error: true, msg: 'Invalid password' };\n  }\n  return {};\n};\n",
@@ -1824,7 +1907,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 90,
+    "__docId__": 93,
     "kind": "function",
     "name": "validateSellPoint",
     "memberof": "src/utils/validation.js",
@@ -1854,7 +1937,7 @@
     }
   },
   {
-    "__docId__": 91,
+    "__docId__": 94,
     "kind": "function",
     "name": "validateSendCoin",
     "memberof": "src/utils/validation.js",
@@ -1884,7 +1967,7 @@
     }
   },
   {
-    "__docId__": 92,
+    "__docId__": 95,
     "kind": "function",
     "name": "validatePassword",
     "memberof": "src/utils/validation.js",
@@ -1914,10 +1997,10 @@
     }
   },
   {
-    "__docId__": 93,
+    "__docId__": 96,
     "kind": "file",
     "name": "src/wallet.js",
-    "content": "import { Wallet } from 'ethers';\n\nexport default Wallet;\n",
+    "content": "import ethers from 'ethers';\n\n// Just to make it appear on the doc\n/**\n * User wallet.\n * It is directly imported from ethers.js\n *\n * See https://docs.ethers.io/ethers.js/html/api-wallet.html for documentation\n */\nclass Wallet extends ethers.Wallet {\n}\nexport default Wallet;\n",
     "static": true,
     "longname": "/Users/paco/Development/dether/dether.js/src/wallet.js",
     "access": "public",
@@ -1925,8 +2008,26 @@
     "lineNumber": 1
   },
   {
+    "__docId__": 97,
+    "kind": "class",
+    "name": "Wallet",
+    "memberof": "src/wallet.js",
+    "static": true,
+    "longname": "src/wallet.js~Wallet",
+    "access": "public",
+    "export": true,
+    "importPath": "detherjs/src/wallet.js",
+    "importStyle": "Wallet",
+    "description": "User wallet.\nIt is directly imported from ethers.js\n\nSee https://docs.ethers.io/ethers.js/html/api-wallet.html for documentation",
+    "lineNumber": 10,
+    "interface": false,
+    "extends": [
+      "ethers~ethers.Wallet"
+    ]
+  },
+  {
     "kind": "index",
-    "content": "# DetherJS\n[![Build Status](https://travis-ci.com/dethertech/detherGateway.svg?token=kdsX9Y3G2xZ5ptCyzuYL&branch=master)](https://travis-ci.com/dethertech/detherGateway) ![npm](https://img.shields.io/npm/v/detherGateway.svg)\n\nDetherJS is Javascript SDK to easily interact with [DetherContracts](https://github.com/dethertech/detherContracts)\n\nIt provides wrappers for all the public methods of the contract and formats values in and out.\n\nV1.0.0\n[V0.x](https://github.com/dethertech/dether.js/tree/v0.x)\n## Table of Contents\n\n* [Get Started](#get-started)\n* [Install](#install)\n* [Example](#example)\n* [Dev](#dev)\n* [Test](#test)\n* [Build doc](#build-doc)\n* [Dependencies](#dependencies)\n* [Bugs](#bugs)\n* [License](#license)\n* [Donation](#donation)\n\n## Install\n\nUse NPM to get the package\n\n```\nnpm install --save dether.js\n```\n\n## Example\n\nYou can find examples of all methods in [examples/usage.js](https://github.com/dethertech/dether.js/blob/detherclass/examples/usage.js)\n```\ngit clone https://github.com/dethertech/dether.js.git\ncd dether.js\nnpm i\nnpm run example\n```\n\n## Dev\n```\ngit clone https://github.com/dethertech/dether.js.git\ncd dether.js\nnpm i\n```\n\n## Test\n```\nnpm test\n```\n\n## Build doc\n```\nnpm run esdoc\n```\n\n## Dependencies\n\n* [dethercontract](https://github.com/dethertech/dethercontracts.git)\n* [eth-toolbox](https://github.com/dethertech/eth-toolbox)\n* [web3](https://github.com/ethereum/web3.js/)\n* [ethers.js](https://github.com/ethers-io/ethers.js)\n\n## Bugs\n\nWhen you find issues, please report them:\n\n* web: [https://github.com/dethertech/dether.js/issues](https://github.com/dethertech/dether.js/issues)\n\n## License\n\n* __MIT__: [http://opensource.org/licenses/MIT](http://opensource.org/licenses/MIT)\n\n## Donation\n* [Ethereum Foundation](https://ethereum.org/donate)\n* [Etherscan](https://etherscan.io/address/0x71c7656ec7ab88b098defb751b7401b5f6d8976f)\n* [MyEtherWallet](https://etherscan.io/address/0x7cB57B5A97eAbe94205C07890BE4c1aD31E486A8)\n",
+    "content": "# DetherJS\n[![Build Status](https://travis-ci.com/dethertech/detherGateway.svg?token=kdsX9Y3G2xZ5ptCyzuYL&branch=master)](https://travis-ci.com/dethertech/detherGateway) ![npm](https://img.shields.io/npm/v/detherGateway.svg)\n\nDetherJS is Javascript SDK to easily interact with [DetherContracts](https://github.com/dethertech/detherContracts)\n\nIt provides wrappers for all the public methods of the contract and formats values in and out.\n\nV1.0.0\n[V0.x](https://github.com/dethertech/dether.js/tree/v0.x)\n## Table of Contents\n\n* [Install](#install)\n* [Docs](#doc)\n* [Example](#example)\n* [Dev](#dev)\n* [Test](#test)\n* [Build doc](#build-doc)\n* [Dependencies](#dependencies)\n* [Bugs](#bugs)\n* [License](#license)\n* [Donation](#donation)\n\n## Install\n\nUse NPM to get the package\n\n```\nnpm install --save dether.js\n```\n\n## Docs\n\nExtensive documentation of all the methods can be found on the [API documentation](https://dethertech.github.io/dether.js)\n\n## Usage\n\nYou can find more examples of method usage in [examples/usage.js](https://github.com/dethertech/dether.js/blob/v1.x/examples/usage.js)\n```\nimport DetherJS from 'dether.js';\n\nconst dether = new DetherJS({ network: 'kovan' });\nconst allTellers = await dether.getAllTellers();\n\nconst wallet = DetherJS.Wallet.createRandom();\nconst encryptedWallet = await wallet.encrypt('password');\n\nconst user = dether.getUser(encryptedWallet);\nconst info = await dether.getInfo();\n```\n\n## Dev\n```\ngit clone https://github.com/dethertech/dether.js.git\ncd dether.js\nnpm i\n```\n\n## Test\n```\nnpm test\n```\n\n## Build doc\n```\nnpm run esdoc\n```\n\n## Dependencies\n\n* [dethercontract](https://github.com/dethertech/dethercontracts.git)\n* [eth-toolbox](https://github.com/dethertech/eth-toolbox)\n* [web3](https://github.com/ethereum/web3.js/)\n* [ethers.js](https://github.com/ethers-io/ethers.js)\n\n## Bugs\n\nWhen you find issues, please report them:\n\n* web: [https://github.com/dethertech/dether.js/issues](https://github.com/dethertech/dether.js/issues)\n\n## License\n\n* __MIT__: [http://opensource.org/licenses/MIT](http://opensource.org/licenses/MIT)\n\n## Donation\n* [Ethereum Foundation](https://ethereum.org/donate)\n* [Etherscan](https://etherscan.io/address/0x71c7656ec7ab88b098defb751b7401b5f6d8976f)\n* [MyEtherWallet](https://etherscan.io/address/0x7cB57B5A97eAbe94205C07890BE4c1aD31E486A8)\n",
     "longname": "/Users/paco/Development/dether/dether.js/README.md",
     "name": "./README.md",
     "static": true,
@@ -1934,7 +2035,7 @@
   },
   {
     "kind": "packageJSON",
-    "content": "{\n  \"name\": \"detherjs\",\n  \"version\": \"1.0.0\",\n  \"description\": \"Dether SDK to easily call smart contract from Javascript\",\n  \"main\": \"lib/index.js\",\n  \"scripts\": {\n    \"babel-node\": \"babel-node --presets=latest\",\n    \"example\": \"npm run babel-node -- examples/usage.js\",\n    \"test\": \"mocha --compilers js:babel-core/register test/test.config.js test/specs/**/*.js --timeout 15000\",\n    \"prepublish\": \"babel src --out-dir lib\",\n    \"build\": \"babel src --out-dir lib\",\n    \"esdoc\": \"./node_modules/.bin/esdoc && open ./esdoc/index.html\"\n  },\n  \"repository\": {\n    \"type\": \"git\",\n    \"url\": \"git+https://github.com/dethertech/dether.js.git\"\n  },\n  \"keywords\": [\n    \"Dether\",\n    \"ethereum\",\n    \"sdk\"\n  ],\n  \"author\": \"Dether Team <hello@dether.io>\",\n  \"license\": \"ISC\",\n  \"bugs\": {\n    \"url\": \"https://github.com/dethertech/dether.js/issues\"\n  },\n  \"homepage\": \"https://github.com/dethertech/dether.js#readme\",\n  \"dependencies\": {\n    \"bignumber.js\": \"^4.1.0\",\n    \"dethercontract\": \"^1.2.5\",\n    \"eth-toolbox\": \"^0.2.3\",\n    \"ethers\": \"^2.1.2\",\n    \"truffle-contract\": \"^2.0.1\",\n    \"web3\": \"^0.19.1\"\n  },\n  \"devDependencies\": {\n    \"babel-cli\": \"^6.26.0\",\n    \"babel-core\": \"^6.26.0\",\n    \"babel-eslint\": \"^8.0.1\",\n    \"babel-polyfill\": \"^6.26.0\",\n    \"babel-preset-latest\": \"^6.24.1\",\n    \"chai\": \"^4.1.2\",\n    \"chai-as-promised\": \"^7.1.1\",\n    \"esdoc\": \"^1.0.2\",\n    \"esdoc-standard-plugin\": \"^1.0.0\",\n    \"eslint\": \"^4.7.2\",\n    \"eslint-config-airbnb-base\": \"^12.0.1\",\n    \"eslint-plugin-import\": \"^2.7.0\",\n    \"mocha\": \"^3.5.3\",\n    \"sinon\": \"^4.0.2\"\n  }\n}\n",
+    "content": "{\n  \"name\": \"detherjs\",\n  \"version\": \"1.0.0\",\n  \"description\": \"Dether SDK to easily call smart contract from Javascript\",\n  \"main\": \"lib/index.js\",\n  \"scripts\": {\n    \"babel-node\": \"babel-node --presets=latest\",\n    \"example\": \"npm run babel-node -- examples/usage.js\",\n    \"test\": \"mocha --compilers js:babel-core/register test/test.config.js test/specs/**/*.js --timeout 15000\",\n    \"prepublish\": \"babel src --out-dir lib\",\n    \"build\": \"babel src --out-dir lib\",\n    \"esdoc\": \"./node_modules/.bin/esdoc\",\n    \"publish:esdoc\": \"gh-pages -d esdoc\"\n  },\n  \"repository\": {\n    \"type\": \"git\",\n    \"url\": \"git+https://github.com/dethertech/dether.js.git\"\n  },\n  \"keywords\": [\n    \"Dether\",\n    \"ethereum\",\n    \"sdk\"\n  ],\n  \"author\": \"Dether Team <hello@dether.io>\",\n  \"contributors\": [\n    \"Mehdi Amari <mehdi@dether.io> (https://github.com/Fukunaga42)\",\n    \"Pacien Boisson <pakokrew@gmail.com> (https://github.com/pakokrew)\"\n  ],\n  \"license\": \"ISC\",\n  \"bugs\": {\n    \"url\": \"https://github.com/dethertech/dether.js/issues\"\n  },\n  \"homepage\": \"https://github.com/dethertech/dether.js#readme\",\n  \"dependencies\": {\n    \"dethercontract\": \"^1.2.5\",\n    \"ethers\": \"^2.1.2\",\n    \"gh-pages\": \"^1.0.0\",\n    \"web3\": \"^0.19.1\"\n  },\n  \"devDependencies\": {\n    \"babel-cli\": \"^6.26.0\",\n    \"babel-core\": \"^6.26.0\",\n    \"babel-eslint\": \"^8.0.1\",\n    \"babel-polyfill\": \"^6.26.0\",\n    \"babel-preset-latest\": \"^6.24.1\",\n    \"chai\": \"^4.1.2\",\n    \"chai-as-promised\": \"^7.1.1\",\n    \"esdoc\": \"^1.0.2\",\n    \"esdoc-standard-plugin\": \"^1.0.0\",\n    \"eslint\": \"^4.7.2\",\n    \"eslint-config-airbnb-base\": \"^12.0.1\",\n    \"eslint-plugin-import\": \"^2.7.0\",\n    \"mocha\": \"^3.5.3\",\n    \"sinon\": \"^4.0.2\"\n  }\n}\n",
     "longname": "/Users/paco/Development/dether/dether.js/package.json",
     "name": "package.json",
     "static": true,
