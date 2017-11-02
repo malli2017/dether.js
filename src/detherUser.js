@@ -1,5 +1,6 @@
 import Ethers from 'ethers';
-import ethToolbox from 'eth-toolbox';
+
+import { add0x } from './utils/eth';
 import { validateSellPoint, validateSendCoin, validatePassword } from './utils/validation';
 import Contracts from './utils/contracts';
 import Formatters from './utils/formatters';
@@ -206,7 +207,7 @@ class DetherUser {
       });
     const transaction = await customContract
       .sendCoin(
-        ethToolbox.utils.add0x(receiver),
+        add0x(receiver),
         Ethers.utils.parseEther(amount.toString()),
       );
 

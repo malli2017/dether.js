@@ -1,7 +1,7 @@
 import Ethers from 'ethers';
 import Web3 from 'web3';
-import ethToolbox from 'eth-toolbox';
 
+import { add0x, isAddr } from './utils/eth';
 import DetherUser from './detherUser';
 import Wallet from './wallet';
 import Contracts from './utils/contracts';
@@ -127,9 +127,9 @@ class DetherJS {
    * @return {Promise<Number>} Escrow balance of teller at address
    */
   async getTellerBalance(address) {
-    if (!ethToolbox.utils.isAddr(address)) throw new TypeError('Invalid ETH address');
+    if (!isAddr(address)) throw new TypeError('Invalid ETH address');
 
-    const fullAddress = ethToolbox.utils.add0x(address);
+    const fullAddress = add0x(address);
     const result = await this.contractInstance.getTellerBalances(fullAddress);
 
     const balance = Ethers.utils.formatEther(result[0]); // TODO pourquoi ??
