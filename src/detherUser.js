@@ -1,5 +1,5 @@
 import Ethers from 'ethers';
-import ethToolbox from 'eth-toolbox';
+import add0x from './utils/add0x';
 import { validateSellPoint, validateSendCoin, validatePassword } from './utils/validation';
 import Contracts from './utils/contracts';
 import Formatters from './utils/formatters';
@@ -100,7 +100,7 @@ class DetherUser {
    */
   async getBalance(password) {
     const wallet = await this._getWallet(password);
-    return this.dether.getBalance(wallet.address);
+    return this.dether.getTellerBalance(wallet.address);
   }
 
 // gas used = 223319
@@ -206,7 +206,7 @@ class DetherUser {
       });
     const transaction = await customContract
       .sendCoin(
-        ethToolbox.utils.add0x(receiver),
+        add0x(receiver),
         Ethers.utils.parseEther(amount.toString()),
       );
 

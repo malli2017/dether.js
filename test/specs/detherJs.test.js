@@ -1,7 +1,6 @@
 /* global describe it */
 import { expect } from 'chai';
 import sinon  from 'sinon';
-import BigNumber from 'bignumber.js';
 import DetherJS from '../../src/detherJs';
 import Wallet from '../../src/wallet';
 import Contracts from '../../src/utils/contracts';
@@ -99,16 +98,17 @@ describe('dether js', () => {
       });
     });
 
-    describe('getBalance', () => {
-      it('should getBalance is a function', () => {
+    describe('getTellerBalance', () => {
+      it('should be a function', () => {
         expect(typeof dether.getTellerBalance).to.equal('function');
       });
 
       it('should get user escrow balance', async () => {
-        const spy = sinon.spy(contractMock, 'getTellerBalance');
+        const spy = sinon.spy(contractMock, 'getTellerBalances');
         const balance = await dether.getTellerBalance('0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623');
         expect(balance).to.eq('2.2');
         expect(spy.calledWith('0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623')).to.be.true;
+        spy.restore();
       });
 
       it('should get user escrow balance throw invalid address', async () => {
@@ -194,7 +194,7 @@ describe('dether js', () => {
         stub.onCall(1).returns({ ethAddress: 'b', zoneId: 42 });
         stub.onCall(3).returns({ ethAddress: 'c', zoneId: 43 });
 
-        const zone = '42';
+        const zone = 42;
         const allTellers = await dether.getTellersInZone(zone);
         expect(allTellers.length).to.eq(2);
         expect(allTellers[0].ethAddress).to.eq('a');
@@ -210,7 +210,7 @@ describe('dether js', () => {
         stub.onCall(1).returns({ ethAddress: 'b', zoneId: 42 });
         stub.onCall(2).returns({ ethAddress: 'a', zoneId: 42 });
 
-        const zone = '42';
+        const zone = 42;
         const allTellers = await dether.getTellersInZone(zone);
         expect(allTellers.length).to.eq(2);
         expect(allTellers[0].ethAddress).to.eq('a');
