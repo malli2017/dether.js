@@ -1,8 +1,7 @@
 import Ethers from 'ethers';
 import Web3 from 'web3';
-import add0x from './utils/add0x';
-import isAddr from './utils/isAddr';
 
+import { add0x, isAddr } from './utils/eth';
 import DetherUser from './detherUser';
 import Wallet from './wallet';
 import Contracts from './utils/contracts';

@@ -1,5 +1,6 @@
 import Ethers from 'ethers';
-import add0x from './utils/add0x';
+
+import { add0x } from './utils/eth';
 import { validateSellPoint, validateSendCoin, validatePassword } from './utils/validation';
 import Contracts from './utils/contracts';
 import Formatters from './utils/formatters';
