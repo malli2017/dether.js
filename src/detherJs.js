@@ -94,8 +94,7 @@ class DetherJS {
   async getAllTellers() {
     const result = await this.storageInstance.getAllTellers();
     if (!result || !result.length) return [];
-    // const test = [result[0][1]];
-    // console.log(test);
+
     const tellers = await Promise.all(result[0].map(this.getTeller.bind(this)));
 
     return DetherJS._filterTellerList(tellers);
@@ -106,15 +105,12 @@ class DetherJS {
    * @return {Promise<Array>} array of tellers in zone
    */
   async getTellersInZone(zone) {
-    const result = await this.storageInstance.getZone();
+    const result = await this.storageInstance.getZone(zone);
     if (!result || !result.length) return [];
 
-    const tellersAddressesInZone = result[0]; // TODO pourquoi ??
+    const tellers = await Promise.all(result[0].map(this.getTeller.bind(this)));
 
-    const zoneInt = zone;
-    const tellers = await Promise.all(tellersAddressesInZone.map(this.getTeller.bind(this)));
-
-    return DetherJS._filterTellerList(tellers).filter(t => t.zoneId === zoneInt);
+    return DetherJS._filterTellerList(tellers).filter(t => t.zoneId === zone);
   }
 
   /**

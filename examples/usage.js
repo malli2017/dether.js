@@ -17,9 +17,9 @@ const DetherJS = require('../src/index');
   // console.log('All tellers: ', allTellers);
 
   // Get list of teller in a zone
-  // const zone = 42;
-  // const tellersInZone = await dether.getTellersInZone(zone);
-  // console.log('Tellers in zone: ', tellersInZone);
+  const zone = 42;
+  const tellersInZone = await dether.getTellersInZone(zone);
+  console.log('Tellers in zone: ', tellersInZone);
 
   // Get details of a teller
   // const tellerAddress = '0x085b30734fD4f48369D53225b410d7D04b2d9011';
