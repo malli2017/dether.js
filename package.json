@@ -32,6 +32,7 @@
   },
   "homepage": "https://github.com/dethertech/dether.js#readme",
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "dethercontract": "^1.2.5",
     "ethers": "^2.1.2",
     "gh-pages": "^1.0.0",
@@ -41,7 +42,6 @@
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.1",
-    "babel-polyfill": "^6.26.0",
     "babel-preset-latest": "^6.24.1",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
