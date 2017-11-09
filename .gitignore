@@ -27,3 +27,6 @@ yarn-debug.log*
 yarn-error.log*
 truffle/testrpcdb/
 truffle/node_modules/
+
+.nyc_output
+coverage

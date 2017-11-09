@@ -4,8 +4,6 @@
  */
 
 import 'babel-polyfill';
-import tellers from './tellers';
+import DetherJS from './detherJs';
 
-export default {
-  tellers,
-};
+module.exports = DetherJS;
