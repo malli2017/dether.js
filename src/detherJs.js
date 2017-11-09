@@ -1,5 +1,4 @@
 import Ethers from 'ethers';
-import Web3 from 'web3';
 
 import { add0x, isAddr } from './utils/eth';
 import DetherUser from './detherUser';
@@ -127,6 +126,8 @@ class DetherJS {
     return Number(Ethers.utils.formatEther(result[0]));
   }
 }
+
+DetherJS.prototype.getColor = () => {return 'test'};
 
 DetherJS.Wallet = Wallet;
 

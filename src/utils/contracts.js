@@ -33,7 +33,6 @@ function getDetherContract(provider) {
   return getContract(DetherJson, provider);
 }
 
-
 /**
  * @ignore
  */

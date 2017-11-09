@@ -36,8 +36,7 @@
     "dethercontract": "^1.2.5",
     "ethers": "^2.1.2",
     "gh-pages": "^1.0.0",
-    "utf8": "^2.1.2",
-    "web3": "^1.0.0-beta.24"
+    "utf8": "^2.1.2"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
