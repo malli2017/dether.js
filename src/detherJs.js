@@ -124,11 +124,7 @@ class DetherJS {
     const fullAddress = add0x(address);
     const result = await this.contractInstance.getTellerBalances(fullAddress);
 
-    const balance = Ethers.utils.formatEther(result[0]); // TODO pourquoi ??
-
-    // if (Number.isNaN(balance.toNumber())) return 0; // TODO check if work
-
-    return balance;
+    return Number(Ethers.utils.formatEther(result[0]));
   }
 }
 

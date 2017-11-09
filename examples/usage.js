@@ -13,22 +13,22 @@ const DetherJS = require('../src/index');
 
   // Get list of all tellers
   const allTellers = await dether.getAllTellers();
-  console.log('All tellers: ', allTellers.length);
+  console.log(`All tellers: ${allTellers.length}`);
   // console.log('All tellers: ', allTellers);
 
   // Get list of teller in a zone
   const zone = 42;
   const tellersInZone = await dether.getTellersInZone(zone);
-  console.log('Tellers in zone: ', tellersInZone);
+  console.log(`Tellers in zone 42: ${tellersInZone.length}`);
 
   // Get details of a teller
-  // const tellerAddress = '0x085b30734fD4f48369D53225b410d7D04b2d9011';
-  // const publicTellerInfo = await dether.getTeller(tellerAddress);
-  // console.log('Public teller: ', publicTellerInfo);
+  const tellerAddress = '0x085b30734fD4f48369D53225b410d7D04b2d9011';
+  const publicTellerInfo = await dether.getTeller(tellerAddress);
+  console.log('Public teller: ', publicTellerInfo);
 
   // Get balance of teller
-  // const tellerBalance = await dether.getTellerBalance(tellerAddress);
-  // console.log('Teller balance: ', tellerBalance);
+  const tellerBalance = await dether.getTellerBalance(tellerAddress);
+  console.log('Teller balance: ', tellerBalance);
 
 
   // //////////////////////////////
