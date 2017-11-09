@@ -141,24 +141,29 @@ class DetherUser {
 
     const formattedSellPoint = Formatters.sellPointToContract(sellPoint);
 
-    const customContract = await this
-      ._getCustomContract({
-        value: tsxAmount,
-        password,
-      });
+    try {
+      const customContract = await this
+        ._getCustomContract({
+          value: tsxAmount,
+          password,
+        });
 
-    const transaction = await customContract.registerPoint(
-      formattedSellPoint.lat,
-      formattedSellPoint.lng,
-      formattedSellPoint.zone,
-      formattedSellPoint.rates,
-      formattedSellPoint.avatar,
-      formattedSellPoint.currency,
-      formattedSellPoint.telegram,
-      formattedSellPoint.username,
-    );
+      const transaction = await customContract.registerPoint(
+        formattedSellPoint.lat,
+        formattedSellPoint.lng,
+        formattedSellPoint.zone,
+        formattedSellPoint.rates,
+        formattedSellPoint.avatar,
+        formattedSellPoint.currency,
+        formattedSellPoint.telegram,
+        formattedSellPoint.username,
+      );
 
-    return transaction;
+      return transaction;
+    } catch (e) {
+      throw new TypeError(e);
+    }
+
     // TODO return full transaction
 
     // const { hash } = transaction;

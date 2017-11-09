@@ -24,7 +24,7 @@ class DetherJS {
     /** @ignore */
     this.provider = Providers.getProvider(providerData);
     /** @ignore */
-    this.web3 = new Web3();
+    // this.web3 = new Web3();
 
     /** @ignore */
     this.contractInstance = Contracts.getDetherContract(this.provider);
