@@ -14,7 +14,8 @@ class DetherJS {
    * You may not instanciate from here, prefer from DetherJS.getUser method
    *
    * @param {object}    providerData
-   * @param {String}    providerData.network      Name of network ('homestead', 'ropsten', 'rinkeby', 'kovan')
+   * @param {String}    providerData.network      Name of network ('homestead',
+   *                                              'ropsten', 'rinkeby', 'kovan')
    * @param {?String}   providerData.rpcURL       JSON RPC provider URL
    * @param {?String}   providerData.infuraKey    INFURA API Key
    * @param {?String}   providerData.etherscanKey Etherscan API Key
@@ -56,13 +57,10 @@ class DetherJS {
       this.contractInstance.getTellerProfile(address),
     ]);
 
-    // TODO real result from contract
-    //     if (tellerPos[3].toNumber() === 0) return null; TODO
+    if (Ethers.utils.formatEther(rawTellerPos[3]) === '0.0') return null;
 
-    const teller = {};
-
-    Object.assign(
-      teller,
+    return Object.assign(
+      {},
       Formatters.tellerPosFromContract(rawTellerPos),
       Formatters.tellerProfileFromContract(rawTellerProfile),
       {
@@ -70,8 +68,6 @@ class DetherJS {
         ethAddress: address,
       },
     );
-
-    return teller;
   }
 
   /**
@@ -81,6 +77,7 @@ class DetherJS {
    * @return {Array} filtered tellers
    */
   static _filterTellerList(list) {
+    // TODO: remove teller 0 balance
     return list
       .filter(teller => !!teller)
       .reduce(
@@ -97,10 +94,9 @@ class DetherJS {
   async getAllTellers() {
     const result = await this.storageInstance.getAllTellers();
     if (!result || !result.length) return [];
-
-    const tellersAddresses = result[0]; // TODO pourquoi ??
-
-    const tellers = await Promise.all(tellersAddresses.map(this.getTeller.bind(this)));
+    // const test = [result[0][1]];
+    // console.log(test);
+    const tellers = await Promise.all(result[0].map(this.getTeller.bind(this)));
 
     return DetherJS._filterTellerList(tellers);
   }
