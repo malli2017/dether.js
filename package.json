@@ -22,10 +22,6 @@
     "sdk"
   ],
   "author": "Dether Team <hello@dether.io>",
-  "contributors": [
-    "Mehdi Amari <mehdi@dether.io> (https://github.com/Fukunaga42)",
-    "Pacien Boisson <pakokrew@gmail.com> (https://github.com/pakokrew)"
-  ],
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/dethertech/dether.js/issues"
