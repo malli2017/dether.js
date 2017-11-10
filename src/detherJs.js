@@ -84,6 +84,7 @@ class DetherJS {
 
   /**
    * Get All tellers on the map
+   * @param  {array}   addr ethereum addresses
    * @return {Promise<Array>} array of tellers
    */
   async getAllTellers(addr) {
@@ -101,6 +102,7 @@ class DetherJS {
   /**
    * Get All tellers per zone
    * @param  {Integer}  zone
+   * @param  {array}    zone ethereum addresses
    * @return {Promise<Array>} array of tellers in zone
    */
   async getTellersInZone(zone) {
