@@ -18,7 +18,7 @@ describe('formatters', () => {
       expect(tellerPos.lat).to.eq(0.00123);
       expect(tellerPos.lng).to.eq(0.00456);
       expect(tellerPos.zoneId).to.eq(789);
-      expect(tellerPos.escrowBalance).to.eq('1.2');
+      expect(tellerPos.escrowBalance).to.eq(1.2);
     });
     it('example 2', () => {
       const rawTellerPos = [
@@ -32,7 +32,7 @@ describe('formatters', () => {
       expect(tellerPos.lat).to.eq(9.12312);
       expect(tellerPos.lng).to.eq(8.12312);
       expect(tellerPos.zoneId).to.eq(1);
-      expect(tellerPos.escrowBalance).to.eq('2.2');
+      expect(tellerPos.escrowBalance).to.eq(2.2);
     });
     it('example 2', () => {
       const rawTellerPos = [
@@ -46,7 +46,7 @@ describe('formatters', () => {
       expect(tellerPos.lat).to.eq(19.12312);
       expect(tellerPos.lng).to.eq(18.12312);
       expect(tellerPos.zoneId).to.eq(1);
-      expect(tellerPos.escrowBalance).to.eq('2.2');
+      expect(tellerPos.escrowBalance).to.eq(2.2);
     });
     it('example 2', () => {
       const rawTellerPos = [
@@ -60,7 +60,7 @@ describe('formatters', () => {
       expect(tellerPos.lat).to.eq(-19.12312);
       expect(tellerPos.lng).to.eq(-18.12312);
       expect(tellerPos.zoneId).to.eq(1);
-      expect(tellerPos.escrowBalance).to.eq('2.2');
+      expect(tellerPos.escrowBalance).to.eq(2.2);
     });
   });
 
@@ -81,7 +81,7 @@ describe('formatters', () => {
       expect(tellerProfile.name).to.eq('Haqry');
       expect(tellerProfile.messengerAddr).to.eq('Harqy');
       expect(tellerProfile.rates).to.eq(23.13);
-      expect(tellerProfile.volumeTrade).to.eq('1.2');
+      expect(tellerProfile.volumeTrade).to.eq(1.2);
       expect(tellerProfile.nbTrade).to.eq(12);
       expect(tellerProfile.currencyId).to.eq(1);
       expect(tellerProfile.avatarId).to.eq(2);

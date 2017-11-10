@@ -23,7 +23,7 @@ class DetherUser {
     this.dether = opts.dether;
     /** @ignore */
     this.encryptedWallet = opts.encryptedWallet;
-    this.address = JSON.parse(opts.encryptedWallet).address;
+    this.address = add0x(JSON.parse(opts.encryptedWallet).address);
   }
 
   /**

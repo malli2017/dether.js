@@ -15,7 +15,7 @@ function tellerPosFromContract(rawTellerPos) {
     // raw : 1234567 -> 1.234567
     tellerPos.lat = rawTellerPos[0] / (10 ** COORD_PRECISION);
     tellerPos.lng = rawTellerPos[1] / (10 ** COORD_PRECISION);
-    tellerPos.zoneId = rawTellerPos[2].toNumber();
+    tellerPos.zoneId = Number(rawTellerPos[2]);
 
     tellerPos.escrowBalance = Number(Ethers.utils.formatEther(rawTellerPos[3]));
   } catch (e) {

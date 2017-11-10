@@ -106,16 +106,17 @@ describe('dether user', () => {
   });
 
   it('should get user address', async () => {
-    const address = await user.getAddress('password');
-    expect(address).to.eq(wallet.address);
+    const address = await user.getAddress();
+    expect(address).to.eq(wallet.address.toLowerCase());
   });
 
   it('should get user info', async () => {
     const stub = sinon.stub(dether, 'getTeller');
     stub.returns('info');
 
-    const info = await user.getInfo('password');
-    expect(stub.calledWith(wallet.address)).to.be.true;
+    const info = await user.getInfo();
+
+    expect(stub.calledWith(wallet.address.toLowerCase())).to.be.true;
     expect(info).to.eq('info');
 
     stub.restore();
@@ -124,9 +125,9 @@ describe('dether user', () => {
   it('should get user escrow balance', async () => {
     const stub = sinon.stub(dether, 'getTellerBalance');
     stub.returns('balance');
+    const balance = await user.getBalance();
 
-    const balance = await user.getBalance('password');
-    expect(stub.calledWith(wallet.address)).to.be.true;
+    expect(stub.calledWith(wallet.address.toLowerCase())).to.be.true;
     expect(balance).to.eq('balance');
 
     stub.restore();
