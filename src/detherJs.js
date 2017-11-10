@@ -117,7 +117,6 @@ class DetherJS {
     }));
 
     if (!result || !result.length) return [];
-
     const tellers = await Promise.all(result.map(this.getTeller.bind(this)));
     return DetherJS._filterTellerList(tellers).filter(t => zones.indexOf(t.zoneId) >= 0);
   }
