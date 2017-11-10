@@ -8,6 +8,7 @@ describe('providers', () => {
     const provider = Providers.getProvider({
       network: 'ropsten',
     });
+
     expect(provider.constructor.name).to.eq('FallbackProvider');
     expect(provider.name).to.eq('ropsten');
   });

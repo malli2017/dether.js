@@ -1,5 +1,4 @@
 import Ethers from 'ethers';
-import Web3 from 'web3';
 
 import { add0x, isAddr } from './utils/eth';
 import DetherUser from './detherUser';
@@ -14,7 +13,8 @@ class DetherJS {
    * You may not instanciate from here, prefer from DetherJS.getUser method
    *
    * @param {object}    providerData
-   * @param {String}    providerData.network      Name of network ('homestead', 'ropsten', 'rinkeby', 'kovan')
+   * @param {String}    providerData.network      Name of network ('homestead',
+   *                                              'ropsten', 'rinkeby', 'kovan')
    * @param {?String}   providerData.rpcURL       JSON RPC provider URL
    * @param {?String}   providerData.infuraKey    INFURA API Key
    * @param {?String}   providerData.etherscanKey Etherscan API Key
@@ -22,9 +22,6 @@ class DetherJS {
   constructor(providerData) {
     /** @ignore */
     this.provider = Providers.getProvider(providerData);
-    /** @ignore */
-    this.web3 = new Web3();
-
     /** @ignore */
     this.contractInstance = Contracts.getDetherContract(this.provider);
     /** @ignore */
@@ -56,13 +53,10 @@ class DetherJS {
       this.contractInstance.getTellerProfile(address),
     ]);
 
-    // TODO real result from contract
-    //     if (tellerPos[3].toNumber() === 0) return null; TODO
+    if (Ethers.utils.formatEther(rawTellerPos[3]) === '0.0') return null;
 
-    const teller = {};
-
-    Object.assign(
-      teller,
+    return Object.assign(
+      {},
       Formatters.tellerPosFromContract(rawTellerPos),
       Formatters.tellerProfileFromContract(rawTellerProfile),
       {
@@ -70,8 +64,6 @@ class DetherJS {
         ethAddress: address,
       },
     );
-
-    return teller;
   }
 
   /**
@@ -92,33 +84,41 @@ class DetherJS {
 
   /**
    * Get All tellers on the map
+   * @param  {array}   addr ethereum addresses
    * @return {Promise<Array>} array of tellers
    */
-  async getAllTellers() {
-    const result = await this.storageInstance.getAllTellers();
-    if (!result || !result.length) return [];
+  async getAllTellers(addr) {
+    if (addr && !Array.isArray(addr) && !isAddr(addr)) throw new TypeError('Invalid ETH address');
 
-    const tellersAddresses = result[0]; // TODO pourquoi ??
+    const result = !addr ? await this.storageInstance.getAllTellers() : [addr];
 
-    const tellers = await Promise.all(tellersAddresses.map(this.getTeller.bind(this)));
+    if (!result || !result.length || !Array.isArray(result[0])) return [];
+
+    const tellers = await Promise.all(result[0].map(this.getTeller.bind(this)));
 
     return DetherJS._filterTellerList(tellers);
   }
+
   /**
    * Get All tellers per zone
    * @param  {Integer}  zone
+   * @param  {array}    zone ethereum addresses
    * @return {Promise<Array>} array of tellers in zone
    */
   async getTellersInZone(zone) {
-    const result = await this.storageInstance.getZone();
+    if (!Number.isInteger(zone) && !Array.isArray(zone)) throw new TypeError('Invalid zone');
+
+    const zones = !Array.isArray(zone) ? [zone] : zone;
+    const result = [];
+
+    await Promise.all(zones.map(async (data) => {
+      const tellersInZone = await this.storageInstance.getZone(data);
+      result.push(...tellersInZone[0]);
+    }));
+
     if (!result || !result.length) return [];
-
-    const tellersAddressesInZone = result[0]; // TODO pourquoi ??
-
-    const zoneInt = zone;
-    const tellers = await Promise.all(tellersAddressesInZone.map(this.getTeller.bind(this)));
-
-    return DetherJS._filterTellerList(tellers).filter(t => t.zoneId === zoneInt);
+    const tellers = await Promise.all(result.map(this.getTeller.bind(this)));
+    return DetherJS._filterTellerList(tellers).filter(t => zones.indexOf(t.zoneId) >= 0);
   }
 
   /**
@@ -132,11 +132,7 @@ class DetherJS {
     const fullAddress = add0x(address);
     const result = await this.contractInstance.getTellerBalances(fullAddress);
 
-    const balance = Ethers.utils.formatEther(result[0]); // TODO pourquoi ??
-
-    // if (Number.isNaN(balance.toNumber())) return 0; // TODO check if work
-
-    return balance;
+    return Number(Ethers.utils.formatEther(result[0]));
   }
 }
 

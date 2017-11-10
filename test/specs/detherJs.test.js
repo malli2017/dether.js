@@ -1,6 +1,6 @@
-/* global describe it */
+/* global describe it beforeEach afterEach */
 import { expect } from 'chai';
-import sinon  from 'sinon';
+import sinon from 'sinon';
 import DetherJS from '../../src/detherJs';
 import Wallet from '../../src/wallet';
 import Contracts from '../../src/utils/contracts';
@@ -27,7 +27,6 @@ describe('dether js', () => {
       });
 
       expect(dether.provider).to.eq('provider');
-      expect(dether.web3.constructor.name).to.eq('Web3');
 
       expect(dether.contractInstance).to.equal('contractInstance');
       expect(dether.storageInstance).to.equal('storageInstance');
@@ -39,11 +38,11 @@ describe('dether js', () => {
       c.restore();
       s.restore();
     });
-
   });
 
   describe('calls', () => {
-    let dether, stubs = [];
+    let dether = [];
+    let stubs = [];
 
     beforeEach(async () => {
       stubs = [];
@@ -89,9 +88,9 @@ describe('dether js', () => {
         expect(teller.lat).to.eq(9.12312);
         expect(teller.lng).to.eq(8.12312);
         expect(teller.zoneId).to.eq(789);
-        expect(teller.escrowBalance).to.eq('2.2');
+        expect(teller.escrowBalance).to.eq(2.2);
         expect(teller.rates).to.eq(23.13);
-        expect(teller.volumeTrade).to.eq('1.2');
+        expect(teller.volumeTrade).to.eq(1.2);
         expect(teller.nbTrade).to.eq(12);
         expect(teller.currencyId).to.eq(1);
         expect(teller.avatarId).to.eq(2);
@@ -106,7 +105,7 @@ describe('dether js', () => {
       it('should get user escrow balance', async () => {
         const spy = sinon.spy(contractMock, 'getTellerBalances');
         const balance = await dether.getTellerBalance('0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623');
-        expect(balance).to.eq('2.2');
+        expect(balance).to.eq(2.2);
         expect(spy.calledWith('0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623')).to.be.true;
         spy.restore();
       });
@@ -138,7 +137,6 @@ describe('dether js', () => {
     });
 
     describe('getAllTellers', () => {
-
       /*
       TODO
       all tellers: test duplicates
