@@ -1,4 +1,4 @@
-/* global describe it */
+/* global describe it beforeEach afterEach */
 import { expect } from 'chai';
 import sinon from 'sinon';
 import DetherJS from '../../src/detherJs';
@@ -38,11 +38,11 @@ describe('dether js', () => {
       c.restore();
       s.restore();
     });
-
   });
 
   describe('calls', () => {
-    let dether, stubs = [];
+    let dether = [];
+    let stubs = [];
 
     beforeEach(async () => {
       stubs = [];

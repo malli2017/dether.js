@@ -1,7 +1,7 @@
-/* global describe it */
+/* global describe it beforeEach afterEach */
 import { expect } from 'chai';
-import Ethers  from 'ethers';
-import sinon  from 'sinon';
+import Ethers from 'ethers';
+import sinon from 'sinon';
 import DetherJS from '../../src/detherJs';
 import DetherUser from '../../src/detherUser';
 import Wallet from '../../src/wallet';
@@ -10,9 +10,10 @@ import Contracts from '../../src/utils/contracts';
 import contractMock from '../mock/contract';
 
 describe('dether user', () => {
-
-  let dether, wallet, user, stubs = [];
-
+  let dether = [];
+  let wallet = [];
+  let user = [];
+  let stubs = [];
 
   beforeEach(async () => {
     stubs = [];
@@ -48,7 +49,8 @@ describe('dether user', () => {
     expect(detheruser.dether).to.eq(dether);
     expect(detheruser.encryptedWallet).to.eq(encryptedWallet);
 
-    const decryptedWallet = await Ethers.Wallet.fromEncryptedWallet(detheruser.encryptedWallet, password);
+    const decryptedWallet =
+      await Ethers.Wallet.fromEncryptedWallet(detheruser.encryptedWallet, password);
     expect(decryptedWallet.privateKey).to.eq(wallet.privateKey);
 
     stub.restore();
@@ -102,7 +104,6 @@ describe('dether user', () => {
     expect(transactionResult).to.eq('result');
     expect(stub.calledWith({ value: 1.2 })).to.be.true;
     expect(stubs[1].calledWith('password')).to.be.true;
-
   });
 
   it('should get user address', async () => {
