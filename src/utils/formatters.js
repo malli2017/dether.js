@@ -1,8 +1,7 @@
 import Ethers from 'ethers';
+
 import { COORD_PRECISION } from '../constants/appConstants';
 import toUtf8 from './toUtf8';
-
-// console.log(web3);
 
 // TODO rename to formatter
 

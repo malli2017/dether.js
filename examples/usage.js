@@ -19,7 +19,6 @@ const DetherJS = require('../src/index');
   // Public data
 
   // Get list of all tellers
-  console.log('- Get all tellers on the map');
   try {
     const allTellers = await dether.getAllTellers();
     console.log(` ${allTellers.length} tellers found`);
@@ -29,7 +28,6 @@ const DetherJS = require('../src/index');
   }
 
   // Get list of all tellers
-  console.log('- Get an array of tellers');
   const addr = [
     '0x21C3aC79007A530BF061adF8dfb739eae78636E1',
     '0x5B585B7BBd948696bb1c4c11D10d4103B4895EFd',
@@ -45,7 +43,6 @@ const DetherJS = require('../src/index');
 
   // Get list of teller in a zone
   try {
-    console.log('- Get all tellers on the zone 42');
     const zone = 42;
     const tellersInZone = await dether.getTellersInZone(zone);
     console.log(` ${tellersInZone.length} tellers found`);
@@ -56,7 +53,6 @@ const DetherJS = require('../src/index');
 
   // Get list of teller in a zone
   try {
-    console.log('- Get all tellers on multiple zone');
     const zones = [42, 101, 3104];
     const tellersInZones = await dether.getTellersInZone(zones);
     console.log(` ${tellersInZones.length} tellers found`);
@@ -69,7 +65,6 @@ const DetherJS = require('../src/index');
   const tellerAddress = '0x085b30734fD4f48369D53225b410d7D04b2d9011';
 
   try {
-    console.log('- Get teller info');
     const publicTellerInfo = await dether.getTeller(tellerAddress);
     console.log(' Public teller: ', publicTellerInfo);
   } catch (e) {
@@ -79,7 +74,6 @@ const DetherJS = require('../src/index');
 
   // Get balance of teller
   try {
-    console.log('- Get Teller Balance');
     const tellerBalance = await dether.getTellerBalance(tellerAddress);
     console.log(' Teller balance: ', tellerBalance);
   } catch (e) {
@@ -87,48 +81,58 @@ const DetherJS = require('../src/index');
   }
 
   // User data
+  console.log('=======================================');
+  const privateKey = '0x0123456789012345678901234567890123456789012345678901234567890123';
+  const userPassword = 'Dether@1';
 
-  // const privateKey = '0x0123456789012345678901234567890123456789012345678901234567890123';
-  // const userPassword = 'Dether@1';
-  //
-  // const wallet = new DetherJS.Wallet(privateKey);
-  // const encryptedWallet = await wallet.encrypt(userPassword);
-  //
-  // const user = await dether.getUser(encryptedWallet);
+  const wallet = new DetherJS.Wallet(privateKey);
+  const encryptedWallet = await wallet.encrypt(userPassword);
+  const user = await dether.getUser(encryptedWallet);
+
   // User registers as a teller
 
-  // const sellPoint = {
-  //   lat: 1.12,
-  //   lng: 2.21,
-  //   zone: 42,
-  //   rates: 20.20,
-  //   avatar: 1,
-  //   currency: 2,
-  //   telegram: 'https://telegram.me/boby',
-  //   username: 'Boby',
-  //   amount: 0.01,
-  // };
-  //
-  // const teller = await user.addSellPoint(sellPoint, userPassword);
-  // console.log('Teller: ', teller);
+  const sellPoint = {
+    lat: 1.12,
+    lng: 2.21,
+    zone: 42,
+    rates: 20.20,
+    avatar: 1,
+    currency: 2,
+    telegram: 'https://telegram.me/boby',
+    username: 'Boby',
+    amount: 0.01,
+  };
 
-  // Get teller info
-  // const tellerInfo = await user.getInfo(userPassword);
-  // console.log('Teller info: ', tellerInfo);
+  const teller = await user.addSellPoint(sellPoint, userPassword);
+  console.log('Teller: ', teller);
 
-  // Get teller balance
-  // const userBalance = await user.getBalance(userPassword);
-  // console.log('Teller balance: ', userBalance);
+  setTimeout(async () => {
+    // Get teller info
+    const tellerInfo = await user.getInfo();
+    console.log('Teller info: ', tellerInfo);
 
-  // User send coin from escrow account
-  // const opts = {
-  //   amount: 0.005,
-  //   receiver: '0x609A999030cEf75FA04274e5Ac5b8401210910Fe',
-  // };
-  // const sendCoinTransaction = await user.sendCoin(opts, userPassword);
-  // console.log('Send coin transaction: ', sendCoinTransaction);
+    // Get teller balance
+    const userBalance = await user.getBalance();
+    console.log('Teller balance: ', userBalance);
 
-  // User remove points and withdraw
-  // const withdrawTransaction = await user.withdrawAll(userPassword);
-  // console.log('Withdraw transaction: ', withdrawTransaction);
+    // User send coin from escrow account
+    const opts = {
+      amount: 0.005,
+      receiver: '0x609A999030cEf75FA04274e5Ac5b8401210910Fe',
+    };
+    const sendCoinTransaction = await user.sendCoin(opts, userPassword);
+    console.log('Send coin transaction: ', sendCoinTransaction);
+
+    setTimeout(async () => {
+      // User remove points and withdraw
+      const withdrawTransaction = await user.withdrawAll(userPassword);
+      console.log('Withdraw transaction: ', withdrawTransaction);
+
+      setTimeout(async () => {
+        // Get teller balance
+        const finalUserBalance = await user.getBalance();
+        console.log('Teller balance: ', finalUserBalance);
+      }, 20000);
+    }, 20000);
+  }, 20000);
 })().catch(console.error);

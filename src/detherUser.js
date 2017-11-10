@@ -23,6 +23,7 @@ class DetherUser {
     this.dether = opts.dether;
     /** @ignore */
     this.encryptedWallet = opts.encryptedWallet;
+    this.address = JSON.parse(opts.encryptedWallet).address;
   }
 
   /**
@@ -76,32 +77,26 @@ class DetherUser {
 
   /**
    * Get user ethereum address
-   * @param {string} password             user password
    * @return {Promise<string>} user ethereum address
    */
-  async getAddress(password) {
-    const wallet = await this._getWallet(password);
-    return wallet.getAddress();
+  async getAddress() {
+    return this.address;
   }
 
   /**
    * Get user teller info
-   * @param {string} password             user password
    * @return {Promise<object>}
    */
-  async getInfo(password) {
-    const wallet = await this._getWallet(password);
-    return this.dether.getTeller(wallet.address);
+  async getInfo() {
+    return this.dether.getTeller(this.address);
   }
 
   /**
    * Get user balance in escrow
-   * @param {string} password             user password
    * @return {Promise<string>}
    */
-  async getBalance(password) {
-    const wallet = await this._getWallet(password);
-    return this.dether.getTellerBalance(wallet.address);
+  async getBalance() {
+    return this.dether.getTellerBalance(this.address);
   }
 
 // gas used = 223319
@@ -163,27 +158,6 @@ class DetherUser {
     } catch (e) {
       throw new TypeError(e);
     }
-
-    // TODO return full transaction
-
-    // const { hash } = transaction;
-    /* TODO ??
-    return {
-      from: ethToolbox.utils.add0x(this.wallet.address),
-      to: this.signedDetherContract,
-      value: sellPoint.amount,
-      date: new Date().toLocaleString('en-US', { hour12: false }),
-      dether: {
-        detherContract: true,
-        receive: false,
-      },
-      etherscan: {
-        kovan: `https://kovan.etherscan.io/tx/${hash}`,
-        ropsten: `https://ropsten.etherscan.io/tx/${hash}`,
-        ether: `https://etherscan.io/tx/${hash}`,
-      },
-    };
-    */
   }
 
 // gas used = 95481
