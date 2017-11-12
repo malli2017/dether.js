@@ -153,7 +153,7 @@ class DetherUser {
         formattedSellPoint.telegram,
         formattedSellPoint.username,
       );
-      const minedTsx = await waitForMined(transaction.hash);
+      const minedTsx = await this.dether.provider.waitForTransaction(transaction.hash);
       return minedTsx;
     } catch (e) {
       throw new TypeError(e);
@@ -189,10 +189,9 @@ class DetherUser {
         add0x(receiver),
         Ethers.utils.parseEther(amount.toString()),
       );
-    const minedTsx = await waitForMined(transaction.hash);
+    const minedTsx = await this.dether.provider.waitForTransaction(transaction.hash);
     return minedTsx;
   }
-
 
 // gas used = 26497
 // gas price average (mainnet) = 25000000000 wei
@@ -211,7 +210,7 @@ class DetherUser {
       password,
     });
     const transaction = await customContract.withdrawAll();
-    const minedTsx = await waitForMined(transaction.hash);
+    const minedTsx = await this.dether.provider.waitForTransaction(transaction.hash);
     return minedTsx;
   }
 }

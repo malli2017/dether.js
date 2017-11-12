@@ -126,5 +126,4 @@ const DetherJS = require('../src/index');
 
   const finalUserBalance = await user.getBalance();
   console.log('Teller balance: ', finalUserBalance);
-
 })().catch(console.error);
