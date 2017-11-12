@@ -1,6 +1,6 @@
 import Ethers from 'ethers';
 
-import { add0x } from './utils/eth';
+import { add0x, waitForMined } from './utils/eth';
 import { validateSellPoint, validateSendCoin, validatePassword } from './utils/validation';
 import Contracts from './utils/contracts';
 import Formatters from './utils/formatters';
@@ -153,8 +153,8 @@ class DetherUser {
         formattedSellPoint.telegram,
         formattedSellPoint.username,
       );
-
-      return transaction;
+      const minedTsx = await waitForMined(transaction.hash);
+      return minedTsx;
     } catch (e) {
       throw new TypeError(e);
     }
@@ -189,8 +189,8 @@ class DetherUser {
         add0x(receiver),
         Ethers.utils.parseEther(amount.toString()),
       );
-
-    return transaction;
+    const minedTsx = await waitForMined(transaction.hash);
+    return minedTsx;
   }
 
 
@@ -211,8 +211,8 @@ class DetherUser {
       password,
     });
     const transaction = await customContract.withdrawAll();
-
-    return transaction;
+    const minedTsx = await waitForMined(transaction.hash);
+    return minedTsx;
   }
 }
 

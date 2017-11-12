@@ -51,7 +51,7 @@ const DetherJS = require('../src/index');
   }
 
 
-  // Get list of teller in a zone
+  // Get list of teller from multiple zone
   try {
     const zones = [42, 101, 3104];
     const tellersInZones = await dether.getTellersInZone(zones);
@@ -71,11 +71,10 @@ const DetherJS = require('../src/index');
     console.log(' An error has occurred');
   }
 
-
-  // Get balance of teller
+  // Get escrow balance of teller
   try {
     const tellerBalance = await dether.getTellerBalance(tellerAddress);
-    console.log(' Teller balance: ', tellerBalance);
+    console.log(' Teller escrow balance: ', tellerBalance);
   } catch (e) {
     console.log(' An error has occurred');
   }
@@ -106,33 +105,26 @@ const DetherJS = require('../src/index');
   const teller = await user.addSellPoint(sellPoint, userPassword);
   console.log('Teller: ', teller);
 
-  setTimeout(async () => {
-    // Get teller info
-    const tellerInfo = await user.getInfo();
-    console.log('Teller info: ', tellerInfo);
+  // Get teller info
+  const tellerInfo = await user.getInfo();
+  console.log('Teller info: ', tellerInfo);
 
-    // Get teller balance
-    const userBalance = await user.getBalance();
-    console.log('Teller balance: ', userBalance);
+  // Get teller balance
+  const userBalance = await user.getBalance();
+  console.log('Teller balance: ', userBalance);
 
-    // User send coin from escrow account
-    const opts = {
-      amount: 0.005,
-      receiver: '0x609A999030cEf75FA04274e5Ac5b8401210910Fe',
-    };
-    const sendCoinTransaction = await user.sendCoin(opts, userPassword);
-    console.log('Send coin transaction: ', sendCoinTransaction);
+  // User send coin from escrow account
+  const opts = {
+    amount: 0.005,
+    receiver: '0x609A999030cEf75FA04274e5Ac5b8401210910Fe',
+  };
+  const sendCoinTransaction = await user.sendCoin(opts, userPassword);
+  console.log('Send coin transaction: ', sendCoinTransaction);
 
-    setTimeout(async () => {
-      // User remove points and withdraw
-      const withdrawTransaction = await user.withdrawAll(userPassword);
-      console.log('Withdraw transaction: ', withdrawTransaction);
+  const withdrawTransaction = await user.withdrawAll(userPassword);
+  console.log('Withdraw transaction: ', withdrawTransaction);
 
-      setTimeout(async () => {
-        // Get teller balance
-        const finalUserBalance = await user.getBalance();
-        console.log('Teller balance: ', finalUserBalance);
-      }, 20000);
-    }, 20000);
-  }, 20000);
+  const finalUserBalance = await user.getBalance();
+  console.log('Teller balance: ', finalUserBalance);
+
 })().catch(console.error);
