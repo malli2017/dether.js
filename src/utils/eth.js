@@ -1,4 +1,3 @@
-
 /**
  * Test if addr is ethereum address
  * @param  {string}  addr eth address
@@ -15,4 +14,3 @@ export const add0x = (input) => {
   if (!input || typeof (input) !== typeof '' || !isAddr(input)) return false;
   return input.slice(0, 2) !== '0x' ? `0x${input}` : input;
 };
-
