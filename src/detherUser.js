@@ -50,10 +50,10 @@ class DetherUser {
     return this.dether.getTellerBalance(this.address);
   }
 
-// gas used = 223319
-// gas price average (mainnet) = 25000000000 wei
-// 250000 * 25000000000 = 0.006250000000000000 ETH
-// need 0.006250000000000000 ETH to process this function
+  // gas used = 223319
+  // gas price average (mainnet) = 25000000000 wei
+  // 250000 * 25000000000 = 0.006250000000000000 ETH
+  // need 0.006250000000000000 ETH to process this function
   /**
    * Register a sell point
    * @param {object} sellPoint
@@ -76,15 +76,6 @@ class DetherUser {
     if (secuPass.error) throw new TypeError(secuPass.msg);
 
     const tsxAmount = Ethers.utils.parseEther(sellPoint.amount.toString());
-
-    // TODO subtract fees if not enough balance
-    // const balance = await this.wallet.getBalance();
-    // check if enough gas is present to sendCoin once after registering
-    // if (balance.greaterThan(tsxAmount + (GAS_PRICE * 650000))) {
-    //   tsxAmount = balance.toNumber() - (GAS_PRICE * 650000);
-    //   if (tsxAmount < 0.0025) throw new TypeError('Insufficient funds');
-    // }
-
     const formattedSellPoint = Formatters.sellPointToContract(sellPoint);
 
     try {
@@ -110,11 +101,10 @@ class DetherUser {
     }
   }
 
-// gas used = 95481
-// gas price average (mainnet) = 25000000000 wei
-// 115000 * 25000000000 = 0.002875000000000000 ETH
-// need 0.006250000000000000 ETH to process this function
-  // TODO rename?
+  // gas used = 95481
+  // gas price average (mainnet) = 25000000000 wei
+  // 115000 * 25000000000 = 0.002875000000000000 ETH
+  // need 0.006250000000000000 ETH to process this function
   /**
    * Send eth from escrow
    * @param  {object}  opts
@@ -123,7 +113,7 @@ class DetherUser {
    * @param  {string}  password      Wallet password
    * @return {Promise<object>} Transaction
    */
-  async sendCoin(opts, password) {
+  async sendToBuyer(opts, password) {
     const secu = validateSendCoin(opts);
     if (secu.error) throw new TypeError(secu.msg);
     const secuPass = validatePassword(password);
@@ -143,17 +133,16 @@ class DetherUser {
     return minedTsx;
   }
 
-// gas used = 26497
-// gas price average (mainnet) = 25000000000 wei
-// 50000 * 25000000000 = 0.001250000000000000 ETH
-// need 0.001250000000000000 ETH to process this function
-  // TODO rename?
+  // gas used = 26497
+  // gas price average (mainnet) = 25000000000 wei
+  // 50000 * 25000000000 = 0.001250000000000000 ETH
+  // need 0.001250000000000000 ETH to process this function
   /**
    * Delete sell point, this function withdraw automatically balance escrow to owner
    * @param  {string} password  Wallet password
    * @return {Promise<object>}  Transaction
    */
-  async withdrawAll(password) {
+  async deleteSellPoint(password) {
     const secuPass = validatePassword(password);
     if (secuPass.error) throw new TypeError(secuPass.msg);
 
