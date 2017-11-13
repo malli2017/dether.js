@@ -13,7 +13,7 @@ class DetherUser {
    *
    * @param {object} opts
    * @param {DetherJS} opts.dether dether instance
-   * @param {object} opts.encryptedWallet user wallet
+   * @param {string} opts.encryptedWallet user wallet
    */
   constructor(opts) {
     if (!opts.dether || !opts.encryptedWallet) {
@@ -26,6 +26,7 @@ class DetherUser {
     this.address = add0x(JSON.parse(opts.encryptedWallet).address);
   }
 
+  // TODO move to utils/provider
   /**
    * Returns decrypted wallet
    *
@@ -44,13 +45,14 @@ class DetherUser {
     return wallet;
   }
 
+  // TODO move to utils/provider
   /**
    * Returns a custom signed contract
    * Allows to add value to a transaction
    *
    * @param {object}      opts
    * @param {string}      opts.password password to decrypt wallet
-   * @param {BigNumber}   opts.value    Ether value to send while calling contract
+   * @param {?BigNumber}  opts.value    Ether value to send while calling contract
    * @return {object}     Dether Contract
    * @private
    * @ignore
@@ -126,8 +128,8 @@ class DetherUser {
 
     const tsxAmount = Ethers.utils.parseEther(sellPoint.amount.toString());
 
-    // const balance = await this.wallet.getBalance();
     // TODO subtract fees if not enough balance
+    // const balance = await this.wallet.getBalance();
     // check if enough gas is present to sendCoin once after registering
     // if (balance.greaterThan(tsxAmount + (GAS_PRICE * 650000))) {
     //   tsxAmount = balance.toNumber() - (GAS_PRICE * 650000);
@@ -164,6 +166,7 @@ class DetherUser {
 // gas price average (mainnet) = 25000000000 wei
 // 115000 * 25000000000 = 0.002875000000000000 ETH
 // need 0.006250000000000000 ETH to process this function
+  // TODO rename?
   /**
    * Send eth from escrow
    * @param  {object}  opts
@@ -197,6 +200,7 @@ class DetherUser {
 // gas price average (mainnet) = 25000000000 wei
 // 50000 * 25000000000 = 0.001250000000000000 ETH
 // need 0.001250000000000000 ETH to process this function
+  // TODO rename?
   /**
    * Delete sell point, this function withdraw automatically balance escrow to owner
    * @param  {string} password  Wallet password

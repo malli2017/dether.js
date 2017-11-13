@@ -82,6 +82,7 @@ class DetherJS {
       );
   }
 
+  // TODO test with address and address array
   /**
    * Get All tellers on the map
    * @param  {array}   addr ethereum addresses
@@ -99,6 +100,7 @@ class DetherJS {
     return DetherJS._filterTellerList(tellers);
   }
 
+  // TODO test with zone and zone array
   /**
    * Get All tellers per zone
    * @param  {Integer}  zone

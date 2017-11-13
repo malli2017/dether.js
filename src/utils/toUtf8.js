@@ -1,5 +1,6 @@
 import utf8 from 'utf8';
 
+// TODO move to eth.js
 const toUtf8 = (hex) => {
   let str = '';
 
@@ -12,6 +13,7 @@ const toUtf8 = (hex) => {
   try {
     return utf8.decode(str);
   } catch (e) {
+    // TODO throw or return empty string
     return 'Dether';
   }
 };

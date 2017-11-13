@@ -1,6 +1,7 @@
 // import DetherJS from 'detherjs';
 const DetherJS = require('../src/index');
 
+// TODO remove try catch
 (async () => {
   console.log('DetherJS example');
   let dether;
