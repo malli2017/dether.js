@@ -72,39 +72,6 @@ describe('dether user', () => {
     Ethers.Wallet = restore;
   });
 
-  it('should create special contract', async () => {
-    const stub = sinon.stub();
-    stub.returns('result');
-
-    const getDetherContract = sandbox.stub(Contracts, 'getDetherContract');
-    getDetherContract.returns('res');
-
-    const customWallet = {
-      sendTransaction: stub,
-      getAddress: () => 'address',
-      provider: 'provider',
-    };
-
-    const _getWallet = sandbox.stub(user, '_getWallet');
-    _getWallet.returns(customWallet);
-
-    const customContract = await user._getCustomContract({
-      value: 1.2,
-      password: 'password',
-    });
-
-    expect(customContract).to.eq('res');
-    const customProvider = getDetherContract.args[0][0];
-
-    expect(customProvider.getAddress()).to.eq('address');
-    expect(customProvider.provider).to.eq('provider');
-
-    const transactionResult = customProvider.sendTransaction({});
-    expect(transactionResult).to.eq('result');
-    expect(stub.calledWith({ value: 1.2 })).to.be.true;
-    expect(_getWallet.calledWith('password')).to.be.true;
-  });
-
   it('should get user address', async () => {
     const address = await user.getAddress();
     expect(address).to.eq(wallet.address.toLowerCase());
@@ -147,7 +114,7 @@ describe('dether user', () => {
 
     const registerPoint = sinon.stub();
     registerPoint.returns(transaction);
-    const _getCustomContract = sandbox.stub(user, '_getCustomContract');
+    const _getCustomContract = sandbox.stub(Contracts, 'getCustomContract');
     _getCustomContract.returns({
       registerPoint,
     });
@@ -193,7 +160,7 @@ describe('dether user', () => {
     const sendCoin = sinon.stub();
     sendCoin.returns(transaction);
 
-    const _getCustomContract = sandbox.stub(user, '_getCustomContract');
+    const _getCustomContract = sandbox.stub(Contracts, 'getCustomContract');
     _getCustomContract.returns({
       sendCoin,
     });
@@ -221,7 +188,7 @@ describe('dether user', () => {
     };
     const withdrawAll = sinon.stub();
     withdrawAll.returns(transaction);
-    const _getCustomContract = sandbox.stub(user, '_getCustomContract');
+    const _getCustomContract = sandbox.stub(Contracts, 'getCustomContract');
     _getCustomContract.returns({
       withdrawAll,
     });
