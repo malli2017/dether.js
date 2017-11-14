@@ -2,8 +2,8 @@ import Ethers from 'ethers';
 
 import { add0x } from './utils/eth';
 import { validateSellPoint, validateSendCoin, validatePassword } from './utils/validation';
-import Formatters from './utils/formatters';
 import Contracts from './utils/contracts';
+import Formatters from './utils/formatters';
 
 class DetherUser {
   /**
@@ -13,7 +13,7 @@ class DetherUser {
    *
    * @param {object} opts
    * @param {DetherJS} opts.dether dether instance
-   * @param {string} opts.encryptedWallet user wallet
+   * @param {object} opts.encryptedWallet user wallet
    */
   constructor(opts) {
     if (!opts.dether || !opts.encryptedWallet) {
@@ -25,31 +25,6 @@ class DetherUser {
     this.encryptedWallet = opts.encryptedWallet;
     this.address = add0x(JSON.parse(opts.encryptedWallet).address);
   }
-
-  /**
-   * Get user ethereum address
-   * @return {Promise<string>} user ethereum address
-   */
-  async getAddress() {
-    return this.address;
-  }
-
-  /**
-   * Get user teller info
-   * @return {Promise<object>}
-   */
-  async getInfo() {
-    return this.dether.getTeller(this.address);
-  }
-
-  /**
-   * Get user balance in escrow
-   * @return {Promise<string>}
-   */
-  async getBalance() {
-    return this.dether.getTellerBalance(this.address);
-  }
-
 
   /**
    * Returns decrypted wallet
@@ -75,7 +50,7 @@ class DetherUser {
    *
    * @param {object}      opts
    * @param {string}      opts.password password to decrypt wallet
-   * @param {?BigNumber}  opts.value    Ether value to send while calling contract
+   * @param {BigNumber}   opts.value    Ether value to send while calling contract
    * @return {object}     Dether Contract
    * @private
    * @ignore
@@ -98,6 +73,30 @@ class DetherUser {
     };
 
     return Contracts.getDetherContract(customProvider);
+  }
+
+  /**
+   * Get user ethereum address
+   * @return {Promise<string>} user ethereum address
+   */
+  async getAddress() {
+    return this.address;
+  }
+
+  /**
+   * Get user teller info
+   * @return {Promise<object>}
+   */
+  async getInfo() {
+    return this.dether.getTeller(this.address);
+  }
+
+  /**
+   * Get user balance in escrow
+   * @return {Promise<string>}
+   */
+  async getBalance() {
+    return this.dether.getTellerBalance(this.address);
   }
 
   // gas used = 223319
