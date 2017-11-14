@@ -19,13 +19,10 @@ const DetherJS = require('../src/index');
   // Public data
 
   // Get list of all tellers
-  try {
-    const allTellers = await dether.getAllTellers();
-    console.log(` ${allTellers.length} tellers found`);
-    // console.log('All tellers: ', allTellers);
-  } catch (e) {
-    console.log(' An error has occurred');
-  }
+  const allTellers = await dether.getAllTellers();
+  console.log(` ${allTellers.length} tellers found`);
+  // console.log('All tellers: ', allTellers);
+
 
   // Get list of all tellers
   const addr = [
@@ -34,50 +31,32 @@ const DetherJS = require('../src/index');
     '0x35ee4ec2BfabCB87da01b799c35dC1CcCCfCdc15',
     '0x788f7291E1BA5b299CabBe5b70F8b4869f4222A2',
   ];
-  try {
-    const allTellers = await dether.getAllTellers(addr);
-    console.log(` ${allTellers.length} tellers found`);
-  } catch (e) {
-    console.log(' An error has occurred');
-  }
+
+  const tellers = await dether.getAllTellers(addr);
+  console.log(` ${tellers.length} tellers found`);
 
   // Get list of teller in a zone
-  try {
-    const zone = 42;
-    const tellersInZone = await dether.getTellersInZone(zone);
-    console.log(` ${tellersInZone.length} tellers found`);
-  } catch (e) {
-    console.log(' An error has occurred');
-  }
+  const zone = 42;
+  const tellersInZone = await dether.getTellersInZone(zone);
+  console.log(` ${tellersInZone.length} tellers found`);
 
 
   // Get list of teller from multiple zone
-  try {
-    const zones = [42, 101, 3104];
-    const tellersInZones = await dether.getTellersInZone(zones);
-    console.log(` ${tellersInZones.length} tellers found`);
-  } catch (e) {
-    console.log(' An error has occurred');
-  }
+
+  const zones = [42, 101, 3104];
+  const tellersInZones = await dether.getTellersInZone(zones);
+  console.log(` ${tellersInZones.length} tellers found`);
 
 
   // Get details of a teller
   const tellerAddress = '0x085b30734fD4f48369D53225b410d7D04b2d9011';
 
-  try {
-    const publicTellerInfo = await dether.getTeller(tellerAddress);
-    console.log(' Public teller: ', publicTellerInfo);
-  } catch (e) {
-    console.log(' An error has occurred');
-  }
+  const publicTellerInfo = await dether.getTeller(tellerAddress);
+  console.log(' Public teller: ', publicTellerInfo);
 
   // Get escrow balance of teller
-  try {
-    const tellerBalance = await dether.getTellerBalance(tellerAddress);
-    console.log(' Teller escrow balance: ', tellerBalance);
-  } catch (e) {
-    console.log(' An error has occurred');
-  }
+  const tellerBalance = await dether.getTellerBalance(tellerAddress);
+  console.log(' Teller escrow balance: ', tellerBalance);
 
   // User data
   console.log('=======================================');
@@ -118,10 +97,10 @@ const DetherJS = require('../src/index');
     amount: 0.005,
     receiver: '0x609A999030cEf75FA04274e5Ac5b8401210910Fe',
   };
-  const sendCoinTransaction = await user.sendCoin(opts, userPassword);
+  const sendCoinTransaction = await user.sendToBuyer(opts, userPassword);
   console.log('Send coin transaction: ', sendCoinTransaction);
 
-  const withdrawTransaction = await user.withdrawAll(userPassword);
+  const withdrawTransaction = await user.deleteSellPoint(userPassword);
   console.log('Withdraw transaction: ', withdrawTransaction);
 
   const finalUserBalance = await user.getBalance();

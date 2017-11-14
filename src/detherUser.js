@@ -13,7 +13,7 @@ class DetherUser {
    *
    * @param {object} opts
    * @param {DetherJS} opts.dether dether instance
-   * @param {object} opts.encryptedWallet user wallet
+   * @param {string} opts.encryptedWallet user wallet
    */
   constructor(opts) {
     if (!opts.dether || !opts.encryptedWallet) {
@@ -23,7 +23,8 @@ class DetherUser {
     this.dether = opts.dether;
     /** @ignore */
     this.encryptedWallet = opts.encryptedWallet;
-    this.address = add0x(JSON.parse(opts.encryptedWallet).address);
+    const parsedWallet = JSON.parse(opts.encryptedWallet);
+    this.address = add0x(parsedWallet.address);
   }
 
   /**
@@ -42,37 +43,6 @@ class DetherUser {
     wallet.provider = this.dether.provider;
 
     return wallet;
-  }
-
-  /**
-   * Returns a custom signed contract
-   * Allows to add value to a transaction
-   *
-   * @param {object}      opts
-   * @param {string}      opts.password password to decrypt wallet
-   * @param {BigNumber}   opts.value    Ether value to send while calling contract
-   * @return {object}     Dether Contract
-   * @private
-   * @ignore
-   */
-  async _getCustomContract(opts) {
-    if (!opts.password) {
-      throw new TypeError('Need password to decrypt wallet');
-    }
-    const wallet = await this._getWallet(opts.password);
-
-    const customProvider = {
-      getAddress: wallet.getAddress.bind(wallet),
-      provider: wallet.provider,
-      sendTransaction: (transaction) => {
-        if (opts.value) {
-          transaction.value = opts.value;
-        }
-        return wallet.sendTransaction(transaction);
-      },
-    };
-
-    return Contracts.getDetherContract(customProvider);
   }
 
   /**
@@ -99,10 +69,10 @@ class DetherUser {
     return this.dether.getTellerBalance(this.address);
   }
 
-// gas used = 223319
-// gas price average (mainnet) = 25000000000 wei
-// 250000 * 25000000000 = 0.006250000000000000 ETH
-// need 0.006250000000000000 ETH to process this function
+  // gas used = 223319
+  // gas price average (mainnet) = 25000000000 wei
+  // 250000 * 25000000000 = 0.006250000000000000 ETH
+  // need 0.006250000000000000 ETH to process this function
   /**
    * Register a sell point
    * @param {object} sellPoint
@@ -125,23 +95,16 @@ class DetherUser {
     if (secuPass.error) throw new TypeError(secuPass.msg);
 
     const tsxAmount = Ethers.utils.parseEther(sellPoint.amount.toString());
-
-    // const balance = await this.wallet.getBalance();
-    // TODO subtract fees if not enough balance
-    // check if enough gas is present to sendCoin once after registering
-    // if (balance.greaterThan(tsxAmount + (GAS_PRICE * 650000))) {
-    //   tsxAmount = balance.toNumber() - (GAS_PRICE * 650000);
-    //   if (tsxAmount < 0.0025) throw new TypeError('Insufficient funds');
-    // }
-
     const formattedSellPoint = Formatters.sellPointToContract(sellPoint);
 
+    const wallet = this._getWallet(password);
+
     try {
-      const customContract = await this
-        ._getCustomContract({
-          value: tsxAmount,
-          password,
-        });
+      const customContract = await Contracts.getCustomContract({
+        wallet,
+        value: tsxAmount,
+        password,
+      });
 
       const transaction = await customContract.registerPoint(
         formattedSellPoint.lat,
@@ -160,10 +123,10 @@ class DetherUser {
     }
   }
 
-// gas used = 95481
-// gas price average (mainnet) = 25000000000 wei
-// 115000 * 25000000000 = 0.002875000000000000 ETH
-// need 0.006250000000000000 ETH to process this function
+  // gas used = 95481
+  // gas price average (mainnet) = 25000000000 wei
+  // 115000 * 25000000000 = 0.002875000000000000 ETH
+  // need 0.006250000000000000 ETH to process this function
   /**
    * Send eth from escrow
    * @param  {object}  opts
@@ -172,7 +135,7 @@ class DetherUser {
    * @param  {string}  password      Wallet password
    * @return {Promise<object>} Transaction
    */
-  async sendCoin(opts, password) {
+  async sendToBuyer(opts, password) {
     const secu = validateSendCoin(opts);
     if (secu.error) throw new TypeError(secu.msg);
     const secuPass = validatePassword(password);
@@ -180,10 +143,13 @@ class DetherUser {
 
     const { amount, receiver } = opts;
 
-    const customContract = await this
-      ._getCustomContract({
-        password,
-      });
+    const wallet = this._getWallet(password);
+
+    const customContract = await Contracts.getCustomContract({
+      wallet,
+      password,
+    });
+
     const transaction = await customContract
       .sendCoin(
         add0x(receiver),
@@ -193,27 +159,30 @@ class DetherUser {
     return minedTsx;
   }
 
-// gas used = 26497
-// gas price average (mainnet) = 25000000000 wei
-// 50000 * 25000000000 = 0.001250000000000000 ETH
-// need 0.001250000000000000 ETH to process this function
+  // gas used = 26497
+  // gas price average (mainnet) = 25000000000 wei
+  // 50000 * 25000000000 = 0.001250000000000000 ETH
+  // need 0.001250000000000000 ETH to process this function
   /**
    * Delete sell point, this function withdraw automatically balance escrow to owner
    * @param  {string} password  Wallet password
    * @return {Promise<object>}  Transaction
    */
-  async withdrawAll(password) {
+  async deleteSellPoint(password) {
     const secuPass = validatePassword(password);
     if (secuPass.error) throw new TypeError(secuPass.msg);
 
-    const customContract = await this._getCustomContract({
+    const wallet = this._getWallet(password);
+
+    const customContract = await Contracts.getCustomContract({
+      wallet,
       password,
     });
+
     const transaction = await customContract.withdrawAll();
     const minedTsx = await this.dether.provider.waitForTransaction(transaction.hash);
     return minedTsx;
   }
 }
-
 
 export default DetherUser;

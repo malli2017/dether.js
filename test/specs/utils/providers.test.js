@@ -18,7 +18,7 @@ describe('providers', () => {
       network: 'ropsten',
       rpcURL: 'http://localhost:8545',
       etherscanKey: 'etherscan',
-      // infuraKey: 'infura', // TODO re-activate
+      // infuraKey: 'infura',
     });
 
     expect(provider.constructor.name).to.eq('FallbackProvider');

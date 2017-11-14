@@ -87,14 +87,15 @@ class DetherJS {
    * @param  {array}   addr ethereum addresses
    * @return {Promise<Array>} array of tellers
    */
-  async getAllTellers(addr) {
-    if (addr && !Array.isArray(addr) && !isAddr(addr)) throw new TypeError('Invalid ETH address');
+  async getAllTellers(addrs) {
+    if (addrs && !Array.isArray(addrs)) throw new TypeError('Need array of addresses as parameter');
 
-    const result = !addr ? await this.storageInstance.getAllTellers() : [addr];
-
+    const result = addrs ? [addrs] : await this.storageInstance.getAllTellers();
     if (!result || !result.length || !Array.isArray(result[0])) return [];
 
-    const tellers = await Promise.all(result[0].map(this.getTeller.bind(this)));
+    const tellerAddrList = result[0];
+
+    const tellers = await Promise.all(tellerAddrList.map(this.getTeller.bind(this)));
 
     return DetherJS._filterTellerList(tellers);
   }

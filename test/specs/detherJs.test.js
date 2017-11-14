@@ -137,12 +137,6 @@ describe('dether js', () => {
     });
 
     describe('getAllTellers', () => {
-      /*
-      TODO
-      all tellers: test duplicates
-      teller detail
-       */
-
       it('should be a function', () => {
         expect(typeof dether.getAllTellers).to.equal('function');
       });
@@ -176,6 +170,47 @@ describe('dether js', () => {
         expect(allTellers[1].ethAddress).to.eq('b');
 
         stub.restore();
+      });
+
+      it('should get array of teller', async () => {
+        const tab = [
+          '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb621',
+          '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb622',
+        ];
+        const allTellers = await dether.getAllTellers(tab);
+        expect(allTellers.length).to.eq(2);
+        expect(allTellers[0].ethAddress).to.eq('0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb621');
+        expect(allTellers[1].ethAddress).to.eq('0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb622');
+      });
+
+      it('should returns empty array if error', async () => {
+        const stub = sinon.stub(dether.storageInstance, 'getAllTellers');
+
+        let allTellers;
+
+        stub.returns(null);
+        allTellers = await dether.getAllTellers();
+        expect(allTellers).to.deep.eq([]);
+
+        stub.returns([]);
+        allTellers = await dether.getAllTellers();
+        expect(allTellers).to.deep.eq([]);
+
+        stub.returns([null]);
+        allTellers = await dether.getAllTellers();
+        expect(allTellers).to.deep.eq([]);
+
+        stub.restore();
+      });
+
+      it('should throw for one teller', async () => {
+        const addr = '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb621';
+        try {
+          await dether.getAllTellers(addr);
+          expect(false).to.be.true;
+        } catch (e) {
+
+        }
       });
     });
 
@@ -214,6 +249,28 @@ describe('dether js', () => {
         expect(allTellers[0].ethAddress).to.eq('a');
         expect(allTellers[1].ethAddress).to.eq('b');
 
+        stub.restore();
+      });
+
+      it('should get all tellers in multiple zone', async () => {
+        const stub = sinon.stub(dether, 'getTeller');
+
+        stub.onCall(0).returns({ ethAddress: 'a', zoneId: 42 });
+        stub.onCall(1).returns({ ethAddress: 'b', zoneId: 42 });
+        stub.onCall(2).returns({ ethAddress: 'c', zoneId: 101 });
+        stub.onCall(3).returns({ ethAddress: 'd', zoneId: 101 });
+        stub.onCall(4).returns({ ethAddress: 'c', zoneId: 101 });
+        stub.onCall(5).returns({ ethAddress: 'd', zoneId: 101 });
+        stub.onCall(6).returns({ ethAddress: 'e', zoneId: 100 });
+        stub.onCall(7).returns({ ethAddress: 'f', zoneId: 58 });
+
+        const zones = [42, 101];
+        const allTellers = await dether.getTellersInZone(zones);
+        expect(allTellers.length).to.eq(4);
+        expect(allTellers[0].ethAddress).to.eq('a');
+        expect(allTellers[1].ethAddress).to.eq('b');
+        expect(allTellers[2].ethAddress).to.eq('c');
+        expect(allTellers[3].ethAddress).to.eq('d');
         stub.restore();
       });
     });

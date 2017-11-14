@@ -1,9 +1,9 @@
 import Ethers from 'ethers';
 
 import { COORD_PRECISION } from '../constants/appConstants';
-import toUtf8 from './toUtf8';
+import { toUtf8 } from './eth';
 
-// TODO rename to formatter
+// TODO test ++++
 
 /**
  * @ignore
