@@ -97,10 +97,10 @@ const DetherJS = require('../src/index');
     amount: 0.005,
     receiver: '0x609A999030cEf75FA04274e5Ac5b8401210910Fe',
   };
-  const sendCoinTransaction = await user.sendCoin(opts, userPassword);
+  const sendCoinTransaction = await user.sendToBuyer(opts, userPassword);
   console.log('Send coin transaction: ', sendCoinTransaction);
 
-  const withdrawTransaction = await user.withdrawAll(userPassword);
+  const withdrawTransaction = await user.deleteSellPoint(userPassword);
   console.log('Withdraw transaction: ', withdrawTransaction);
 
   const finalUserBalance = await user.getBalance();

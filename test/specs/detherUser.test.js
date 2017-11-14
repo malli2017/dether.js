@@ -195,7 +195,7 @@ describe('dether user', () => {
       sendCoin: stubs[0],
     });
 
-    const result = await user.sendCoin(opts, 'password');
+    const result = await user.sendToBuyer(opts, 'password');
     expect(result).to.deep.eq({
       hash: 'hash',
     });
@@ -217,7 +217,7 @@ describe('dether user', () => {
       withdrawAll: stubs[0],
     });
 
-    const result = await user.withdrawAll('password');
+    const result = await user.deleteSellPoint('password');
     expect(result).to.deep.eq({
       hash: 'hash',
     });

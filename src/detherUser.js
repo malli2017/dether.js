@@ -3,7 +3,7 @@ import Ethers from 'ethers';
 import { add0x } from './utils/eth';
 import { validateSellPoint, validateSendCoin, validatePassword } from './utils/validation';
 import Formatters from './utils/formatters';
-import { getCustomContract } from './utils/providers';
+import Contracts from './utils/contracts';
 
 class DetherUser {
   /**
@@ -50,6 +50,56 @@ class DetherUser {
     return this.dether.getTellerBalance(this.address);
   }
 
+
+  /**
+   * Returns decrypted wallet
+   *
+   * @param {string} password             user password
+   * @return {Wallet}     User wallet
+   * @private
+   * @ignore
+   */
+  async _getWallet(password) {
+    if (!password) {
+      throw new TypeError('Need password to decrypt wallet');
+    }
+    const wallet = await Ethers.Wallet.fromEncryptedWallet(this.encryptedWallet, password);
+    wallet.provider = this.dether.provider;
+
+    return wallet;
+  }
+
+  /**
+   * Returns a custom signed contract
+   * Allows to add value to a transaction
+   *
+   * @param {object}      opts
+   * @param {string}      opts.password password to decrypt wallet
+   * @param {?BigNumber}  opts.value    Ether value to send while calling contract
+   * @return {object}     Dether Contract
+   * @private
+   * @ignore
+   */
+  async _getCustomContract(opts) {
+    if (!opts.password) {
+      throw new TypeError('Need password to decrypt wallet');
+    }
+    const wallet = await this._getWallet(opts.password);
+
+    const customProvider = {
+      getAddress: wallet.getAddress.bind(wallet),
+      provider: wallet.provider,
+      sendTransaction: (transaction) => {
+        if (opts.value) {
+          transaction.value = opts.value;
+        }
+        return wallet.sendTransaction(transaction);
+      },
+    };
+
+    return Contracts.getDetherContract(customProvider);
+  }
+
   // gas used = 223319
   // gas price average (mainnet) = 25000000000 wei
   // 250000 * 25000000000 = 0.006250000000000000 ETH
@@ -79,7 +129,7 @@ class DetherUser {
     const formattedSellPoint = Formatters.sellPointToContract(sellPoint);
 
     try {
-      const customContract = await getCustomContract({
+      const customContract = await this._getCustomContract({
           value: tsxAmount,
           password,
         });
@@ -121,7 +171,7 @@ class DetherUser {
 
     const { amount, receiver } = opts;
 
-    const customContract = await getCustomContract({
+    const customContract = await this._getCustomContract({
         password,
       });
     const transaction = await customContract
@@ -146,7 +196,7 @@ class DetherUser {
     const secuPass = validatePassword(password);
     if (secuPass.error) throw new TypeError(secuPass.msg);
 
-    const customContract = await getCustomContract({
+    const customContract = await this._getCustomContract({
       password,
     });
     const transaction = await customContract.withdrawAll();
@@ -154,6 +204,5 @@ class DetherUser {
     return minedTsx;
   }
 }
-
 
 export default DetherUser;
