@@ -13,7 +13,7 @@ class DetherUser {
    *
    * @param {object} opts
    * @param {DetherJS} opts.dether dether instance
-   * @param {object} opts.encryptedWallet user wallet
+   * @param {string} opts.encryptedWallet user wallet
    */
   constructor(opts) {
     if (!opts.dether || !opts.encryptedWallet) {
@@ -23,7 +23,8 @@ class DetherUser {
     this.dether = opts.dether;
     /** @ignore */
     this.encryptedWallet = opts.encryptedWallet;
-    this.address = add0x(JSON.parse(opts.encryptedWallet).address);
+    const parsedWallet = JSON.parse(opts.encryptedWallet);
+    this.address = add0x(parsedWallet.address);
   }
 
   /**
