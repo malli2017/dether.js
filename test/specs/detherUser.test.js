@@ -129,8 +129,10 @@ describe('dether user', () => {
     expect(balance).to.eq('balance');
   });
 
-  // TODO
   it('should register point', async () => {
+    const transaction = {
+      hash: 'hash',
+    };
     const sellPoint = {
       lat: 1,
       lng: 2,
@@ -144,18 +146,20 @@ describe('dether user', () => {
     };
 
     const registerPoint = sinon.stub();
-    registerPoint.returns({
-      hash: 'hash',
-    });
+    registerPoint.returns(transaction);
     const _getCustomContract = sandbox.stub(user, '_getCustomContract');
     _getCustomContract.returns({
       registerPoint,
     });
 
+    const waitForTransaction = sinon.stub();
+    waitForTransaction.resolves(transaction);
+    user.dether.provider = {
+      waitForTransaction,
+    };
+
     const result = await user.addSellPoint(sellPoint, 'password');
-    expect(result).to.deep.eq({
-      hash: 'hash',
-    });
+    expect(result).to.deep.eq(transaction);
 
     expect(registerPoint.args[0][0]).to.eq(100000);
     expect(registerPoint.args[0][1]).to.eq(200000);
@@ -173,51 +177,64 @@ describe('dether user', () => {
     const transactionValue = Ethers.utils.parseEther('0.01');
     expect(_getCustomContract.args[0][0].value.eq(transactionValue)).to.be.true;
     expect(_getCustomContract.args[0][0].password).to.eq('password');
+    expect(waitForTransaction.calledWith(transaction.hash));
   });
 
   it('should send coin', async () => {
+    const transaction = {
+      hash: 'hash',
+    };
+
     const opts = {
       amount: 1,
       receiver: '0x085b30734fD4f48369D53225b410d7D04b2d9011',
     };
 
-    const registerPoint = sinon.stub();
-    registerPoint.returns({
-      hash: 'hash',
-    });
+    const sendCoin = sinon.stub();
+    sendCoin.returns(transaction);
 
     const _getCustomContract = sandbox.stub(user, '_getCustomContract');
     _getCustomContract.returns({
-      registerPoint,
+      sendCoin,
     });
+
+    const waitForTransaction = sinon.stub();
+    waitForTransaction.resolves(transaction);
+    user.dether.provider = {
+      waitForTransaction,
+    };
 
     const result = await user.sendToBuyer(opts, 'password');
-    expect(result).to.deep.eq({
-      hash: 'hash',
-    });
+    expect(result).to.deep.eq(transaction);
 
-    expect(registerPoint.calledWith(
+    expect(sendCoin.calledWith(
       '0x085b30734fD4f48369D53225b410d7D04b2d9011',
       Ethers.utils.parseEther('1'),
     )).to.be.true;
     expect(_getCustomContract.args[0][0].password).to.eq('password');
+    expect(waitForTransaction.calledWith(transaction.hash));
   });
 
   it('should withdraw all', async () => {
-
-    const withdrawAll = sinon.stub();
-    withdrawAll.returns({
+    const transaction = {
       hash: 'hash',
-    });
+    };
+    const withdrawAll = sinon.stub();
+    withdrawAll.returns(transaction);
     const _getCustomContract = sandbox.stub(user, '_getCustomContract');
     _getCustomContract.returns({
       withdrawAll,
     });
 
+    const waitForTransaction = sinon.stub();
+    waitForTransaction.resolves(transaction);
+    user.dether.provider = {
+      waitForTransaction,
+    };
+
     const result = await user.deleteSellPoint('password');
-    expect(result).to.deep.eq({
-      hash: 'hash',
-    });
+    expect(result).to.deep.eq(transaction);
     expect(_getCustomContract.args[0][0].password).to.eq('password');
+    expect(waitForTransaction.calledWith(transaction.hash));
   });
 });
