@@ -137,12 +137,6 @@ describe('dether js', () => {
     });
 
     describe('getAllTellers', () => {
-      /*
-      TODO
-      all tellers: test duplicates
-      teller detail
-       */
-
       it('should be a function', () => {
         expect(typeof dether.getAllTellers).to.equal('function');
       });
@@ -187,6 +181,36 @@ describe('dether js', () => {
         expect(allTellers.length).to.eq(2);
         expect(allTellers[0].ethAddress).to.eq('0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb621');
         expect(allTellers[1].ethAddress).to.eq('0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb622');
+      });
+
+      it('should returns empty array if error', async () => {
+        const stub = sinon.stub(dether.storageInstance, 'getAllTellers');
+
+        let allTellers;
+
+        stub.returns(null);
+        allTellers = await dether.getAllTellers();
+        expect(allTellers).to.deep.eq([]);
+
+        stub.returns([]);
+        allTellers = await dether.getAllTellers();
+        expect(allTellers).to.deep.eq([]);
+
+        stub.returns([null]);
+        allTellers = await dether.getAllTellers();
+        expect(allTellers).to.deep.eq([]);
+
+        stub.restore();
+      });
+
+      it('should throw for one teller', async () => {
+        const addr = '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb621';
+        try {
+          await dether.getAllTellers(addr);
+          expect(false).to.be.true;
+        } catch (e) {
+
+        }
       });
     });
 
