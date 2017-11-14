@@ -22,6 +22,9 @@ function getProvider(opts) {
   if (opts.etherscanKey) {
     providers.push(new Ethers.providers.EtherscanProvider(opts.network, opts.etherscanKey));
   }
+  // if (opts.infuraKey) {
+  //   providers.push(new Ethers.providers.InfuraProvider(opts.network, opts.infuraKey));
+  // }
 
   providers.push(Ethers.providers.getDefaultProvider(opts.network));
   return new Ethers.providers.FallbackProvider(providers);
