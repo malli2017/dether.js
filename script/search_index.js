@@ -6,6 +6,12 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "detherjs/src/utils/contracts.js~contracts",
+    "variable/index.html#static-variable-Contracts",
+    "<span>Contracts</span> <span class=\"search-result-import-path\">detherjs/src/utils/contracts.js</span>",
+    "variable"
+  ],
+  [
     "detherjs/src/detherjs.js~detherjs",
     "class/src/detherJs.js~DetherJS.html",
     "<span>DetherJS</span> <span class=\"search-result-import-path\">detherjs/src/detherJs.js</span>",
@@ -384,9 +390,21 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/detheruser.js~detheruser#address",
+    "class/src/detherUser.js~DetherUser.html#instance-member-address",
+    "src/detherUser.js~DetherUser#address",
+    "member"
+  ],
+  [
     "src/detheruser.js~detheruser#constructor",
     "class/src/detherUser.js~DetherUser.html#instance-constructor-constructor",
     "src/detherUser.js~DetherUser#constructor",
+    "method"
+  ],
+  [
+    "src/detheruser.js~detheruser#deletesellpoint",
+    "class/src/detherUser.js~DetherUser.html#instance-method-deleteSellPoint",
+    "src/detherUser.js~DetherUser#deleteSellPoint",
     "method"
   ],
   [
@@ -408,15 +426,9 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/detheruser.js~detheruser#sendcoin",
-    "class/src/detherUser.js~DetherUser.html#instance-method-sendCoin",
-    "src/detherUser.js~DetherUser#sendCoin",
-    "method"
-  ],
-  [
-    "src/detheruser.js~detheruser#withdrawall",
-    "class/src/detherUser.js~DetherUser.html#instance-method-withdrawAll",
-    "src/detherUser.js~DetherUser#withdrawAll",
+    "src/detheruser.js~detheruser#sendtobuyer",
+    "class/src/detherUser.js~DetherUser.html#instance-method-sendToBuyer",
+    "src/detherUser.js~DetherUser#sendToBuyer",
     "method"
   ],
   [

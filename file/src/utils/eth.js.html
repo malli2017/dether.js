@@ -36,12 +36,14 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GAS_PRICE">GAS_PRICE</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utils">utils</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-add0x">add0x</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isAddr">isAddr</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Contracts">Contracts</a></span></span></li>
 </ul>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/utils/eth.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import utf8 from &apos;utf8&apos;;
+
 /**
  * Test if addr is ethereum address
  * @param  {string}  addr eth address
@@ -59,6 +61,27 @@ export const add0x = (input) =&gt; {
   return input.slice(0, 2) !== &apos;0x&apos; ? `0x${input}` : input;
 };
 
+/**
+ * @ignore
+ * Return formated hexa string
+ * @param  {string} hex encoded string
+ * @return {string}     decoded string
+ */
+export const toUtf8 = (hex) =&gt; {
+  let str = &apos;&apos;;
+
+  for (let i = hex.substring(0, 2) === &apos;0x&apos; ? 2 : 0;
+    i &lt; hex.length; i += 2) {
+      const code = parseInt(hex.substr(i, 2), 16);
+      if (code === 0) break;
+      str += String.fromCharCode(code);
+  }
+  try {
+    return utf8.decode(str);
+  } catch (e) {
+    return &apos;&apos;;
+  }
+};
 </code></pre>
 
 </div>

@@ -36,6 +36,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GAS_PRICE">GAS_PRICE</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utils">utils</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-add0x">add0x</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isAddr">isAddr</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Contracts">Contracts</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -46,48 +47,79 @@
 import DetherJson from &apos;dethercontract/contracts/DetherInterface.json&apos;;
 import DetherStorageJson from &apos;dethercontract/contracts/DetherStorage.json&apos;;
 
-/**
- * @ignore
- */
-function getContract(ContractJson, provider) {
-  let chainId = null;
-  if (provider.provider) {
-    chainId = provider.provider.chainId;
-  } else {
-    chainId = provider.chainId;
-  }
-  if (!chainId) {
-    throw new Error(&apos;No chain id found&apos;);
-  }
-  const network = ContractJson.networks[chainId];
-  if (!network) {
-    throw new Error(`Contract not deployed on network ${chainId}`);
-  }
-  const contractAddress = ContractJson.networks[chainId].address;
-  const contractABI = ContractJson.abi;
+const Contracts = {
+  /**
+   * @ignore
+   */
+  getContract(ContractJson, provider) {
+    let chainId = null;
+    if (provider.provider) {
+      chainId = provider.provider.chainId;
+    } else {
+      chainId = provider.chainId;
+    }
+    if (!chainId) {
+      throw new Error(&apos;No chain id found&apos;);
+    }
+    const network = ContractJson.networks[chainId];
+    if (!network) {
+      throw new Error(`Contract not deployed on network ${chainId}`);
+    }
+    const contractAddress = network.address;
+    const contractABI = ContractJson.abi;
 
-  return new Ethers.Contract(contractAddress, contractABI, provider);
-}
+    return new Ethers.Contract(contractAddress, contractABI, provider);
+  },
 
-/**
- * @ignore
- */
-function getDetherContract(provider) {
-  return getContract(DetherJson, provider);
-}
+  /**
+   * @ignore
+   */
+  getDetherContract(provider) {
+    return Contracts.getContract(DetherJson, provider);
+  },
 
+  /**
+   * @ignore
+   */
+  getDetherStorageContract(provider) {
+    return Contracts.getContract(DetherStorageJson, provider);
+  },
 
-/**
- * @ignore
- */
-function getDetherStorageContract(provider) {
-  return getContract(DetherStorageJson, provider);
-}
+  /**
+   * Returns a custom signed contract
+   * Allows to add value to a transaction
+   *
+   * @param {object}      opts
+   * @param {object}      opts.wallet   Decrypted user wallet
+   * @param {string}      opts.password password to decrypt wallet
+   * @param {?BigNumber}  opts.value    Ether value to send while calling contract
+   * @return {object}     Dether Contract
+   * @private
+   * @ignore
+   */
+  async getCustomContract(opts) {
+    if (!opts.password) {
+      throw new TypeError(&apos;Need password to decrypt wallet&apos;);
+    }
 
-export default {
-  getDetherContract,
-  getDetherStorageContract,
+    const { wallet } = opts;
+    const customProvider = {
+      getAddress: wallet.getAddress.bind(wallet),
+      provider: wallet.provider,
+      sendTransaction: (transaction) =&gt; {
+        if (opts.value) {
+          transaction.value = opts.value;
+        }
+        return wallet.sendTransaction(transaction);
+      },
+    };
+
+    return Contracts.getDetherContract(customProvider);
+  },
+
 };
+
+export default Contracts;
 </code></pre>
 
 </div>

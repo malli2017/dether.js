@@ -36,13 +36,13 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GAS_PRICE">GAS_PRICE</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utils">utils</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-add0x">add0x</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isAddr">isAddr</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Contracts">Contracts</a></span></span></li>
 </ul>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/detherJs.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import Ethers from &apos;ethers&apos;;
-import Web3 from &apos;web3&apos;;
 
 import { add0x, isAddr } from &apos;./utils/eth&apos;;
 import DetherUser from &apos;./detherUser&apos;;
@@ -57,7 +57,8 @@ class DetherJS {
    * You may not instanciate from here, prefer from DetherJS.getUser method
    *
    * @param {object}    providerData
-   * @param {String}    providerData.network      Name of network (&apos;homestead&apos;, &apos;ropsten&apos;, &apos;rinkeby&apos;, &apos;kovan&apos;)
+   * @param {String}    providerData.network      Name of network (&apos;homestead&apos;,
+   *                                              &apos;ropsten&apos;, &apos;rinkeby&apos;, &apos;kovan&apos;)
    * @param {?String}   providerData.rpcURL       JSON RPC provider URL
    * @param {?String}   providerData.infuraKey    INFURA API Key
    * @param {?String}   providerData.etherscanKey Etherscan API Key
@@ -65,9 +66,6 @@ class DetherJS {
   constructor(providerData) {
     /** @ignore */
     this.provider = Providers.getProvider(providerData);
-    /** @ignore */
-    this.web3 = new Web3();
-
     /** @ignore */
     this.contractInstance = Contracts.getDetherContract(this.provider);
     /** @ignore */
@@ -99,13 +97,10 @@ class DetherJS {
       this.contractInstance.getTellerProfile(address),
     ]);
 
-    // TODO real result from contract
-    //     if (tellerPos[3].toNumber() === 0) return null; TODO
+    if (Ethers.utils.formatEther(rawTellerPos[3]) === &apos;0.0&apos;) return null;
 
-    const teller = {};
-
-    Object.assign(
-      teller,
+    return Object.assign(
+      {},
       Formatters.tellerPosFromContract(rawTellerPos),
       Formatters.tellerProfileFromContract(rawTellerProfile),
       {
@@ -113,8 +108,6 @@ class DetherJS {
         ethAddress: address,
       },
     );
-
-    return teller;
   }
 
   /**
@@ -135,33 +128,42 @@ class DetherJS {
 
   /**
    * Get All tellers on the map
+   * @param  {array}   addr ethereum addresses
    * @return {Promise&lt;Array&gt;} array of tellers
    */
-  async getAllTellers() {
-    const result = await this.storageInstance.getAllTellers();
-    if (!result || !result.length) return [];
+  async getAllTellers(addrs) {
+    if (addrs &amp;&amp; !Array.isArray(addrs)) throw new TypeError(&apos;Need array of addresses as parameter&apos;);
 
-    const tellersAddresses = result[0]; // TODO pourquoi ??
+    const result = addrs ? [addrs] : await this.storageInstance.getAllTellers();
+    if (!result || !result.length || !Array.isArray(result[0])) return [];
 
-    const tellers = await Promise.all(tellersAddresses.map(this.getTeller.bind(this)));
+    const tellerAddrList = result[0];
+
+    const tellers = await Promise.all(tellerAddrList.map(this.getTeller.bind(this)));
 
     return DetherJS._filterTellerList(tellers);
   }
+
   /**
    * Get All tellers per zone
    * @param  {Integer}  zone
+   * @param  {array}    zone ethereum addresses
    * @return {Promise&lt;Array&gt;} array of tellers in zone
    */
   async getTellersInZone(zone) {
-    const result = await this.storageInstance.getZone();
+    if (!Number.isInteger(zone) &amp;&amp; !Array.isArray(zone)) throw new TypeError(&apos;Invalid zone&apos;);
+
+    const zones = !Array.isArray(zone) ? [zone] : zone;
+    const result = [];
+
+    await Promise.all(zones.map(async (data) =&gt; {
+      const tellersInZone = await this.storageInstance.getZone(data);
+      result.push(...tellersInZone[0]);
+    }));
+
     if (!result || !result.length) return [];
-
-    const tellersAddressesInZone = result[0]; // TODO pourquoi ??
-
-    const zoneInt = zone;
-    const tellers = await Promise.all(tellersAddressesInZone.map(this.getTeller.bind(this)));
-
-    return DetherJS._filterTellerList(tellers).filter(t =&gt; t.zoneId === zoneInt);
+    const tellers = await Promise.all(result.map(this.getTeller.bind(this)));
+    return DetherJS._filterTellerList(tellers).filter(t =&gt; zones.indexOf(t.zoneId) &gt;= 0);
   }
 
   /**
@@ -175,11 +177,7 @@ class DetherJS {
     const fullAddress = add0x(address);
     const result = await this.contractInstance.getTellerBalances(fullAddress);
 
-    const balance = Ethers.utils.formatEther(result[0]); // TODO pourquoi ??
-
-    // if (Number.isNaN(balance.toNumber())) return 0; // TODO check if work
-
-    return balance;
+    return Number(Ethers.utils.formatEther(result[0]));
   }
 }
 

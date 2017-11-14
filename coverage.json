@@ -1,7 +1,7 @@
 {
-  "coverage": "87.5%",
-  "expectCount": 40,
-  "actualCount": 35,
+  "coverage": "83.78%",
+  "expectCount": 37,
+  "actualCount": 31,
   "files": {
     "src/constants/appConstants.js": {
       "expectCount": 2,
@@ -12,35 +12,36 @@
       ]
     },
     "src/detherJs.js": {
-      "expectCount": 12,
-      "actualCount": 11,
+      "expectCount": 11,
+      "actualCount": 10,
       "undocumentLines": [
-        11
+        10
       ]
     },
     "src/detherUser.js": {
       "expectCount": 12,
-      "actualCount": 11,
+      "actualCount": 10,
       "undocumentLines": [
-        8
+        8,
+        27
       ]
     },
     "src/utils/contracts.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        6
+      ]
+    },
+    "src/utils/eth.js": {
       "expectCount": 3,
       "actualCount": 3,
       "undocumentLines": []
     },
-    "src/utils/eth.js": {
-      "expectCount": 2,
-      "actualCount": 2,
-      "undocumentLines": []
-    },
     "src/utils/formatters.js": {
-      "expectCount": 4,
+      "expectCount": 3,
       "actualCount": 3,
-      "undocumentLines": [
-        6
-      ]
+      "undocumentLines": []
     },
     "src/utils/providers.js": {
       "expectCount": 1,
