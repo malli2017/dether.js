@@ -2,7 +2,6 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
 import DetherJS from '../../src/detherJs';
-import Wallet from '../../src/wallet';
 import Contracts from '../../src/utils/contracts';
 import Providers from '../../src/utils/providers';
 
@@ -62,7 +61,7 @@ describe('dether js', () => {
 
 
     it('should get user', async () => {
-      const wallet = Wallet.createRandom();
+      const wallet = DetherJS.Ethers.Wallet.createRandom();
       const encryptedWallet = await wallet.encrypt('password');
 
       const user = dether.getUser(encryptedWallet);

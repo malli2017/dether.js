@@ -2,7 +2,6 @@ import Ethers from 'ethers';
 
 import { add0x, isAddr } from './utils/eth';
 import DetherUser from './detherUser';
-import Wallet from './wallet';
 import Contracts from './utils/contracts';
 import Providers from './utils/providers';
 import Formatters from './utils/formatters';
@@ -137,6 +136,6 @@ class DetherJS {
   }
 }
 
-DetherJS.Wallet = Wallet;
+DetherJS.Ethers = Ethers;
 
 export default DetherJS;
