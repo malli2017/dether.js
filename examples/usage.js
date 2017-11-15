@@ -61,12 +61,11 @@ const DetherJS = require('../src/index');
   // User data
   console.log('=======================================');
   const privateKey = '0x0123456789012345678901234567890123456789012345678901234567890123';
-  const userPassword = 'Dether@1';
+  const userPassword = '1234';
 
-  const wallet = new DetherJS.Wallet(privateKey);
+  const wallet = new DetherJS.Ethers.Wallet(privateKey);
   const encryptedWallet = await wallet.encrypt(userPassword);
   const user = await dether.getUser(encryptedWallet);
-
   // User registers as a teller
 
   const sellPoint = {

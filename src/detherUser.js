@@ -41,7 +41,6 @@ class DetherUser {
     }
     const wallet = await Ethers.Wallet.fromEncryptedWallet(this.encryptedWallet, password);
     wallet.provider = this.dether.provider;
-
     return wallet;
   }
 
@@ -93,12 +92,10 @@ class DetherUser {
     if (secu.error) throw new TypeError(secu.msg);
     const secuPass = validatePassword(password);
     if (secuPass.error) throw new TypeError(secuPass.msg);
-
     const tsxAmount = Ethers.utils.parseEther(sellPoint.amount.toString());
     const formattedSellPoint = Formatters.sellPointToContract(sellPoint);
 
-    const wallet = this._getWallet(password);
-
+    const wallet = await this._getWallet(password);
     try {
       const customContract = await Contracts.getCustomContract({
         wallet,
@@ -143,7 +140,7 @@ class DetherUser {
 
     const { amount, receiver } = opts;
 
-    const wallet = this._getWallet(password);
+    const wallet = await this._getWallet(password);
 
     const customContract = await Contracts.getCustomContract({
       wallet,
@@ -172,7 +169,7 @@ class DetherUser {
     const secuPass = validatePassword(password);
     if (secuPass.error) throw new TypeError(secuPass.msg);
 
-    const wallet = this._getWallet(password);
+    const wallet = await this._getWallet(password);
 
     const customContract = await Contracts.getCustomContract({
       wallet,
