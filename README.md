@@ -81,6 +81,7 @@ yarn run publish:esdoc
 * [dethercontract](https://github.com/dethertech/dethercontracts.git)
 * [ethers.js](https://github.com/ethers-io/ethers.js)
 * [babel-polyfill](https://github.com/babel/babel/tree/master/packages/babel-polyfill)
+* [utf8](https://github.com/mathiasbynens/utf8.js)
 
 ## Bugs
 

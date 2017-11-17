@@ -31,6 +31,7 @@
     "babel-polyfill": "^6.26.0",
     "dethercontract": "^1.2.5",
     "ethers": "^2.1.2",
+    "utf8": "^2.1.2"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
