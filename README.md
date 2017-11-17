@@ -1,12 +1,16 @@
 # DetherJS
-[![Build Status](https://travis-ci.com/dethertech/detherGateway.svg?token=kdsX9Y3G2xZ5ptCyzuYL&branch=master)](https://travis-ci.com/dethertech/detherGateway) ![npm](https://img.shields.io/npm/v/detherGateway.svg)
+[![NPM](https://nodei.co/npm/detherjs.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/detherjs/)
+
+[![Build Status](https://travis-ci.com/dethertech/dether.js.svg?token=kdsX9Y3G2xZ5ptCyzuYL&branch=master)](https://travis-ci.com/dethertech/dether.js)
+[![npm version](https://badge.fury.io/js/detherjs.svg)](https://badge.fury.io/js/detherjs)
+[![GitHub issues](https://img.shields.io/github/issues/dethertech/dether.js.svg)](https://github.com/dethertech/dether.js/issues)
+[![GitHub stars](https://img.shields.io/github/stars/dethertech/dether.js.svg)](https://github.com/dethertech/dether.js/stargazers)
+
 
 DetherJS is Javascript SDK to easily interact with [DetherContracts](https://github.com/dethertech/detherContracts)
 
 It provides wrappers for all the public methods of the contract and formats values in and out.
 
-V1.0.0
-[V0.x](https://github.com/dethertech/dether.js/tree/v0.x)
 ## Table of Contents
 
 * [Install](#install)
@@ -17,7 +21,6 @@ V1.0.0
 * [Build doc](#build-doc)
 * [Dependencies](#dependencies)
 * [Bugs](#bugs)
-* [License](#license)
 * [Donation](#donation)
 
 ## Install
@@ -34,11 +37,12 @@ Extensive documentation of all the methods can be found on the [API documentatio
 
 ## Usage
 
-You can find more examples of method usage in [examples/usage.js](https://github.com/dethertech/dether.js/blob/v1.x/examples/usage.js)
-```
+You can find more examples of method usage in [examples/usage.js](https://github.com/dethertech/dether.js/blob/master/examples/usage.js)
+```js
 import DetherJS from 'dether.js';
 
 const dether = new DetherJS({ network: 'kovan' });
+
 const allTellers = await dether.getAllTellers();
 
 const wallet = DetherJS.Wallet.createRandom();
@@ -78,9 +82,6 @@ When you find issues, please report them:
 
 * web: [https://github.com/dethertech/dether.js/issues](https://github.com/dethertech/dether.js/issues)
 
-## License
-
-* __MIT__: [http://opensource.org/licenses/MIT](http://opensource.org/licenses/MIT)
 
 ## Donation
 * [Ethereum Foundation](https://ethereum.org/donate)
