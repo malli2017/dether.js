@@ -18,6 +18,7 @@ It provides wrappers for all the public methods of the contract and formats valu
 * [Example](#example)
 * [Dev](#dev)
 * [Test](#test)
+* [Example](#example)
 * [Build doc](#build-doc)
 * [Dependencies](#dependencies)
 * [Bugs](#bugs)
@@ -45,7 +46,7 @@ const dether = new DetherJS({ network: 'kovan' });
 
 const allTellers = await dether.getAllTellers();
 
-const wallet = DetherJS.Wallet.createRandom();
+const wallet = DetherJS.Ethers.Wallet.createRandom();
 const encryptedWallet = await wallet.encrypt('password');
 
 const user = dether.getUser(encryptedWallet);
@@ -56,25 +57,30 @@ const info = await dether.getInfo();
 ```
 git clone https://github.com/dethertech/dether.js.git
 cd dether.js
-npm i
+yarn
 ```
 
 ## Test
 ```
-npm test
+yarn test
+```
+
+## Example
+```
+yarn run example
 ```
 
 ## Build doc
 ```
-npm run esdoc
+yarn run esdoc
+yarn run publish:esdoc
 ```
 
 ## Dependencies
 
 * [dethercontract](https://github.com/dethertech/dethercontracts.git)
-* [eth-toolbox](https://github.com/dethertech/eth-toolbox)
-* [web3](https://github.com/ethereum/web3.js/)
 * [ethers.js](https://github.com/ethers-io/ethers.js)
+* [babel-polyfill](https://github.com/babel/babel/tree/master/packages/babel-polyfill)
 
 ## Bugs
 
