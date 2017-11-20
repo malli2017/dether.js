@@ -6,6 +6,10 @@ import Contracts from './utils/contracts';
 import Providers from './utils/providers';
 import Formatters from './utils/formatters';
 
+/**
+ * @example
+ * import DetherJS from 'dether.js';
+ */
 class DetherJS {
   /**
    * Creates an instance of DetherUser
