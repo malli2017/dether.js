@@ -70,27 +70,9 @@ try {
 }
 ```
 
-#### Inputs
-
 #### Return value
+Array of tellers
 
-
-
-
-
-```js
-import DetherJS from 'dether.js';
-
-const dether = new DetherJS({ network: 'kovan' });
-
-const allTellers = await dether.getAllTellers();
-
-const wallet = DetherJS.Ethers.Wallet.createRandom();
-const encryptedWallet = await wallet.encrypt('password');
-
-const user = dether.getUser(encryptedWallet);
-const info = await dether.getInfo();
-```
 
 ## Dev
 ```
