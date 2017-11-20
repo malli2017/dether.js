@@ -5,6 +5,15 @@ import { validateSellPoint, validateSendCoin, validatePassword } from './utils/v
 import Contracts from './utils/contracts';
 import Formatters from './utils/formatters';
 
+/**
+ * @example
+ * import DetherJS from 'dether.js';
+ *
+ * const wallet = DetherJS.Ethers.Wallet.createRandom();
+ * const encryptedWallet = await wallet.encrypt('password');
+ *
+ * const User = dether.getUser(encryptedWallet);
+ */
 class DetherUser {
   /**
    * Creates an instance of DetherUser.
