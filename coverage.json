@@ -1,7 +1,7 @@
 {
-  "coverage": "83.78%",
-  "expectCount": 37,
-  "actualCount": 31,
+  "coverage": "83.33%",
+  "expectCount": 36,
+  "actualCount": 30,
   "files": {
     "src/constants/appConstants.js": {
       "expectCount": 2,
@@ -15,7 +15,7 @@
       "expectCount": 11,
       "actualCount": 10,
       "undocumentLines": [
-        10
+        9
       ]
     },
     "src/detherUser.js": {
@@ -51,11 +51,6 @@
     "src/utils/validation.js": {
       "expectCount": 3,
       "actualCount": 3,
-      "undocumentLines": []
-    },
-    "src/wallet.js": {
-      "expectCount": 1,
-      "actualCount": 1,
       "undocumentLines": []
     }
   }

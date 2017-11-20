@@ -31,7 +31,6 @@
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/detherJs.js~DetherJS.html">DetherJS</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/detherUser.js~DetherUser.html">DetherUser</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/wallet.js~Wallet.html">Wallet</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#constants">constants</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-COORD_PRECISION">COORD_PRECISION</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GAS_PRICE">GAS_PRICE</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utils">utils</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-add0x">add0x</a></span></span></li>
@@ -85,7 +84,6 @@ class DetherUser {
     }
     const wallet = await Ethers.Wallet.fromEncryptedWallet(this.encryptedWallet, password);
     wallet.provider = this.dether.provider;
-
     return wallet;
   }
 
@@ -137,12 +135,10 @@ class DetherUser {
     if (secu.error) throw new TypeError(secu.msg);
     const secuPass = validatePassword(password);
     if (secuPass.error) throw new TypeError(secuPass.msg);
-
     const tsxAmount = Ethers.utils.parseEther(sellPoint.amount.toString());
     const formattedSellPoint = Formatters.sellPointToContract(sellPoint);
 
-    const wallet = this._getWallet(password);
-
+    const wallet = await this._getWallet(password);
     try {
       const customContract = await Contracts.getCustomContract({
         wallet,
@@ -187,7 +183,7 @@ class DetherUser {
 
     const { amount, receiver } = opts;
 
-    const wallet = this._getWallet(password);
+    const wallet = await this._getWallet(password);
 
     const customContract = await Contracts.getCustomContract({
       wallet,
@@ -216,7 +212,7 @@ class DetherUser {
     const secuPass = validatePassword(password);
     if (secuPass.error) throw new TypeError(secuPass.msg);
 
-    const wallet = this._getWallet(password);
+    const wallet = await this._getWallet(password);
 
     const customContract = await Contracts.getCustomContract({
       wallet,

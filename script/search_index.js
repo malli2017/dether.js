@@ -30,12 +30,6 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
-    "detherjs/src/wallet.js~wallet",
-    "class/src/wallet.js~Wallet.html",
-    "<span>Wallet</span> <span class=\"search-result-import-path\">detherjs/src/wallet.js</span>",
-    "class"
-  ],
-  [
     "detherjs/src/utils/eth.js~add0x",
     "function/index.html#static-function-add0x",
     "<span>add0x</span> <span class=\"search-result-import-path\">detherjs/src/utils/eth.js</span>",
@@ -465,12 +459,6 @@ window.esdocSearchIndex = [
     "src/utils/validation.js",
     "file/src/utils/validation.js.html",
     "src/utils/validation.js",
-    "file"
-  ],
-  [
-    "src/wallet.js",
-    "file/src/wallet.js.html",
-    "src/wallet.js",
     "file"
   ]
 ]

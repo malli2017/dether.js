@@ -31,7 +31,6 @@
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/detherJs.js~DetherJS.html">DetherJS</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/detherUser.js~DetherUser.html">DetherUser</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/wallet.js~Wallet.html">Wallet</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#constants">constants</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-COORD_PRECISION">COORD_PRECISION</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GAS_PRICE">GAS_PRICE</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utils">utils</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-add0x">add0x</a></span></span></li>
@@ -41,54 +40,78 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="detherjs">DetherJS</h1><p><a href="https://travis-ci.com/dethertech/detherGateway"><img src="https://travis-ci.com/dethertech/detherGateway.svg?token=kdsX9Y3G2xZ5ptCyzuYL&amp;branch=master" alt="Build Status"></a> <img src="https://img.shields.io/npm/v/detherGateway.svg" alt="npm"></p>
+<div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="detherjs">DetherJS</h1><p><a href="https://nodei.co/npm/detherjs/"><img src="https://nodei.co/npm/detherjs.png?downloads=true&amp;downloadRank=true&amp;stars=true" alt="NPM"></a></p>
+<p><a href="https://travis-ci.com/dethertech/dether.js"><img src="https://travis-ci.com/dethertech/dether.js.svg?token=kdsX9Y3G2xZ5ptCyzuYL&amp;branch=master" alt="Build Status"></a>
+<a href="https://badge.fury.io/js/detherjs"><img src="https://badge.fury.io/js/detherjs.svg" alt="npm version"></a>
+<a href="https://github.com/dethertech/dether.js/issues"><img src="https://img.shields.io/github/issues/dethertech/dether.js.svg" alt="GitHub issues"></a>
+<a href="https://github.com/dethertech/dether.js/stargazers"><img src="https://img.shields.io/github/stars/dethertech/dether.js.svg" alt="GitHub stars"></a></p>
 <p>DetherJS is Javascript SDK to easily interact with <a href="https://github.com/dethertech/detherContracts">DetherContracts</a></p>
 <p>It provides wrappers for all the public methods of the contract and formats values in and out.</p>
-<p>V1.0.0
-<a href="https://github.com/dethertech/dether.js/tree/v0.x">V0.x</a></p>
 <h2 id="table-of-contents">Table of Contents</h2><ul>
 <li><a href="#install">Install</a></li>
 <li><a href="#doc">Docs</a></li>
 <li><a href="#example">Example</a></li>
 <li><a href="#dev">Dev</a></li>
 <li><a href="#test">Test</a></li>
+<li><a href="#example">Example</a></li>
 <li><a href="#build-doc">Build doc</a></li>
 <li><a href="#dependencies">Dependencies</a></li>
 <li><a href="#bugs">Bugs</a></li>
-<li><a href="#license">License</a></li>
 <li><a href="#donation">Donation</a></li>
 </ul>
 <h2 id="install">Install</h2><p>Use NPM to get the package</p>
 <pre><code><code class="source-code prettyprint">npm install --save dether.js</code>
 </code></pre><h2 id="docs">Docs</h2><p>Extensive documentation of all the methods can be found on the <a href="https://dethertech.github.io/dether.js">API documentation</a></p>
-<h2 id="usage">Usage</h2><p>You can find more examples of method usage in <a href="https://github.com/dethertech/dether.js/blob/v1.x/examples/usage.js">examples/usage.js</a></p>
-<pre><code><code class="source-code prettyprint">import DetherJS from &apos;dether.js&apos;;
+<h2 id="usage">Usage</h2><p>You can find more examples of method usage in <a href="https://github.com/dethertech/dether.js/blob/master/examples/usage.js">examples/usage.js</a></p>
+<h3 id="instanciate-a-new-detherjs-instance">Instanciate a new DetherJS instance</h3><pre><code class="lang-javascript"><code class="source-code prettyprint">import DetherJS from &apos;dether.js&apos;;
+
+const dether = new DetherJS({
+  network: &apos;ropsten&apos;,
+  rpcURL: &apos;http://localhost:8545&apos;,
+  etherscanKey: &apos;etherscan&apos;,
+});</code>
+</code></pre>
+<h4 id="inputs">Inputs</h4><ul>
+<li><code>network</code>: Network</li>
+<li><code>rpcURL</code>: Provider URL</li>
+<li><code>etherscanKey</code>: Etherscan key</li>
+</ul>
+<h4 id="return-value">Return value</h4><p>New instance of DetherJS</p>
+<h3 id="get-all-tellers">Get all tellers</h3><pre><code class="lang-javascript"><code class="source-code prettyprint">try {
+  const allTellers = await dether.getAllTellers();
+  console.log(allTellers);
+} catch(e) {
+  console.log(e);
+}</code>
+</code></pre>
+<h4 id="inputs">Inputs</h4><h4 id="return-value">Return value</h4><pre><code class="lang-js"><code class="source-code prettyprint">import DetherJS from &apos;dether.js&apos;;
 
 const dether = new DetherJS({ network: &apos;kovan&apos; });
+
 const allTellers = await dether.getAllTellers();
 
-const wallet = DetherJS.Wallet.createRandom();
+const wallet = DetherJS.Ethers.Wallet.createRandom();
 const encryptedWallet = await wallet.encrypt(&apos;password&apos;);
 
 const user = dether.getUser(encryptedWallet);
 const info = await dether.getInfo();</code>
-</code></pre><h2 id="dev">Dev</h2><pre><code><code class="source-code prettyprint">git clone https://github.com/dethertech/dether.js.git
+</code></pre>
+<h2 id="dev">Dev</h2><pre><code><code class="source-code prettyprint">git clone https://github.com/dethertech/dether.js.git
 cd dether.js
-npm i</code>
-</code></pre><h2 id="test">Test</h2><pre><code><code class="source-code prettyprint">npm test</code>
-</code></pre><h2 id="build-doc">Build doc</h2><pre><code><code class="source-code prettyprint">npm run esdoc</code>
+yarn</code>
+</code></pre><h2 id="test">Test</h2><pre><code><code class="source-code prettyprint">yarn test</code>
+</code></pre><h2 id="example">Example</h2><pre><code><code class="source-code prettyprint">yarn run example</code>
+</code></pre><h2 id="build-doc">Build doc</h2><pre><code><code class="source-code prettyprint">yarn run esdoc
+yarn run publish:esdoc</code>
 </code></pre><h2 id="dependencies">Dependencies</h2><ul>
 <li><a href="https://github.com/dethertech/dethercontracts.git">dethercontract</a></li>
-<li><a href="https://github.com/dethertech/eth-toolbox">eth-toolbox</a></li>
-<li><a href="https://github.com/ethereum/web3.js/">web3</a></li>
 <li><a href="https://github.com/ethers-io/ethers.js">ethers.js</a></li>
+<li><a href="https://github.com/babel/babel/tree/master/packages/babel-polyfill">babel-polyfill</a></li>
+<li><a href="https://github.com/mathiasbynens/utf8.js">utf8</a></li>
 </ul>
 <h2 id="bugs">Bugs</h2><p>When you find issues, please report them:</p>
 <ul>
 <li>web: <a href="https://github.com/dethertech/dether.js/issues">https://github.com/dethertech/dether.js/issues</a></li>
-</ul>
-<h2 id="license">License</h2><ul>
-<li><strong>MIT</strong>: <a href="http://opensource.org/licenses/MIT">http://opensource.org/licenses/MIT</a></li>
 </ul>
 <h2 id="donation">Donation</h2><ul>
 <li><a href="https://ethereum.org/donate">Ethereum Foundation</a></li>
