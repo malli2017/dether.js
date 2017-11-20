@@ -15,7 +15,7 @@ It provides wrappers for all the public methods of the contract and formats valu
 
 * [Install](#install)
 * [Docs](#doc)
-* [Example](#example)
+* [Usage](#usage)
 * [Dev](#dev)
 * [Test](#test)
 * [Example](#example)
@@ -39,6 +39,45 @@ Extensive documentation of all the methods can be found on the [API documentatio
 ## Usage
 
 You can find more examples of method usage in [examples/usage.js](https://github.com/dethertech/dether.js/blob/master/examples/usage.js)
+
+### Instanciate a new DetherJS instance
+```javascript
+import DetherJS from 'dether.js';
+
+const dether = new DetherJS({
+  network: 'ropsten',
+  rpcURL: 'http://localhost:8545',
+  etherscanKey: 'etherscan',
+});
+```
+#### Inputs
+
+* `network`: Network
+* `rpcURL`: Provider URL
+* `etherscanKey`: Etherscan key
+
+#### Return value
+New instance of DetherJS
+
+
+### Get all tellers
+```javascript
+try {
+  const allTellers = await dether.getAllTellers();
+  console.log(allTellers);
+} catch(e) {
+  console.log(e);
+}
+```
+
+#### Inputs
+
+#### Return value
+
+
+
+
+
 ```js
 import DetherJS from 'dether.js';
 
