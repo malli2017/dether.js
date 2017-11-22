@@ -5,7 +5,7 @@
 [![npm version](https://badge.fury.io/js/detherjs.svg)](https://badge.fury.io/js/detherjs)
 [![GitHub issues](https://img.shields.io/github/issues/dethertech/dether.js.svg)](https://github.com/dethertech/dether.js/issues)
 [![GitHub stars](https://img.shields.io/github/stars/dethertech/dether.js.svg)](https://github.com/dethertech/dether.js/stargazers)
-
+[![Package Quality](http://npm.packagequality.com/shield/detherjs.svg)](http://packagequality.com/#?package=detherjs)
 
 DetherJS is Javascript SDK to easily interact with [DetherContracts](https://github.com/dethertech/detherContracts)
 
