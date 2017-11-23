@@ -3,34 +3,37 @@ import Ethers from 'ethers';
 import DetherJson from 'dethercontract/contracts/DetherInterface.json';
 import DetherStorageJson from 'dethercontract/contracts/DetherStorage.json';
 
+import { validateGetCustomContract } from './validation';
+
 const Contracts = {
   /**
    * @ignore
    */
   getContract(ContractJson, provider) {
-    let chainId = null;
-    if (provider.provider) {
-      chainId = provider.provider.chainId;
-    } else {
-      chainId = provider.chainId;
+    if (!ContractJson || !provider) {
+      throw new Error('No ContractJson or provider found');
     }
-    if (!chainId) {
-      throw new Error('No chain id found');
-    }
+
+    const chainId = provider.provider ?
+                    provider.provider.chainId :
+                    provider.chainId;
+
+    if (!chainId) throw new Error('No chain id found');
+
     const network = ContractJson.networks[chainId];
+
     if (!network) {
       throw new Error(`Contract not deployed on network ${chainId}`);
     }
-    const contractAddress = network.address;
-    const contractABI = ContractJson.abi;
-
-    return new Ethers.Contract(contractAddress, contractABI, provider);
+    return new Ethers.Contract(network.address, ContractJson.abi, provider);
   },
 
   /**
    * @ignore
    */
   getDetherContract(provider) {
+    if (!provider) throw new Error('No provider found');
+
     return Contracts.getContract(DetherJson, provider);
   },
 
@@ -38,6 +41,10 @@ const Contracts = {
    * @ignore
    */
   getDetherStorageContract(provider) {
+    if (!DetherStorageJson || !provider) {
+      throw new Error('No DetherStorageJson or provider found');
+    }
+
     return Contracts.getContract(DetherStorageJson, provider);
   },
 
@@ -54,11 +61,11 @@ const Contracts = {
    * @ignore
    */
   async getCustomContract(opts) {
-    if (!opts.password) {
-      throw new TypeError('Need password to decrypt wallet');
-    }
+    const validation = validateGetCustomContract(opts);
+    if (validation.error) throw new TypeError(validation.msg);
 
     const { wallet } = opts;
+
     const customProvider = {
       getAddress: wallet.getAddress.bind(wallet),
       provider: wallet.provider,

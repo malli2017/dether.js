@@ -3,17 +3,10 @@ import DetherJS from 'detherjs';
 
 (async () => {
   console.log('DetherJS example');
-  let dether;
 
-  try {
-    dether = new DetherJS({
-      network: 'kovan',
-    });
-    console.log('- Detherjs has been instantiated');
-  } catch (e) {
-    throw new Error(e);
-  }
-
+  const dether = new DetherJS({
+    network: 'kovan',
+  });
 
   // //////////////////////////////
   // Public data
@@ -75,7 +68,7 @@ import DetherJS from 'detherjs';
     rates: 20.20,
     avatar: 1,
     currency: 2,
-    telegram: 'https://telegram.me/boby',
+    telegram: 'boby',
     username: 'Boby',
     amount: 0.01,
   };

@@ -2,75 +2,67 @@ import Ethers from 'ethers';
 
 import { COORD_PRECISION } from '../constants/appConstants';
 import { toUtf8 } from './eth';
-
-// TODO test ++++
+import { validateSellPoint } from './validation';
 
 /**
  * @ignore
  */
-function tellerPosFromContract(rawTellerPos) {
-  const tellerPos = {};
+const tellerPosFromContract = (rawTellerPos) => {
   try {
-    // TODO more resilient
-    // raw : 1234567 -> 1.234567
-    tellerPos.lat = rawTellerPos[0] / (10 ** COORD_PRECISION);
-    tellerPos.lng = rawTellerPos[1] / (10 ** COORD_PRECISION);
-    tellerPos.zoneId = Number(rawTellerPos[2]);
-
-    tellerPos.escrowBalance = Number(Ethers.utils.formatEther(rawTellerPos[3]));
+    return {
+      lat: rawTellerPos[0] / (10 ** COORD_PRECISION),
+      lng: rawTellerPos[1] / (10 ** COORD_PRECISION),
+      zoneId: Number(rawTellerPos[2]),
+      escrowBalance: Number(Ethers.utils.formatEther(rawTellerPos[3])),
+    };
   } catch (e) {
-    console.error(e);
     throw new TypeError(`Invalid teller position: ${e.message}`);
   }
-  return tellerPos;
-}
+};
 
 /**
  * @ignore
  */
-function tellerProfileFromContract(rawTellerProfile) {
-  const tellerProfile = {};
-
-  // TODO more resilient
+const tellerProfileFromContract = (rawTellerProfile) => {
   try {
-    tellerProfile.rates = rawTellerProfile.rates / 100;
-    tellerProfile.volumeTrade = Number(Ethers.utils.formatEther(rawTellerProfile.volumeTrade));
-    tellerProfile.nbTrade = rawTellerProfile.nbTrade.toNumber();
-    tellerProfile.name = toUtf8(rawTellerProfile.name);
-    tellerProfile.currencyId = rawTellerProfile.currency;
-    tellerProfile.avatarId = rawTellerProfile.avatar;
-    tellerProfile.messengerAddr = toUtf8(rawTellerProfile.telAddr);
+    return {
+      rates: rawTellerProfile.rates / 100,
+      volumeTrade: Number(Ethers.utils.formatEther(rawTellerProfile.volumeTrade)),
+      nbTrade: rawTellerProfile.nbTrade.toNumber(),
+      name: toUtf8(rawTellerProfile.name),
+      currencyId: rawTellerProfile.currency,
+      avatarId: rawTellerProfile.avatar,
+      messengerAddr: toUtf8(rawTellerProfile.telAddr),
+    };
   } catch (e) {
-    console.error(e);
     throw new TypeError(`Invalid teller profile: ${e.message}`);
   }
-  return tellerProfile;
-}
+};
 
 /**
  * @ignore
  */
-function sellPointToContract(rawSellPoint) {
-  const sellPoint = {};
+const sellPointToContract = (rawSellPoint) => {
+  const validation = validateSellPoint(rawSellPoint);
+  if (validation.error) throw new TypeError(validation.msg);
 
   try {
-    // 1.234567 -> 1234567
-    sellPoint.lat = Math.floor(rawSellPoint.lat.toFixed(COORD_PRECISION + 1)
-      * (10 ** COORD_PRECISION));
-    sellPoint.lng = Math.floor(rawSellPoint.lng.toFixed(COORD_PRECISION + 1)
-      * (10 ** COORD_PRECISION));
-    sellPoint.zone = rawSellPoint.zone;
-    sellPoint.rates = Math.floor(rawSellPoint.rates * 100);
-    sellPoint.avatar = rawSellPoint.avatar;
-    sellPoint.currency = rawSellPoint.currency;
-    sellPoint.telegram = Ethers.utils.toUtf8Bytes(rawSellPoint.telegram);
-    sellPoint.username = Ethers.utils.toUtf8Bytes(rawSellPoint.username);
+    return {
+      lat: Math.floor(rawSellPoint.lat.toFixed(COORD_PRECISION + 1)
+        * (10 ** COORD_PRECISION)),
+      lng: Math.floor(rawSellPoint.lng.toFixed(COORD_PRECISION + 1)
+        * (10 ** COORD_PRECISION)),
+      zone: rawSellPoint.zone,
+      rates: Math.floor(rawSellPoint.rates * 100),
+      avatar: rawSellPoint.avatar,
+      currency: rawSellPoint.currency,
+      telegram: Ethers.utils.toUtf8Bytes(rawSellPoint.telegram),
+      username: Ethers.utils.toUtf8Bytes(rawSellPoint.username),
+    };
   } catch (e) {
-    console.error(e);
     throw new TypeError(`Invalid teller profile: ${e.message}`);
   }
-  return sellPoint;
-}
+};
 
 export default {
   tellerPosFromContract,

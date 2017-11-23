@@ -2,6 +2,9 @@
  * @ignore
  */
 export const validateSellPoint = (teller) => {
+  if (!teller || typeof teller !== 'object') {
+    return { error: true, msg: 'Invalid args' };
+  }
   if (!teller.lat || Number.isNaN(teller.lat) || teller.lat > 90 || teller.lat < -90) {
     return { error: true, msg: 'Invalid latitude' };
   }
@@ -36,6 +39,9 @@ export const validateSellPoint = (teller) => {
  * @ignore
  */
 export const validateSendCoin = (tsx) => {
+  if (!tsx || typeof tsx !== 'object') {
+    return { error: true, msg: 'Invalid args' };
+  }
   if (!tsx.receiver) {
     return { error: true, msg: 'Invalid receiver' };
   }
@@ -51,6 +57,22 @@ export const validateSendCoin = (tsx) => {
 export const validatePassword = (password) => {
   if (!password || (typeof password) !== 'string' || password.length < 1) {
     return { error: true, msg: 'Invalid password' };
+  }
+  return {};
+};
+
+/**
+ * @ignore
+ */
+export const validateGetCustomContract = (opts) => {
+  if (!opts || typeof opts !== 'object') {
+    return { error: true, msg: 'No params found' };
+  }
+  if (!opts.wallet || typeof opts.wallet !== 'object') {
+    return { error: true, msg: 'Invalid wallet' };
+  }
+  if (!opts.password || typeof opts.password !== 'string') {
+    return { error: true, msg: 'Need password to decrypt wallet' };
   }
   return {};
 };
