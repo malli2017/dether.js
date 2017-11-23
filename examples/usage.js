@@ -1,5 +1,5 @@
-// import DetherJS from 'detherjs';
-const DetherJS = require('../src/index');
+import DetherJS from 'detherjs';
+// const DetherJS = require('../src/index');
 
 (async () => {
   console.log('DetherJS example');
@@ -7,7 +7,6 @@ const DetherJS = require('../src/index');
   const dether = new DetherJS({
     network: 'kovan',
   });
-
 
   // //////////////////////////////
   // Public data
