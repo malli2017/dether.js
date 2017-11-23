@@ -13,7 +13,9 @@ export const isAddr = addr => /^(0x)?[0-9a-f]{40}$/i.test(addr) || /^(0x)?[0-9a-
  * @return {string}      formated address ethereum or false
  */
 export const add0x = (input) => {
-  if (!input || typeof (input) !== typeof '' || !isAddr(input)) return false;
+  if (!input || typeof (input) !== typeof '' || !isAddr(input)) {
+    throw new Error('Invalid address');
+  }
   return input.slice(0, 2) !== '0x' ? `0x${input}` : input;
 };
 
@@ -24,6 +26,8 @@ export const add0x = (input) => {
  * @return {string}     decoded string
  */
 export const toUtf8 = (hex) => {
+  if (!hex || typeof hex !== 'string') throw new Error('Invalid args');
+
   let str = '';
 
   for (let i = hex.substring(0, 2) === '0x' ? 2 : 0;
@@ -32,6 +36,7 @@ export const toUtf8 = (hex) => {
       if (code === 0) break;
       str += String.fromCharCode(code);
   }
+
   try {
     return utf8.decode(str);
   } catch (e) {

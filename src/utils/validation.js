@@ -62,17 +62,11 @@ export const validateGetCustomContract = (opts) => {
   if (!opts || typeof opts !== 'object') {
     return { error: true, msg: 'No params found' };
   }
-
   if (!opts.wallet || typeof opts.wallet !== 'object') {
     return { error: true, msg: 'Invalid wallet' };
   }
-
   if (!opts.password || typeof opts.password !== 'string') {
     return { error: true, msg: 'Need password to decrypt wallet' };
-  }
-
-  if (!opts.value) {
-    return { error: true, msg: 'Invalid value' };
   }
   return {};
 };

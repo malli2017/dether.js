@@ -1,18 +1,12 @@
-import DetherJS from 'detherjs';
-// const DetherJS = require('../src/index');
+// import DetherJS from 'detherjs';
+const DetherJS = require('../src/index');
 
 (async () => {
   console.log('DetherJS example');
-  let dether;
 
-  try {
-    dether = new DetherJS({
-      network: 'kovan',
-    });
-    console.log('- Detherjs has been instantiated');
-  } catch (e) {
-    throw new Error(e);
-  }
+  const dether = new DetherJS({
+    network: 'kovan',
+  });
 
 
   // //////////////////////////////
