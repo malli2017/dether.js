@@ -12,7 +12,7 @@ import Ethers from 'ethers';
  * @return {Provider}
  * @ignore
  */
-function getProvider(opts) {
+const getProvider = (opts) => {
   if (!opts.network) throw new TypeError('Unable to get provider, need network');
   const providers = [];
 
@@ -28,7 +28,7 @@ function getProvider(opts) {
 
   providers.push(Ethers.providers.getDefaultProvider(opts.network));
   return new Ethers.providers.FallbackProvider(providers);
-}
+};
 
 export default {
   getProvider,

@@ -187,6 +187,5 @@ describe('formatters', () => {
       expect(sellPoint.lat).to.eq(-1210000);
       expect(sellPoint.lng).to.eq(-2310000);
     });
-    // TODO are lat lng possibly > 100 ?
   });
 });
