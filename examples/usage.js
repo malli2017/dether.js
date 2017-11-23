@@ -69,7 +69,7 @@ const DetherJS = require('../src/index');
     rates: 20.20,
     avatar: 1,
     currency: 2,
-    telegram: 'https://telegram.me/boby',
+    telegram: 'boby',
     username: 'Boby',
     amount: 0.01,
   };

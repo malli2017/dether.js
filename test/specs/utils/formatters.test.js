@@ -74,6 +74,7 @@ describe('formatters', () => {
         currency: 1,
         avatar: 2,
         telAddr: '0x4861727179000000000000000000000000000000000000000000000000000000',
+        amount: 1,
       };
 
       const tellerProfile = Formatters.tellerProfileFromContract(rawTellerProfile);
@@ -97,8 +98,9 @@ describe('formatters', () => {
         rates: 23.13,
         avatar: 2,
         currency: 1,
-        telegram: 'ab',
-        username: 'ba',
+        telegram: 'abetgr',
+        username: 'barg',
+        amount: 1,
       };
       const sellPoint = Formatters.sellPointToContract(rawSellPoint);
 
@@ -123,8 +125,9 @@ describe('formatters', () => {
         rates: 23.13321,
         avatar: 2,
         currency: 1,
-        telegram: 'ab',
-        username: 'ba',
+        telegram: 'abrtgr',
+        username: 'batgr',
+        amount: 1,
       };
       const sellPoint = Formatters.sellPointToContract(rawSellPoint);
 
@@ -140,8 +143,9 @@ describe('formatters', () => {
         rates: 23,
         avatar: 2,
         currency: 1,
-        telegram: 'ab',
-        username: 'ba',
+        telegram: 'abrtg',
+        username: 'batrgrt',
+        amount: 1,
       };
       const sellPoint = Formatters.sellPointToContract(rawSellPoint);
 
@@ -157,8 +161,9 @@ describe('formatters', () => {
         rates: 23,
         avatar: 2,
         currency: 1,
-        telegram: 'ab',
-        username: 'ba',
+        telegram: 'abrtgrt',
+        username: 'batgt',
+        amount: 1,
       };
       const sellPoint = Formatters.sellPointToContract(rawSellPoint);
 
@@ -173,8 +178,9 @@ describe('formatters', () => {
         rates: 23,
         avatar: 2,
         currency: 1,
-        telegram: 'ab',
-        username: 'ba',
+        telegram: 'abtgg',
+        username: 'batgt',
+        amount: 1,
       };
       const sellPoint = Formatters.sellPointToContract(rawSellPoint);
 

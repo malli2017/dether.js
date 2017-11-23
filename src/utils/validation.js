@@ -2,6 +2,9 @@
  * @ignore
  */
 export const validateSellPoint = (teller) => {
+  if (!teller || typeof teller !== 'object') {
+    return { error: true, msg: 'Invalid args' };
+  }
   if (!teller.lat || Number.isNaN(teller.lat) || teller.lat > 90 || teller.lat < -90) {
     return { error: true, msg: 'Invalid latitude' };
   }
@@ -36,6 +39,9 @@ export const validateSellPoint = (teller) => {
  * @ignore
  */
 export const validateSendCoin = (tsx) => {
+  if (!tsx || typeof tsx !== 'object') {
+    return { error: true, msg: 'Invalid args' };
+  }
   if (!tsx.receiver) {
     return { error: true, msg: 'Invalid receiver' };
   }
