@@ -1,5 +1,5 @@
-import DetherJS from 'detherjs';
-// const DetherJS = require('../src/index');
+// import DetherJS from 'detherjs';
+const DetherJS = require('../src/index');
 
 (async () => {
   console.log('DetherJS example');
@@ -13,9 +13,8 @@ import DetherJS from 'detherjs';
 
   // Get list of all tellers
   const allTellers = await dether.getAllTellers();
-  console.log(` ${allTellers.length} tellers found`);
+  // console.log(` ${allTellers.length} tellers found`);
   // console.log('All tellers: ', allTellers);
-
 
   // Get list of all tellers
   const addr = [
@@ -26,30 +25,30 @@ import DetherJS from 'detherjs';
   ];
 
   const tellers = await dether.getAllTellers(addr);
-  console.log(` ${tellers.length} tellers found`);
+  // console.log(` ${tellers.length} tellers found`);
 
   // Get list of teller in a zone
   const zone = 42;
   const tellersInZone = await dether.getTellersInZone(zone);
-  console.log(` ${tellersInZone.length} tellers found`);
+  // console.log(` ${tellersInZone.length} tellers found`);
 
 
   // Get list of teller from multiple zone
 
   const zones = [42, 101, 3104];
   const tellersInZones = await dether.getTellersInZone(zones);
-  console.log(` ${tellersInZones.length} tellers found`);
+  // console.log(` ${tellersInZones.length} tellers found`);
 
 
   // Get details of a teller
   const tellerAddress = '0x085b30734fD4f48369D53225b410d7D04b2d9011';
 
   const publicTellerInfo = await dether.getTeller(tellerAddress);
-  console.log(' Public teller: ', publicTellerInfo);
+  // console.log(' Public teller: ', publicTellerInfo);
 
   // Get escrow balance of teller
   const tellerBalance = await dether.getTellerBalance(tellerAddress);
-  console.log(' Teller escrow balance: ', tellerBalance);
+  // console.log(' Teller escrow balance: ', tellerBalance);
 
   // User data
   console.log('=======================================');

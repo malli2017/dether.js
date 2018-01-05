@@ -52,6 +52,14 @@ describe('dether user', () => {
     expect(decryptedWallet.privateKey).to.eq(localWallet.privateKey);
   });
 
+  it('should generate, encrypt and decrypt menmonic', () => {
+    const mnemonic = DetherJS.createMnemonic();
+    const passPhrase = 'password';
+    const encrypted = DetherJS.encryptMnemonic(mnemonic, passPhrase);
+    const decrypted = DetherJS.decryptMnemonic(encrypted, passPhrase);
+    expect(mnemonic).to.eq(decrypted);
+  });
+
   it('should get wallet', async () => {
     const customWallet = {};
     dether.provider = 'provider';
