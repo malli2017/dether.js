@@ -1,6 +1,6 @@
 {
   "name": "detherjs",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Dether SDK to easily call smart contract from Javascript",
   "main": "lib/index.js",
   "scripts": {
@@ -29,8 +29,10 @@
   "homepage": "https://github.com/dethertech/dether.js#readme",
   "dependencies": {
     "babel-polyfill": "^6.26.0",
+    "bip39": "^2.4.0",
     "dethercontract": "^1.2.5",
     "ethers": "^2.1.2",
+    "simple-crypto-js": "^1.1.1",
     "utf8": "^2.1.2"
   },
   "devDependencies": {

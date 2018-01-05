@@ -1,10 +1,14 @@
 import Ethers from 'ethers';
 
+
 import { add0x, isAddr } from './utils/eth';
 import DetherUser from './detherUser';
 import Contracts from './utils/contracts';
 import Providers from './utils/providers';
 import Formatters from './utils/formatters';
+// to add different stuff on it
+import {createMnemonic, encryptMnemonic, decryptMnemonic} from './utils/mnemonic';
+
 
 /**
  * @example
@@ -138,8 +142,12 @@ class DetherJS {
 
     return Number(Ethers.utils.formatEther(result[0]));
   }
+
 }
 
 DetherJS.Ethers = Ethers;
+DetherJS.createMnemonic = createMnemonic;
+DetherJS.encryptMnemonic = encryptMnemonic;
+DetherJS.decryptMnemonic = decryptMnemonic;
 
 export default DetherJS;
