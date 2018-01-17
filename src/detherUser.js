@@ -189,6 +189,31 @@ class DetherUser {
     const minedTsx = await this.dether.provider.waitForTransaction(transaction.hash);
     return minedTsx;
   }
+
+  /**
+   * Delete sell point, this function withdraw automatically balance escrow to owner
+   * @param  {object}  opts
+   * @param  {string}  opts.user ethereum address
+   * @param  {string} password  Wallet password
+   * @return {Promise<object>}  Transaction
+   */
+  async certifyNewUser(opts, password) {
+    const secuPass = validatePassword(password);
+    if (secuPass.error) throw new TypeError(secuPass.msg);
+
+    const wallet = await this._getWallet(password);
+
+    const customContract = await Contracts.getSmsContract({
+      wallet,
+      password,
+    });
+
+    const transaction = await customContract.certify(opts.user);
+    const minedTsx = await this.dether.provider.waitForTransaction(transaction.hash);
+    return minedTsx;
+
+  }
+
 }
 
 export default DetherUser;

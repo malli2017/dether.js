@@ -3,8 +3,8 @@ import sinon from 'sinon';
 import { expect } from 'chai';
 import Ethers from 'ethers';
 
-import DetherJson from 'dethercontract/contracts/DetherInterface.json';
-import DetherStorageJson from 'dethercontract/contracts/DetherStorage.json';
+import DetherInterfaceJson from 'dethercontract_dev/contracts/DetherInterface.json';
+import DetherTellerStorageJson from 'dethercontract_dev/contracts/DetherTellerStorage.json';
 
 import Contracts from '../../../src/utils/contracts';
 
@@ -26,12 +26,12 @@ describe('Contracts', () => {
       chainId: 42,
     };
 
-    const contract = await Contracts.getContract(DetherJson, provider);
+    const contract = await Contracts.getContract(DetherInterfaceJson, provider);
 
     expect(contract instanceof Ethers.Contract).to.be.true;
-    expect(contract.address).to.eq(DetherJson.networks[42].address);
+    expect(contract.address).to.eq(DetherInterfaceJson.networks[42].address);
     expect(contract.provider).to.deep.eq(provider);
-    expect(typeof contract.registerPoint).to.eq('function');
+    expect(typeof contract.registerTeller).to.eq('function');
   });
 
   it('should get contract with signed wallet', async () => {
@@ -41,10 +41,10 @@ describe('Contracts', () => {
       },
     };
 
-    const contract = await Contracts.getContract(DetherJson, wallet);
+    const contract = await Contracts.getContract(DetherInterfaceJson, wallet);
 
     expect(contract.provider).to.deep.eq(wallet.provider);
-    expect(contract.address).to.eq(DetherJson.networks[42].address);
+    expect(contract.address).to.eq(DetherInterfaceJson.networks[42].address);
   });
 
   it('should get dether contract', async () => {
@@ -53,7 +53,7 @@ describe('Contracts', () => {
 
 
     const detherContract = await Contracts.getDetherContract('provider');
-    expect(getContract.calledWith(DetherJson, 'provider')).to.be.true;
+    expect(getContract.calledWith(DetherInterfaceJson, 'provider')).to.be.true;
     expect(detherContract).to.eq('res');
   });
 
@@ -63,7 +63,7 @@ describe('Contracts', () => {
 
 
     const detherContract = await Contracts.getDetherStorageContract('provider');
-    expect(getContract.calledWith(DetherStorageJson, 'provider')).to.be.true;
+    expect(getContract.calledWith(DetherTellerStorageJson, 'provider')).to.be.true;
     expect(detherContract).to.eq('res');
   });
 

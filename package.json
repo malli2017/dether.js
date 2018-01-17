@@ -31,6 +31,7 @@
     "babel-polyfill": "^6.26.0",
     "bip39": "^2.4.0",
     "dethercontract": "^1.2.5",
+    "dethercontract_dev": "^1.1.0",
     "ethers": "^2.1.2",
     "simple-crypto-js": "^1.1.1",
     "utf8": "^2.1.2"

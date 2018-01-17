@@ -60,7 +60,7 @@ class DetherJS {
       this.contractInstance.getTellerProfile(address),
     ]);
 
-    if (Ethers.utils.formatEther(rawTellerPos[3]) === '0.0') return null;
+    // if (Ethers.utils.formatEther(rawTellerPos[3]) === '0.0') return null;
 
     return Object.assign(
       {},
@@ -96,14 +96,13 @@ class DetherJS {
    */
   async getAllTellers(addrs) {
     if (addrs && !Array.isArray(addrs)) throw new TypeError('Need array of addresses as parameter');
-
     const result = addrs ? [addrs] : await this.storageInstance.getAllTellers();
+
     if (!result || !result.length || !Array.isArray(result[0])) return [];
 
     const tellerAddrList = result[0];
 
     const tellers = await Promise.all(tellerAddrList.map(this.getTeller.bind(this)));
-
     return DetherJS._filterTellerList(tellers);
   }
 
@@ -138,7 +137,7 @@ class DetherJS {
     if (!isAddr(address)) throw new TypeError('Invalid ETH address');
 
     const fullAddress = add0x(address);
-    const result = await this.contractInstance.getTellerBalances(fullAddress);
+    const result = await this.contractInstance.getTellerBalance(fullAddress);
 
     return Number(Ethers.utils.formatEther(result[0]));
   }

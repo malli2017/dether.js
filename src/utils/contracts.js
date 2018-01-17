@@ -1,7 +1,8 @@
 import Ethers from 'ethers';
 
-import DetherJson from 'dethercontract/contracts/DetherInterface.json';
-import DetherStorageJson from 'dethercontract/contracts/DetherStorage.json';
+import DetherInterfaceJson from 'dethercontract_dev/contracts/DetherInterface.json';
+import DetherTellerStorageJson from 'dethercontract_dev/contracts/DetherTellerStorage.json';
+import DetherSmsJson from 'dethercontract_dev/contracts/SmsCertifier.json';
 
 import { validateGetCustomContract } from './validation';
 
@@ -34,18 +35,26 @@ const Contracts = {
   getDetherContract(provider) {
     if (!provider) throw new Error('No provider found');
 
-    return Contracts.getContract(DetherJson, provider);
+    return Contracts.getContract(DetherInterfaceJson, provider);
   },
 
   /**
    * @ignore
    */
   getDetherStorageContract(provider) {
-    if (!DetherStorageJson || !provider) {
-      throw new Error('No DetherStorageJson or provider found');
+    if (!DetherTellerStorageJson || !provider) {
+      throw new Error('No DetherTellerStorageJson or provider found');
     }
 
-    return Contracts.getContract(DetherStorageJson, provider);
+    return Contracts.getContract(DetherTellerStorageJson, provider);
+  },
+
+  getDetherSmsContract(provider) {
+    if (!DetherSmsJson || !provider) {
+      throw new Error('No DetherSmsJson or provider found');
+    }
+
+    return Contracts.getContract(DetherSmsJson, provider);
   },
 
   /**
@@ -78,6 +87,37 @@ const Contracts = {
     };
 
     return Contracts.getDetherContract(customProvider);
+  },
+
+  /**
+   * Returns a custom signed contract
+   * Allows to add value to a transaction
+   *
+   * @param {object}      opts
+   * @param {object}      opts.wallet   Decrypted user wallet
+   * @param {string}      opts.password password to decrypt wallet
+   * @param {?BigNumber}  opts.value    Ether value to send while calling contract
+   * @return {object}     Dether Contract
+   * @private
+   * @ignore
+   */
+  async getSmsContract(opts) {
+    const validation = validateGetCustomContract(opts);
+    if (validation.error) throw new TypeError(validation.msg);
+
+    const { wallet } = opts;
+
+    const customProvider = {
+      getAddress: wallet.getAddress.bind(wallet),
+      provider: wallet.provider,
+      sendTransaction: (transaction) => {
+        if (opts.value) {
+          transaction.value = opts.value;
+        }
+        return wallet.sendTransaction(transaction);
+      },
+    };
+    return Contracts.getDetherSmsContract(customProvider);
   },
 
 };

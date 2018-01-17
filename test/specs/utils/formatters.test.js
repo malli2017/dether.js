@@ -10,79 +10,68 @@ describe('formatters', () => {
       const rawTellerPos = [
         123,
         456,
-        789,
-        Ethers.utils.bigNumberify('1200000000000000000'),
+        '0x4652000000000000000000000000000000000000000000000000000000000000',
+        75009,
       ];
       const tellerPos = Formatters.tellerPosFromContract(rawTellerPos);
 
       expect(tellerPos.lat).to.eq(0.00123);
       expect(tellerPos.lng).to.eq(0.00456);
-      expect(tellerPos.zoneId).to.eq(789);
-      expect(tellerPos.escrowBalance).to.eq(1.2);
+      expect(tellerPos.countryId).to.eq('FR');
+      expect(tellerPos.postalCode).to.eq(75009);
     });
     it('example 2', () => {
       const rawTellerPos = [
         912312,
         812312,
-        1,
-        Ethers.utils.bigNumberify('2200000000000000000'),
+        '0x4652000000000000000000000000000000000000000000000000000000000000',
+        75009,
       ];
       const tellerPos = Formatters.tellerPosFromContract(rawTellerPos);
 
       expect(tellerPos.lat).to.eq(9.12312);
       expect(tellerPos.lng).to.eq(8.12312);
-      expect(tellerPos.zoneId).to.eq(1);
-      expect(tellerPos.escrowBalance).to.eq(2.2);
+      expect(tellerPos.countryId).to.eq('FR');
+      expect(tellerPos.postalCode).to.eq(75009);
     });
-    it('example 2', () => {
-      const rawTellerPos = [
-        1912312,
-        1812312,
-        1,
-        Ethers.utils.bigNumberify('2200000000000000000'),
-      ];
-      const tellerPos = Formatters.tellerPosFromContract(rawTellerPos);
-
-      expect(tellerPos.lat).to.eq(19.12312);
-      expect(tellerPos.lng).to.eq(18.12312);
-      expect(tellerPos.zoneId).to.eq(1);
-      expect(tellerPos.escrowBalance).to.eq(2.2);
-    });
-    it('example 2', () => {
+    it('example 3', () => {
       const rawTellerPos = [
         -1912312,
         -1812312,
-        1,
-        Ethers.utils.bigNumberify('2200000000000000000'),
+        '0x4652000000000000000000000000000000000000000000000000000000000000',
+        75009,
       ];
       const tellerPos = Formatters.tellerPosFromContract(rawTellerPos);
 
       expect(tellerPos.lat).to.eq(-19.12312);
       expect(tellerPos.lng).to.eq(-18.12312);
-      expect(tellerPos.zoneId).to.eq(1);
-      expect(tellerPos.escrowBalance).to.eq(2.2);
+      expect(tellerPos.countryId).to.eq('FR');
+      expect(tellerPos.postalCode).to.eq(75009);
     });
   });
 
   describe('tellerProfileFromContract', () => {
     it('example 1', () => {
       const rawTellerProfile = {
-        rates: 2313,
-        volumeTrade: Ethers.utils.parseEther('1.2'),
+        avatarId: 2,
+        currencyId: 1,
+        messengerAddr: '0x4861727179000000000000000000000000000000000000000000000000000000',
+        messengerAddr2: '0x4861727179000000000000000000000000000000000000000000000000000000',
+        rate: 2313,
+        volumeSell: Ethers.utils.parseEther('1.2'),
+        volumeBuy: Ethers.utils.parseEther('2.2'),
         nbTrade: Ethers.utils.bigNumberify(12),
-        name: '0x4861717279000000000000000000000000000000000000000000000000000000',
-        currency: 1,
-        avatar: 2,
-        telAddr: '0x4861727179000000000000000000000000000000000000000000000000000000',
-        amount: 1,
+        balance: Ethers.utils.parseEther('2.1'),
       };
 
       const tellerProfile = Formatters.tellerProfileFromContract(rawTellerProfile);
 
-      expect(tellerProfile.name).to.eq('Haqry');
       expect(tellerProfile.messengerAddr).to.eq('Harqy');
+      expect(tellerProfile.messengerAddr2).to.eq('Harqy');
+      expect(tellerProfile.balance).to.eq(2.1);
       expect(tellerProfile.rates).to.eq(23.13);
-      expect(tellerProfile.volumeTrade).to.eq(1.2);
+      expect(tellerProfile.volumeSell).to.eq(1.2);
+      expect(tellerProfile.volumeBuy).to.eq(2.2);
       expect(tellerProfile.nbTrade).to.eq(12);
       expect(tellerProfile.currencyId).to.eq(1);
       expect(tellerProfile.avatarId).to.eq(2);

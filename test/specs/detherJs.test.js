@@ -59,7 +59,6 @@ describe('dether js', () => {
       stubs = [];
     });
 
-
     it('should get user', async () => {
       const wallet = DetherJS.Ethers.Wallet.createRandom();
       const encryptedWallet = await wallet.encrypt('password');
@@ -76,23 +75,24 @@ describe('dether js', () => {
         stubs.push(sinon.spy(contractMock, 'getTellerProfile'));
 
         const teller = await dether.getTeller('addr');
-
         expect(stubs[0].calledWith('addr')).to.be.true;
         expect(stubs[1].calledWith('addr')).to.be.true;
 
         expect(teller.id).to.eq('addr');
         expect(teller.ethAddress).to.eq('addr');
-        expect(teller.name).to.eq('Haqry');
         expect(teller.messengerAddr).to.eq('Harqy');
+        expect(teller.messengerAddr2).to.eq('Harqy');
         expect(teller.lat).to.eq(9.12312);
         expect(teller.lng).to.eq(8.12312);
-        expect(teller.zoneId).to.eq(789);
-        expect(teller.escrowBalance).to.eq(2.2);
+        expect(teller.countryId).to.eq('FR');
+        expect(teller.balance).to.eq(2.1);
         expect(teller.rates).to.eq(23.13);
-        expect(teller.volumeTrade).to.eq(1.2);
+        expect(teller.volumeSell).to.eq(1.2);
+        expect(teller.volumeBuy).to.eq(2.2);
         expect(teller.nbTrade).to.eq(12);
         expect(teller.currencyId).to.eq(1);
         expect(teller.avatarId).to.eq(2);
+        expect(teller.postalCode).to.eq(75009);
       });
     });
 
@@ -102,7 +102,7 @@ describe('dether js', () => {
       });
 
       it('should get user escrow balance', async () => {
-        const spy = sinon.spy(contractMock, 'getTellerBalances');
+        const spy = sinon.spy(contractMock, 'getTellerBalance');
         const balance = await dether.getTellerBalance('0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623');
         expect(balance).to.eq(2.2);
         expect(spy.calledWith('0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623')).to.be.true;

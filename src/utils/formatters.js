@@ -12,10 +12,11 @@ const tellerPosFromContract = (rawTellerPos) => {
     return {
       lat: rawTellerPos[0] / (10 ** COORD_PRECISION),
       lng: rawTellerPos[1] / (10 ** COORD_PRECISION),
-      zoneId: Number(rawTellerPos[2]),
-      escrowBalance: Number(Ethers.utils.formatEther(rawTellerPos[3])),
+      countryId: toUtf8(rawTellerPos[2]),
+      postalCode: rawTellerPos[3],
     };
   } catch (e) {
+    console.log('error teller pos');
     throw new TypeError(`Invalid teller position: ${e.message}`);
   }
 };
@@ -26,15 +27,18 @@ const tellerPosFromContract = (rawTellerPos) => {
 const tellerProfileFromContract = (rawTellerProfile) => {
   try {
     return {
-      rates: rawTellerProfile.rates / 100,
-      volumeTrade: Number(Ethers.utils.formatEther(rawTellerProfile.volumeTrade)),
+      avatarId: rawTellerProfile.avatarId,
+      currencyId: rawTellerProfile.currencyId,
+      messengerAddr: toUtf8(rawTellerProfile.messengerAddr),
+      messengerAddr2: toUtf8(rawTellerProfile.messengerAddr2),
+      rates: rawTellerProfile.rate / 100,
+      volumeSell: Number(Ethers.utils.formatEther(rawTellerProfile.volumeSell)),
+      volumeBuy: Number(Ethers.utils.formatEther(rawTellerProfile.volumeBuy)),
       nbTrade: rawTellerProfile.nbTrade.toNumber(),
-      name: toUtf8(rawTellerProfile.name),
-      currencyId: rawTellerProfile.currency,
-      avatarId: rawTellerProfile.avatar,
-      messengerAddr: toUtf8(rawTellerProfile.telAddr),
+      balance: Number(Ethers.utils.formatEther(rawTellerProfile.balance)),
     };
   } catch (e) {
+    console.log('error teller profile', e.message);
     throw new TypeError(`Invalid teller profile: ${e.message}`);
   }
 };
