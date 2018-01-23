@@ -83,39 +83,44 @@ describe('formatters', () => {
       const rawSellPoint = {
         lat: 1.233,
         lng: 2.233,
-        zone: 42,
+        countryId: 'FR',
+        postalCode: 75019,
         rates: 23.13,
-        avatar: 2,
-        currency: 1,
-        telegram: 'abetgr',
-        username: 'barg',
+        avatarId: 2,
+        currencyId: 1,
+        messengerAddr: 'telegram',
+        messengerAddr2: 'toshi',
         amount: 1,
       };
       const sellPoint = Formatters.sellPointToContract(rawSellPoint);
 
       expect(sellPoint.lat).to.eq(123300);
       expect(sellPoint.lng).to.eq(223300);
-      expect(sellPoint.zone).to.eq(42);
-      expect(sellPoint.rates).to.eq(2313);
-      expect(sellPoint.avatar).to.eq(2);
-      expect(sellPoint.currency).to.eq(1);
-      expect(sellPoint.telegram.constructor.name).to.eq('Uint8Array');
-      expect(sellPoint.telegram[0]).to.eq(97);
-      expect(sellPoint.telegram[1]).to.eq(98);
-      expect(sellPoint.username.constructor.name).to.eq('Uint8Array');
-      expect(sellPoint.username[0]).to.eq(98);
-      expect(sellPoint.username[1]).to.eq(97);
+      expect(sellPoint.countryId).to.eq('FR');
+      expect(sellPoint.postalCode).to.eq(75019);
+      expect(sellPoint.avatarId).to.eq(2);
+      expect(sellPoint.currencyId).to.eq(1);
+      expect(sellPoint.messengerAddr.constructor.name).to.eq('Uint8Array');
+      expect(sellPoint.messengerAddr[0]).to.eq(116);
+      expect(sellPoint.messengerAddr[1]).to.eq(101);
+      expect(sellPoint.messengerAddr[2]).to.eq(108);
+
+      expect(sellPoint.messengerAddr2.constructor.name).to.eq('Uint8Array');
+      expect(sellPoint.messengerAddr2[0]).to.eq(116);
+      expect(sellPoint.messengerAddr2[1]).to.eq(111);
+      expect(sellPoint.messengerAddr2[2]).to.eq(115);
     });
     it('example 2', () => {
       const rawSellPoint = {
         lat: 1.23384739847,
         lng: 2.2338742383,
-        zone: 42,
+        countryId: 'FR',
+        postalCode: 75019,
         rates: 23.13321,
-        avatar: 2,
-        currency: 1,
-        telegram: 'abrtgr',
-        username: 'batgr',
+        avatarId: 2,
+        currencyId: 1,
+        messengerAddr: 'telegram',
+        messengerAddr2: 'toshi',
         amount: 1,
       };
       const sellPoint = Formatters.sellPointToContract(rawSellPoint);
@@ -128,12 +133,13 @@ describe('formatters', () => {
       const rawSellPoint = {
         lat: 12,
         lng: 23,
-        zone: 42,
+        countryId: 'FR',
+        postalCode: 75019,
         rates: 23,
-        avatar: 2,
-        currency: 1,
-        telegram: 'abrtg',
-        username: 'batrgrt',
+        avatarId: 2,
+        currencyId: 1,
+        messengerAddr: 'telegram',
+        messengerAddr2: 'toshi',
         amount: 1,
       };
       const sellPoint = Formatters.sellPointToContract(rawSellPoint);
@@ -146,12 +152,13 @@ describe('formatters', () => {
       const rawSellPoint = {
         lat: 12.1,
         lng: 23.1,
-        zone: 42,
+        countryId: 'FR',
+        postalCode: 75019,
         rates: 23,
-        avatar: 2,
-        currency: 1,
-        telegram: 'abrtgrt',
-        username: 'batgt',
+        avatarId: 2,
+        currencyId: 1,
+        messengerAddr: 'telegram',
+        messengerAddr2: 'toshi',
         amount: 1,
       };
       const sellPoint = Formatters.sellPointToContract(rawSellPoint);
@@ -163,12 +170,13 @@ describe('formatters', () => {
       const rawSellPoint = {
         lat: -12.1,
         lng: -23.1,
-        zone: 42,
+        countryId: 'FR',
+        postalCode: 75019,
         rates: 23,
-        avatar: 2,
-        currency: 1,
-        telegram: 'abtgg',
-        username: 'batgt',
+        avatarId: 2,
+        currencyId: 1,
+        messengerAddr: 'telegram',
+        messengerAddr2: 'toshi',
         amount: 1,
       };
       const sellPoint = Formatters.sellPointToContract(rawSellPoint);

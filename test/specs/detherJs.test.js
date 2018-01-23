@@ -222,13 +222,13 @@ describe('dether js', () => {
       it('should get all tellers in zone', async () => {
         const stub = sinon.stub(dether, 'getTeller');
 
-        stub.onCall(0).returns({ ethAddress: 'a', zoneId: 42 });
-        stub.onCall(1).returns({ ethAddress: 'b', zoneId: 42 });
-        stub.onCall(3).returns({ ethAddress: 'c', zoneId: 43 });
+        stub.onCall(0).returns({ ethAddress: 'a', countryId: 'FR', postalCode: 75019 });
+        stub.onCall(1).returns({ ethAddress: 'b', countryId: 'FR', postalCode: 75019 });
+        stub.onCall(2).returns({ ethAddress: 'a', countryId: 'BE', postalCode: 11209 });
 
-        const zone = 42;
-        const allTellers = await dether.getTellersInZone(zone);
-        expect(allTellers.length).to.eq(2);
+        const countryId = 'FR';
+        const postalCode = 75019;
+        const allTellers = await dether.getTellersInZone(countryId, postalCode);
         expect(allTellers[0].ethAddress).to.eq('a');
         expect(allTellers[1].ethAddress).to.eq('b');
 
@@ -238,12 +238,14 @@ describe('dether js', () => {
       it('should get all tellers in zone without duplicates', async () => {
         const stub = sinon.stub(dether, 'getTeller');
 
-        stub.onCall(0).returns({ ethAddress: 'a', zoneId: 42 });
-        stub.onCall(1).returns({ ethAddress: 'b', zoneId: 42 });
-        stub.onCall(2).returns({ ethAddress: 'a', zoneId: 42 });
+        stub.onCall(0).returns({ ethAddress: 'a', countryId: 'FR', postalCode: 75019 });
+        stub.onCall(1).returns({ ethAddress: 'b', countryId: 'FR', postalCode: 75019 });
+        stub.onCall(2).returns({ ethAddress: 'a', countryId: 'BE', postalCode: 11209 });
 
-        const zone = 42;
-        const allTellers = await dether.getTellersInZone(zone);
+        const countryId = 'FR';
+        const postalCode = 75019;
+        const allTellers = await dether.getTellersInZone(countryId, postalCode);
+
         expect(allTellers.length).to.eq(2);
         expect(allTellers[0].ethAddress).to.eq('a');
         expect(allTellers[1].ethAddress).to.eq('b');
@@ -251,27 +253,27 @@ describe('dether js', () => {
         stub.restore();
       });
 
-      it('should get all tellers in multiple zone', async () => {
-        const stub = sinon.stub(dether, 'getTeller');
-
-        stub.onCall(0).returns({ ethAddress: 'a', zoneId: 42 });
-        stub.onCall(1).returns({ ethAddress: 'b', zoneId: 42 });
-        stub.onCall(2).returns({ ethAddress: 'c', zoneId: 101 });
-        stub.onCall(3).returns({ ethAddress: 'd', zoneId: 101 });
-        stub.onCall(4).returns({ ethAddress: 'c', zoneId: 101 });
-        stub.onCall(5).returns({ ethAddress: 'd', zoneId: 101 });
-        stub.onCall(6).returns({ ethAddress: 'e', zoneId: 100 });
-        stub.onCall(7).returns({ ethAddress: 'f', zoneId: 58 });
-
-        const zones = [42, 101];
-        const allTellers = await dether.getTellersInZone(zones);
-        expect(allTellers.length).to.eq(4);
-        expect(allTellers[0].ethAddress).to.eq('a');
-        expect(allTellers[1].ethAddress).to.eq('b');
-        expect(allTellers[2].ethAddress).to.eq('c');
-        expect(allTellers[3].ethAddress).to.eq('d');
-        stub.restore();
-      });
+      // it('should get all tellers in multiple zone', async () => {
+      //   const stub = sinon.stub(dether, 'getTeller');
+      //
+      //   stub.onCall(0).returns({ ethAddress: 'a', zoneId: 42 });
+      //   stub.onCall(1).returns({ ethAddress: 'b', zoneId: 42 });
+      //   stub.onCall(2).returns({ ethAddress: 'c', zoneId: 101 });
+      //   stub.onCall(3).returns({ ethAddress: 'd', zoneId: 101 });
+      //   stub.onCall(4).returns({ ethAddress: 'c', zoneId: 101 });
+      //   stub.onCall(5).returns({ ethAddress: 'd', zoneId: 101 });
+      //   stub.onCall(6).returns({ ethAddress: 'e', zoneId: 100 });
+      //   stub.onCall(7).returns({ ethAddress: 'f', zoneId: 58 });
+      //
+      //   const zones = [42, 101];
+      //   const allTellers = await dether.getTellersInZone(zones);
+      //   expect(allTellers.length).to.eq(4);
+      //   expect(allTellers[0].ethAddress).to.eq('a');
+      //   expect(allTellers[1].ethAddress).to.eq('b');
+      //   expect(allTellers[2].ethAddress).to.eq('c');
+      //   expect(allTellers[3].ethAddress).to.eq('d');
+      //   stub.restore();
+      // });
     });
   });
 });

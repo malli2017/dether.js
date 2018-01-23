@@ -108,20 +108,21 @@ describe('dether user', () => {
     const sellPoint = {
       lat: 1,
       lng: 2,
-      zone: 42,
+      countryId: 'FR',
+      postalCode: 75019,
       rates: 20.20,
-      avatar: 1,
-      currency: 2,
-      telegram: 'abc',
-      username: 'cba',
+      avatarId: 1,
+      currencyId: 2,
+      messengerAddr: 'telegram',
+      messengerAddr2: 'toshi',
       amount: 0.01,
     };
 
-    const registerPoint = sinon.stub();
-    registerPoint.returns(transaction);
+    const registerTeller = sinon.stub();
+    registerTeller.returns(transaction);
     const _getCustomContract = sandbox.stub(Contracts, 'getCustomContract');
     _getCustomContract.returns({
-      registerPoint,
+      registerTeller,
     });
 
     const waitForTransaction = sinon.stub();
@@ -133,18 +134,19 @@ describe('dether user', () => {
     const result = await user.addSellPoint(sellPoint, 'password');
     expect(result).to.deep.eq(transaction);
 
-    expect(registerPoint.args[0][0]).to.eq(100000);
-    expect(registerPoint.args[0][1]).to.eq(200000);
-    expect(registerPoint.args[0][2]).to.eq(42);
-    expect(registerPoint.args[0][3]).to.eq(2020);
-    expect(registerPoint.args[0][4]).to.eq(1);
-    expect(registerPoint.args[0][5]).to.eq(2);
-    expect(registerPoint.args[0][6][0]).to.eq(97);
-    expect(registerPoint.args[0][6][1]).to.eq(98);
-    expect(registerPoint.args[0][6][2]).to.eq(99);
-    expect(registerPoint.args[0][7][0]).to.eq(99);
-    expect(registerPoint.args[0][7][1]).to.eq(98);
-    expect(registerPoint.args[0][7][2]).to.eq(97);
+    expect(registerTeller.args[0][0]).to.eq(100000);
+    expect(registerTeller.args[0][1]).to.eq(200000);
+    expect(registerTeller.args[0][2]).to.eq('FR');
+    expect(registerTeller.args[0][3]).to.eq(75019);
+    expect(registerTeller.args[0][4]).to.eq(2020);
+    expect(registerTeller.args[0][5]).to.eq(1);
+    expect(registerTeller.args[0][6]).to.eq(2);
+    expect(registerTeller.args[0][7][0]).to.eq(116);
+    expect(registerTeller.args[0][7][1]).to.eq(101);
+    expect(registerTeller.args[0][7][2]).to.eq(108);
+    expect(registerTeller.args[0][8][0]).to.eq(116);
+    expect(registerTeller.args[0][8][1]).to.eq(111);
+    expect(registerTeller.args[0][8][2]).to.eq(115);
 
     const transactionValue = DetherJS.Ethers.utils.parseEther('0.01');
     expect(_getCustomContract.args[0][0].value.eq(transactionValue)).to.be.true;

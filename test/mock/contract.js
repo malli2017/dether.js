@@ -42,7 +42,7 @@ const instance = {
     hash: 'hash',
   }),
   getTellerBalance: async () => ({ 0: Ethers.utils.bigNumberify('2200000000000000000') }),
-  registerPoint: async () => ({
+  registerTeller: async () => ({
     hash: 'hash',
   }),
   getTellerStatus: async () => ({

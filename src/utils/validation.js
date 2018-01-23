@@ -11,27 +11,27 @@ export const validateSellPoint = (teller) => {
   if (!teller.lng || Number.isNaN(teller.lng) || teller.lng > 180 || teller.lng < -180) {
     return { error: true, msg: 'Invalid longitude' };
   }
-  if (!teller.zone || !Number.isInteger(teller.zone)) {
+  if (!teller.countryId || teller.countryId < 1 ||  teller.countryId > 4) {
     return { error: true, msg: 'Invalid zone' };
   }
   if (!teller.rates || teller.rates <= 0 || teller.rates > 100) {
     return { error: true, msg: 'Invalid rates' };
   }
-  if (!teller.avatar || !Number.isInteger(teller.avatar) || teller.avatar < 0) {
+  if (!teller.avatarId || !Number.isInteger(teller.avatarId) || teller.avatarId < 0) {
     return { error: true, msg: 'Invalid avatar' };
   }
-  if (!teller.currency || !Number.isInteger(teller.currency) || teller.currency < 0) {
+  if (!teller.currencyId || !Number.isInteger(teller.currencyId) || teller.currencyId < 0) {
     return { error: true, msg: 'Invalid currency' };
   }
-  if (!teller.telegram || teller.telegram.length < 3 || teller.telegram.length > 30) {
+  if (!teller.messengerAddr || teller.messengerAddr.length < 3 || teller.messengerAddr.length > 30) {
     return { error: true, msg: 'Invalid telegram' };
   }
   if (!teller.amount || Number.isNaN(teller.amount) || teller.amount < 0.01) {
     return { error: true, msg: 'Invalid amount' };
   }
-  if (!teller.username || teller.username.length < 3 || teller.username.length > 30) {
-    return { error: true, msg: 'Invalid username' };
-  }
+  // if (!teller.postalCode) {
+  //   return { error: true, msg: 'Invalid amount' };
+  // }
   return {};
 };
 

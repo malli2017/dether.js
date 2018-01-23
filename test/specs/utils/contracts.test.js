@@ -3,8 +3,8 @@ import sinon from 'sinon';
 import { expect } from 'chai';
 import Ethers from 'ethers';
 
-import DetherInterfaceJson from 'dethercontract_dev/contracts/DetherInterface.json';
-import DetherTellerStorageJson from 'dethercontract_dev/contracts/DetherTellerStorage.json';
+import DetherInterfaceJson from 'dethercontract/contracts/DetherInterface.json';
+import DetherTellerStorageJson from 'dethercontract/contracts/DetherTellerStorage.json';
 
 import Contracts from '../../../src/utils/contracts';
 

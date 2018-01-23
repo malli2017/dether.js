@@ -1,8 +1,8 @@
 import Ethers from 'ethers';
 
-import DetherInterfaceJson from 'dethercontract_dev/contracts/DetherInterface.json';
-import DetherTellerStorageJson from 'dethercontract_dev/contracts/DetherTellerStorage.json';
-import DetherSmsJson from 'dethercontract_dev/contracts/SmsCertifier.json';
+import DetherInterfaceJson from 'dethercontract/contracts/DetherInterface.json';
+import DetherTellerStorageJson from 'dethercontract/contracts/DetherTellerStorage.json';
+import DetherSmsJson from 'dethercontract/contracts/SmsCertifier.json';
 
 import { validateGetCustomContract } from './validation';
 

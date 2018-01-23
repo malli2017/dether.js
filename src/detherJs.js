@@ -59,7 +59,7 @@ class DetherJS {
       this.contractInstance.getTellerPos(address),
       this.contractInstance.getTellerProfile(address),
     ]);
-
+    console.log('raw teller ', rawTellerPos, rawTellerProfile);
     // if (Ethers.utils.formatEther(rawTellerPos[3]) === '0.0') return null;
 
     return Object.assign(
@@ -108,24 +108,19 @@ class DetherJS {
 
   /**
    * Get All tellers per zone
-   * @param  {Integer}  zone
-   * @param  {array}    zone ethereum addresses
+   * @param  {string}  countryId
+   * @param  {Integer}  postalCode
    * @return {Promise<Array>} array of tellers in zone
    */
-  async getTellersInZone(zone) {
-    if (!Number.isInteger(zone) && !Array.isArray(zone)) throw new TypeError('Invalid zone');
-
-    const zones = !Array.isArray(zone) ? [zone] : zone;
+  async getTellersInZone(countryId, postalCode) {
+    if (!Number.isInteger(postalCode) ) throw new TypeError('Invalid zone');
     const result = [];
 
-    await Promise.all(zones.map(async (data) => {
-      const tellersInZone = await this.storageInstance.getZone(data);
-      result.push(...tellersInZone[0]);
-    }));
+      const tellersInZone = await this.storageInstance.getZone(countryId, postalCode);
 
-    if (!result || !result.length) return [];
-    const tellers = await Promise.all(result.map(this.getTeller.bind(this)));
-    return DetherJS._filterTellerList(tellers).filter(t => zones.indexOf(t.zoneId) >= 0);
+    if (!tellersInZone) return [];
+    const tellers = await Promise.all(tellersInZone.map(this.getTeller.bind(this)));
+    return DetherJS._filterTellerList(tellers);
   }
 
   /**

@@ -26,6 +26,7 @@ const tellerPosFromContract = (rawTellerPos) => {
  */
 const tellerProfileFromContract = (rawTellerProfile) => {
   try {
+    console.log('rawTellerProfile', rawTellerProfile)
     return {
       avatarId: rawTellerProfile.avatarId,
       currencyId: rawTellerProfile.currencyId,
@@ -38,7 +39,6 @@ const tellerProfileFromContract = (rawTellerProfile) => {
       balance: Number(Ethers.utils.formatEther(rawTellerProfile.balance)),
     };
   } catch (e) {
-    console.log('error teller profile', e.message);
     throw new TypeError(`Invalid teller profile: ${e.message}`);
   }
 };
@@ -56,12 +56,13 @@ const sellPointToContract = (rawSellPoint) => {
         * (10 ** COORD_PRECISION)),
       lng: Math.floor(rawSellPoint.lng.toFixed(COORD_PRECISION + 1)
         * (10 ** COORD_PRECISION)),
-      zone: rawSellPoint.zone,
+      countryId: Ethers.utils.toUtf8Bytes(rawSellPoint.countryId),
+      postalCode: rawSellPoint.postalCode,
+      avatarId: rawSellPoint.avatarId,
+      currencyId: rawSellPoint.currencyId,
+      messengerAddr: Ethers.utils.toUtf8Bytes(rawSellPoint.messengerAddr),
+      messengerAddr2: Ethers.utils.toUtf8Bytes(rawSellPoint.messengerAddr2),
       rates: Math.floor(rawSellPoint.rates * 100),
-      avatar: rawSellPoint.avatar,
-      currency: rawSellPoint.currency,
-      telegram: Ethers.utils.toUtf8Bytes(rawSellPoint.telegram),
-      username: Ethers.utils.toUtf8Bytes(rawSellPoint.username),
     };
   } catch (e) {
     throw new TypeError(`Invalid teller profile: ${e.message}`);

@@ -1,11 +1,12 @@
 {
   "name": "detherjs",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "Dether SDK to easily call smart contract from Javascript",
   "main": "lib/index.js",
   "scripts": {
     "babel-node": "babel-node --presets=latest",
     "example": "npm run babel-node -- examples/usage.js",
+    "exampletruffle": "npm run babel-node -- examples/exampletruffle.js",
     "test": "nyc --reporter=html mocha --compilers js:babel-core/register test/test.config.js test/specs/*.test.js test/specs/**/*.test.js --timeout 15000",
     "prepublish": "babel src --out-dir lib",
     "build": "babel src --out-dir lib",
@@ -30,9 +31,10 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "bip39": "^2.4.0",
-    "dethercontract": "^1.2.5",
-    "dethercontract_dev": "^1.1.0",
+    "dethercontract": "^1.3.0",
     "ethers": "^2.1.2",
+    "ethjs-provider-signer": "^0.1.4",
+    "ethjs-signer": "^0.1.1",
     "simple-crypto-js": "^1.1.1",
     "utf8": "^2.1.2"
   },

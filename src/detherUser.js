@@ -86,13 +86,14 @@ class DetherUser {
    * @param {object} sellPoint
    * @param {number} sellPoint.lat        latitude min -90 max +90
    * @param {number} sellPoint.lng        longitude min -180 max +180
-   * @param {number} sellPoint.zone       geographic zone
+   * @param {string} sellPoint.countryId       geographic zone ISO
+   * @param {number} sellPoint.postalCode   postal code
    * @param {number} sellPoint.rates      Margin (0-100)
-   * @param {number} sellPoint.avatar     avatar id (1-9)
-   * @param {number} sellPoint.currency   currency id (0-4)
+   * @param {number} sellPoint.avatarId     avatar id (1-9)
+   * @param {number} sellPoint.currencyId   currency id (0-4)
    * @param {number} sellPoint.amount     Ether amount to put on escrow
-   * @param {string} sellPoint.telegram   Telegram address
-   * @param {string} sellPoint.username   username
+   * @param {string} sellPoint.messengerAddr   messenger Addr
+   * @param {string} sellPoint.messengerAddr2   messenger Addr
    * @param {string} password             user password
    * @return {Promise<object>} Transaction
    */
@@ -111,18 +112,20 @@ class DetherUser {
         value: tsxAmount,
         password,
       });
-
-      const transaction = await customContract.registerPoint(
+      const transaction = await customContract.registerTeller(
         formattedSellPoint.lat,
         formattedSellPoint.lng,
-        formattedSellPoint.zone,
+        formattedSellPoint.countryId,
+        formattedSellPoint.postalCode,
+        formattedSellPoint.avatarId,
+        formattedSellPoint.currencyId,
+        formattedSellPoint.messengerAddr,
+        formattedSellPoint.messengerAddr2,
         formattedSellPoint.rates,
-        formattedSellPoint.avatar,
-        formattedSellPoint.currency,
-        formattedSellPoint.telegram,
-        formattedSellPoint.username,
       );
+      console.log('txs', transaction);
       const minedTsx = await this.dether.provider.waitForTransaction(transaction.hash);
+      console.log('mined txs', minedTsx);
       return minedTsx;
     } catch (e) {
       throw new TypeError(e);
@@ -191,7 +194,7 @@ class DetherUser {
   }
 
   /**
-   * Delete sell point, this function withdraw automatically balance escrow to owner
+   * Certify New User, this function whitelist by sms new user
    * @param  {object}  opts
    * @param  {string}  opts.user ethereum address
    * @param  {string} password  Wallet password
