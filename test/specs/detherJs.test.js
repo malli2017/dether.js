@@ -71,17 +71,19 @@ describe('dether js', () => {
 
     describe('getTeller', () => {
       it('should get teller', async () => {
-        stubs.push(sinon.spy(contractMock, 'getTellerPos'));
-        stubs.push(sinon.spy(contractMock, 'getTellerProfile'));
+        stubs.push(sinon.spy(storageMock, 'getTellerPositionRaw'));
+        stubs.push(sinon.spy(storageMock, 'getTellerProfile1'));
+        // stubs.push(sinon.spy(storageMock, 'getTellerProfile2'));
 
         const teller = await dether.getTeller('addr');
         expect(stubs[0].calledWith('addr')).to.be.true;
         expect(stubs[1].calledWith('addr')).to.be.true;
+        // expect(stubs[2].calledWith('addr')).to.be.true;
 
         expect(teller.id).to.eq('addr');
         expect(teller.ethAddress).to.eq('addr');
-        expect(teller.messengerAddr).to.eq('Harqy');
-        expect(teller.messengerAddr2).to.eq('Harqy');
+        expect(teller.messengerAddr).to.eq('telegram');
+        expect(teller.messengerAddr2).to.eq('toshi');
         expect(teller.lat).to.eq(9.12312);
         expect(teller.lng).to.eq(8.12312);
         expect(teller.countryId).to.eq('FR');

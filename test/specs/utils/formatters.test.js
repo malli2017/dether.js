@@ -10,7 +10,7 @@ describe('formatters', () => {
       const rawTellerPos = [
         123,
         456,
-        '0x4652000000000000000000000000000000000000000000000000000000000000',
+        'FR',
         75009,
       ];
       const tellerPos = Formatters.tellerPosFromContract(rawTellerPos);
@@ -24,7 +24,7 @@ describe('formatters', () => {
       const rawTellerPos = [
         912312,
         812312,
-        '0x4652000000000000000000000000000000000000000000000000000000000000',
+        'FR',
         75009,
       ];
       const tellerPos = Formatters.tellerPosFromContract(rawTellerPos);
@@ -38,7 +38,7 @@ describe('formatters', () => {
       const rawTellerPos = [
         -1912312,
         -1812312,
-        '0x4652000000000000000000000000000000000000000000000000000000000000',
+        'FR',
         75009,
       ];
       const tellerPos = Formatters.tellerPosFromContract(rawTellerPos);
@@ -52,11 +52,14 @@ describe('formatters', () => {
 
   describe('tellerProfileFromContract', () => {
     it('example 1', () => {
-      const rawTellerProfile = {
+      const rawTellerProfile1 = {
         avatarId: 2,
         currencyId: 1,
-        messengerAddr: '0x4861727179000000000000000000000000000000000000000000000000000000',
-        messengerAddr2: '0x4861727179000000000000000000000000000000000000000000000000000000',
+        messengerAddr: 'telegram',
+        messengerAddr2: 'toshi',
+      };
+
+      const rawTellerProfile2 = {
         rate: 2313,
         volumeSell: Ethers.utils.parseEther('1.2'),
         volumeBuy: Ethers.utils.parseEther('2.2'),
@@ -64,17 +67,17 @@ describe('formatters', () => {
         balance: Ethers.utils.parseEther('2.1'),
       };
 
-      const tellerProfile = Formatters.tellerProfileFromContract(rawTellerProfile);
-
-      expect(tellerProfile.messengerAddr).to.eq('Harqy');
-      expect(tellerProfile.messengerAddr2).to.eq('Harqy');
-      expect(tellerProfile.balance).to.eq(2.1);
-      expect(tellerProfile.rates).to.eq(23.13);
-      expect(tellerProfile.volumeSell).to.eq(1.2);
-      expect(tellerProfile.volumeBuy).to.eq(2.2);
-      expect(tellerProfile.nbTrade).to.eq(12);
-      expect(tellerProfile.currencyId).to.eq(1);
-      expect(tellerProfile.avatarId).to.eq(2);
+      const tellerProfile1 = Formatters.tellerProfileFromContract1(rawTellerProfile1);
+      const tellerProfile2 = Formatters.tellerProfileFromContract2(rawTellerProfile2);
+      expect(tellerProfile1.messengerAddr).to.eq('telegram');
+      expect(tellerProfile1.messengerAddr2).to.eq('toshi');
+      expect(tellerProfile2.balance).to.eq(2.1);
+      expect(tellerProfile2.rates).to.eq(23.13);
+      expect(tellerProfile2.volumeSell).to.eq(1.2);
+      expect(tellerProfile2.volumeBuy).to.eq(2.2);
+      expect(tellerProfile2.nbTrade).to.eq(12);
+      expect(tellerProfile1.currencyId).to.eq(1);
+      expect(tellerProfile1.avatarId).to.eq(2);
     });
   });
 
@@ -100,15 +103,13 @@ describe('formatters', () => {
       expect(sellPoint.postalCode).to.eq(75019);
       expect(sellPoint.avatarId).to.eq(2);
       expect(sellPoint.currencyId).to.eq(1);
-      expect(sellPoint.messengerAddr.constructor.name).to.eq('Uint8Array');
-      expect(sellPoint.messengerAddr[0]).to.eq(116);
-      expect(sellPoint.messengerAddr[1]).to.eq(101);
-      expect(sellPoint.messengerAddr[2]).to.eq(108);
+      // expect(sellPoint.messengerAddr.constructor.name).to.eq('Uint8Array');
+      expect(sellPoint.messengerAddr).to.eq('telegram');
 
-      expect(sellPoint.messengerAddr2.constructor.name).to.eq('Uint8Array');
-      expect(sellPoint.messengerAddr2[0]).to.eq(116);
-      expect(sellPoint.messengerAddr2[1]).to.eq(111);
-      expect(sellPoint.messengerAddr2[2]).to.eq(115);
+
+      // expect(sellPoint.messengerAddr2.constructor.name).to.eq('Uint8Array');
+      expect(sellPoint.messengerAddr2).to.eq('toshi');
+
     });
     it('example 2', () => {
       const rawSellPoint = {

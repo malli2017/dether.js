@@ -133,20 +133,16 @@ describe('dether user', () => {
 
     const result = await user.addSellPoint(sellPoint, 'password');
     expect(result).to.deep.eq(transaction);
-
+    console.log('regis', registerTeller);
     expect(registerTeller.args[0][0]).to.eq(100000);
     expect(registerTeller.args[0][1]).to.eq(200000);
     expect(registerTeller.args[0][2]).to.eq('FR');
     expect(registerTeller.args[0][3]).to.eq(75019);
-    expect(registerTeller.args[0][4]).to.eq(2020);
-    expect(registerTeller.args[0][5]).to.eq(1);
-    expect(registerTeller.args[0][6]).to.eq(2);
-    expect(registerTeller.args[0][7][0]).to.eq(116);
-    expect(registerTeller.args[0][7][1]).to.eq(101);
-    expect(registerTeller.args[0][7][2]).to.eq(108);
-    expect(registerTeller.args[0][8][0]).to.eq(116);
-    expect(registerTeller.args[0][8][1]).to.eq(111);
-    expect(registerTeller.args[0][8][2]).to.eq(115);
+    expect(registerTeller.args[0][4]).to.eq(1);
+    expect(registerTeller.args[0][5]).to.eq(2);
+    expect(registerTeller.args[0][6]).to.eq('telegram');
+    expect(registerTeller.args[0][7]).to.eq('toshi');
+    expect(registerTeller.args[0][8]).to.eq(2020);
 
     const transactionValue = DetherJS.Ethers.utils.parseEther('0.01');
     expect(_getCustomContract.args[0][0].value.eq(transactionValue)).to.be.true;

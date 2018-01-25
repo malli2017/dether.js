@@ -23,7 +23,7 @@ export const validateSellPoint = (teller) => {
   if (!teller.currencyId || !Number.isInteger(teller.currencyId) || teller.currencyId < 0) {
     return { error: true, msg: 'Invalid currency' };
   }
-  if (!teller.messengerAddr || teller.messengerAddr.length < 3 || teller.messengerAddr.length > 30) {
+  if (!teller.messengerAddr || teller.messengerAddr.length < 2 || teller.messengerAddr.length > 30) {
     return { error: true, msg: 'Invalid telegram' };
   }
   if (!teller.amount || Number.isNaN(teller.amount) || teller.amount < 0.01) {

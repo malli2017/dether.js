@@ -55,17 +55,18 @@ class DetherJS {
    * @return {Promise<Object>} teller
    */
   async getTeller(address) {
-    const [rawTellerPos, rawTellerProfile] = await Promise.all([
-      this.contractInstance.getTellerPos(address),
-      this.contractInstance.getTellerProfile(address),
+    const [rawTellerPos, rawTellerProfile1, rawTellerProfile2] = await Promise.all([
+      this.storageInstance.getTellerPositionRaw(address),
+      this.storageInstance.getTellerProfile1(address),
+      this.storageInstance.getTellerProfile2(address),
     ]);
-    console.log('raw teller ', rawTellerPos, rawTellerProfile);
     // if (Ethers.utils.formatEther(rawTellerPos[3]) === '0.0') return null;
 
     return Object.assign(
       {},
       Formatters.tellerPosFromContract(rawTellerPos),
-      Formatters.tellerProfileFromContract(rawTellerProfile),
+      Formatters.tellerProfileFromContract1(rawTellerProfile1),
+      Formatters.tellerProfileFromContract2(rawTellerProfile2),
       {
         id: address,
         ethAddress: address,
@@ -117,10 +118,12 @@ class DetherJS {
     const result = [];
 
       const tellersInZone = await this.storageInstance.getZone(countryId, postalCode);
-
+      // console.log('tellerinzone => ', tellersInZone);
     if (!tellersInZone) return [];
-    const tellers = await Promise.all(tellersInZone.map(this.getTeller.bind(this)));
-    return DetherJS._filterTellerList(tellers);
+    const tellersList = tellersInZone[0];
+    const tellers = await Promise.all(tellersList.map(this.getTeller.bind(this)));
+    return tellers;
+    // return DetherJS._filterTellerList(tellers);
   }
 
   /**

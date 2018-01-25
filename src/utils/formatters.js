@@ -12,7 +12,7 @@ const tellerPosFromContract = (rawTellerPos) => {
     return {
       lat: rawTellerPos[0] / (10 ** COORD_PRECISION),
       lng: rawTellerPos[1] / (10 ** COORD_PRECISION),
-      countryId: toUtf8(rawTellerPos[2]),
+      countryId: rawTellerPos[2],
       postalCode: rawTellerPos[3],
     };
   } catch (e) {
@@ -24,14 +24,25 @@ const tellerPosFromContract = (rawTellerPos) => {
 /**
  * @ignore
  */
-const tellerProfileFromContract = (rawTellerProfile) => {
+const tellerProfileFromContract1 = (rawTellerProfile) => {
   try {
-    console.log('rawTellerProfile', rawTellerProfile)
     return {
       avatarId: rawTellerProfile.avatarId,
       currencyId: rawTellerProfile.currencyId,
-      messengerAddr: toUtf8(rawTellerProfile.messengerAddr),
-      messengerAddr2: toUtf8(rawTellerProfile.messengerAddr2),
+      messengerAddr: rawTellerProfile.messengerAddr,
+      messengerAddr2: rawTellerProfile.messengerAddr2,
+    };
+  } catch (e) {
+    throw new TypeError(`Invalid teller profile: ${e.message}`);
+  }
+};
+
+/**
+ * @ignore
+ */
+const tellerProfileFromContract2 = (rawTellerProfile) => {
+  try {
+    return {
       rates: rawTellerProfile.rate / 100,
       volumeSell: Number(Ethers.utils.formatEther(rawTellerProfile.volumeSell)),
       volumeBuy: Number(Ethers.utils.formatEther(rawTellerProfile.volumeBuy)),
@@ -56,12 +67,15 @@ const sellPointToContract = (rawSellPoint) => {
         * (10 ** COORD_PRECISION)),
       lng: Math.floor(rawSellPoint.lng.toFixed(COORD_PRECISION + 1)
         * (10 ** COORD_PRECISION)),
-      countryId: Ethers.utils.toUtf8Bytes(rawSellPoint.countryId),
+      // countryId: Ethers.utils.toUtf8Bytes(rawSellPoint.countryId),
+      countryId: rawSellPoint.countryId,
       postalCode: rawSellPoint.postalCode,
       avatarId: rawSellPoint.avatarId,
       currencyId: rawSellPoint.currencyId,
-      messengerAddr: Ethers.utils.toUtf8Bytes(rawSellPoint.messengerAddr),
-      messengerAddr2: Ethers.utils.toUtf8Bytes(rawSellPoint.messengerAddr2),
+      messengerAddr: rawSellPoint.messengerAddr,
+      messengerAddr2: rawSellPoint.messengerAddr2,
+      // messengerAddr: Ethers.utils.toUtf8Bytes(rawSellPoint.messengerAddr),
+      // messengerAddr2: Ethers.utils.toUtf8Bytes(rawSellPoint.messengerAddr2),
       rates: Math.floor(rawSellPoint.rates * 100),
     };
   } catch (e) {
@@ -71,6 +85,7 @@ const sellPointToContract = (rawSellPoint) => {
 
 export default {
   tellerPosFromContract,
-  tellerProfileFromContract,
+  tellerProfileFromContract1,
+  tellerProfileFromContract2,
   sellPointToContract,
 };

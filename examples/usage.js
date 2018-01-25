@@ -13,8 +13,12 @@ const DetherJS = require('../src/index');
 
   // User data
   console.log('=======================================');
-  const privateKey = '0x0123456789012345678901234567890123456789012345678901234567890123';
-// address: 0x14791697260E4c9A71f18484C9f997B308e59325
+//   const privateKey = '0x0123456789012345678901234567890123456789012345678901234567890123';
+// // address: 0x14791697260E4c9A71f18484C9f997B308e59325
+
+const privateKey = '0x0123456789012345678901234567890123456789012345678901234567890321';
+// address: 0x391edA1b8D31f891d1653B131779751BdeDA24D3
+
   const userPassword = '1234';
 
   const wallet = new DetherJS.Ethers.Wallet(privateKey);
@@ -36,13 +40,13 @@ const DetherJS = require('../src/index');
   };
 
   const teller = await user.addSellPoint(sellPoint, userPassword);
-  //console.log('Teller: ', teller);
+  // console.log('Teller: ', teller);
 
   // Get teller info
   // let tellerInfo = await user.getInfo();
   // console.log('Teller info1: ', tellerInfo);
 
-  tellerInfo  = await dether.getTeller('0x14791697260e4c9a71f18484c9f997b308e59325');
+  let tellerInfo  = await dether.getTeller('0x391edA1b8D31f891d1653B131779751BdeDA24D3');
   console.log('Teller info2: ', tellerInfo);
 
   // validate user
@@ -53,7 +57,7 @@ const DetherJS = require('../src/index');
   const countryId = 'FR';
   const postalCode = 75019;
   const tellersInZone = await dether.getTellersInZone(countryId, postalCode);
-  console.log(` ${tellersInZone.length} tellers found`);
+  console.log('tellerinzone', tellersInZone);
 
 
   // // Get details of a teller
