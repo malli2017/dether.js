@@ -123,9 +123,7 @@ class DetherUser {
         formattedSellPoint.messengerAddr2,
         formattedSellPoint.rates,
       );
-      console.log('txs', transaction);
       const minedTsx = await this.dether.provider.waitForTransaction(transaction.hash);
-      console.log('mined txs', minedTsx);
       return minedTsx;
     } catch (e) {
       throw new TypeError(e);

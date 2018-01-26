@@ -133,7 +133,6 @@ describe('dether user', () => {
 
     const result = await user.addSellPoint(sellPoint, 'password');
     expect(result).to.deep.eq(transaction);
-    console.log('regis', registerTeller);
     expect(registerTeller.args[0][0]).to.eq(100000);
     expect(registerTeller.args[0][1]).to.eq(200000);
     expect(registerTeller.args[0][2]).to.eq('FR');

@@ -118,7 +118,6 @@ class DetherJS {
     const result = [];
 
       const tellersInZone = await this.storageInstance.getZone(countryId, postalCode);
-      // console.log('tellerinzone => ', tellersInZone);
     if (!tellersInZone) return [];
     const tellersList = tellersInZone[0];
     const tellers = await Promise.all(tellersList.map(this.getTeller.bind(this)));

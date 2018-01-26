@@ -40,7 +40,6 @@ const privateKey = '0x0123456789012345678901234567890123456789012345678901234567
   };
 
   const teller = await user.addSellPoint(sellPoint, userPassword);
-  // console.log('Teller: ', teller);
 
   // Get teller info
   // let tellerInfo = await user.getInfo();

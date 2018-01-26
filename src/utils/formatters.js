@@ -16,7 +16,6 @@ const tellerPosFromContract = (rawTellerPos) => {
       postalCode: rawTellerPos[3],
     };
   } catch (e) {
-    console.log('error teller pos');
     throw new TypeError(`Invalid teller position: ${e.message}`);
   }
 };
