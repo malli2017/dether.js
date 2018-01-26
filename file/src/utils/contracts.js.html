@@ -35,6 +35,9 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GAS_PRICE">GAS_PRICE</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utils">utils</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-add0x">add0x</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isAddr">isAddr</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createMnemonic">createMnemonic</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-decryptMnemonic">decryptMnemonic</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-encryptMnemonic">encryptMnemonic</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Contracts">Contracts</a></span></span></li>
 </ul>
 </div>
@@ -43,45 +46,61 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/utils/contracts.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import Ethers from &apos;ethers&apos;;
 
-import DetherJson from &apos;dethercontract/contracts/DetherInterface.json&apos;;
-import DetherStorageJson from &apos;dethercontract/contracts/DetherStorage.json&apos;;
+import DetherInterfaceJson from &apos;dethercontract/contracts/DetherInterface.json&apos;;
+import DetherTellerStorageJson from &apos;dethercontract/contracts/DetherTellerStorage.json&apos;;
+import DetherSmsJson from &apos;dethercontract/contracts/SmsCertifier.json&apos;;
+
+import { validateGetCustomContract } from &apos;./validation&apos;;
 
 const Contracts = {
   /**
    * @ignore
    */
   getContract(ContractJson, provider) {
-    let chainId = null;
-    if (provider.provider) {
-      chainId = provider.provider.chainId;
-    } else {
-      chainId = provider.chainId;
+    if (!ContractJson || !provider) {
+      throw new Error(&apos;No ContractJson or provider found&apos;);
     }
-    if (!chainId) {
-      throw new Error(&apos;No chain id found&apos;);
-    }
+
+    const chainId = provider.provider ?
+                    provider.provider.chainId :
+                    provider.chainId;
+
+    if (!chainId) throw new Error(&apos;No chain id found&apos;);
+
     const network = ContractJson.networks[chainId];
+
     if (!network) {
       throw new Error(`Contract not deployed on network ${chainId}`);
     }
-    const contractAddress = network.address;
-    const contractABI = ContractJson.abi;
-
-    return new Ethers.Contract(contractAddress, contractABI, provider);
+    return new Ethers.Contract(network.address, ContractJson.abi, provider);
   },
 
   /**
    * @ignore
    */
   getDetherContract(provider) {
-    return Contracts.getContract(DetherJson, provider);
+    if (!provider) throw new Error(&apos;No provider found&apos;);
+
+    return Contracts.getContract(DetherInterfaceJson, provider);
   },
 
   /**
    * @ignore
    */
   getDetherStorageContract(provider) {
-    return Contracts.getContract(DetherStorageJson, provider);
+    if (!DetherTellerStorageJson || !provider) {
+      throw new Error(&apos;No DetherTellerStorageJson or provider found&apos;);
+    }
+
+    return Contracts.getContract(DetherTellerStorageJson, provider);
+  },
+
+  getDetherSmsContract(provider) {
+    if (!DetherSmsJson || !provider) {
+      throw new Error(&apos;No DetherSmsJson or provider found&apos;);
+    }
+
+    return Contracts.getContract(DetherSmsJson, provider);
   },
 
   /**
@@ -97,11 +116,11 @@ const Contracts = {
    * @ignore
    */
   async getCustomContract(opts) {
-    if (!opts.password) {
-      throw new TypeError(&apos;Need password to decrypt wallet&apos;);
-    }
+    const validation = validateGetCustomContract(opts);
+    if (validation.error) throw new TypeError(validation.msg);
 
     const { wallet } = opts;
+
     const customProvider = {
       getAddress: wallet.getAddress.bind(wallet),
       provider: wallet.provider,
@@ -114,6 +133,37 @@ const Contracts = {
     };
 
     return Contracts.getDetherContract(customProvider);
+  },
+
+  /**
+   * Returns a custom signed contract
+   * Allows to add value to a transaction
+   *
+   * @param {object}      opts
+   * @param {object}      opts.wallet   Decrypted user wallet
+   * @param {string}      opts.password password to decrypt wallet
+   * @param {?BigNumber}  opts.value    Ether value to send while calling contract
+   * @return {object}     Dether Contract
+   * @private
+   * @ignore
+   */
+  async getSmsContract(opts) {
+    const validation = validateGetCustomContract(opts);
+    if (validation.error) throw new TypeError(validation.msg);
+
+    const { wallet } = opts;
+
+    const customProvider = {
+      getAddress: wallet.getAddress.bind(wallet),
+      provider: wallet.provider,
+      sendTransaction: (transaction) =&gt; {
+        if (opts.value) {
+          transaction.value = opts.value;
+        }
+        return wallet.sendTransaction(transaction);
+      },
+    };
+    return Contracts.getDetherSmsContract(customProvider);
   },
 
 };

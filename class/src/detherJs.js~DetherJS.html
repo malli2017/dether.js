@@ -35,19 +35,22 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GAS_PRICE">GAS_PRICE</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utils">utils</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-add0x">add0x</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isAddr">isAddr</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createMnemonic">createMnemonic</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-decryptMnemonic">decryptMnemonic</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-encryptMnemonic">encryptMnemonic</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Contracts">Contracts</a></span></span></li>
 </ul>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import DetherJS from &apos;<span><a href="file/src/detherJs.js.html#lineNumber9">detherjs/src/detherJs.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import DetherJS from &apos;<span><a href="file/src/detherJs.js.html#lineNumber17">detherjs/src/detherJs.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/detherJs.js.html#lineNumber9">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/detherJs.js.html#lineNumber17">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -72,7 +75,14 @@
 
   
 
-  
+  <div data-ice="exampleDocs">
+    <h4>Example:</h4>
+    
+  <div class="example-doc" data-ice="exampleDoc">
+      
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">import DetherJS from &apos;dether.js&apos;;</code></pre>
+    </div>
+</div>
 
   
 
@@ -224,7 +234,7 @@ You may not instanciate from here, prefer from DetherJS.getUser method</p>
           
           <span data-ice="async">async</span>
           
-          <span class="code" data-ice="name"><span><a href="class/src/detherJs.js~DetherJS.html#instance-method-getTellersInZone">getTellersInZone</a></span></span><span class="code" data-ice="signature">(zone: <span>Integer</span>, zone: <span>array</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span>&lt;<span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>&gt;</span>
+          <span class="code" data-ice="name"><span><a href="class/src/detherJs.js~DetherJS.html#instance-method-getTellersInZone">getTellersInZone</a></span></span><span class="code" data-ice="signature">(countryId: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, postalCode: <span>Integer</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span>&lt;<span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>&gt;</span>
         </p>
       </div>
       <div>
@@ -290,7 +300,7 @@ You may not instanciate from here, prefer from DetherJS.getUser method</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/detherJs.js.html#lineNumber21">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/detherJs.js.html#lineNumber29">source</a></span></span>
     </span>
   </h3>
 
@@ -384,7 +394,7 @@ You may not instanciate from here, prefer from DetherJS.getUser method</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/detherJs.js.html#lineNumber89">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/detherJs.js.html#lineNumber98">source</a></span></span>
     </span>
   </h3>
 
@@ -458,7 +468,7 @@ You may not instanciate from here, prefer from DetherJS.getUser method</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/detherJs.js.html#lineNumber49">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/detherJs.js.html#lineNumber57">source</a></span></span>
     </span>
   </h3>
 
@@ -532,7 +542,7 @@ You may not instanciate from here, prefer from DetherJS.getUser method</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/detherJs.js.html#lineNumber129">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/detherJs.js.html#lineNumber133">source</a></span></span>
     </span>
   </h3>
 
@@ -602,11 +612,11 @@ You may not instanciate from here, prefer from DetherJS.getUser method</p>
     
     <span data-ice="async">async</span>
     
-    <span class="code" data-ice="name">getTellersInZone</span><span class="code" data-ice="signature">(zone: <span>Integer</span>, zone: <span>array</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span>&lt;<span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>&gt;</span>
+    <span class="code" data-ice="name">getTellersInZone</span><span class="code" data-ice="signature">(countryId: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, postalCode: <span>Integer</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span>&lt;<span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>&gt;</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/detherJs.js.html#lineNumber108">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/detherJs.js.html#lineNumber116">source</a></span></span>
     </span>
   </h3>
 
@@ -627,17 +637,16 @@ You may not instanciate from here, prefer from DetherJS.getUser method</p>
     <tbody>
     
     <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">zone</td>
-      <td data-ice="type" class="code"><span>Integer</span></td>
+      <td data-ice="name" class="code" data-depth="0">countryId</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"></td>
     </tr>
 <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">zone</td>
-      <td data-ice="type" class="code"><span>array</span></td>
+      <td data-ice="name" class="code" data-depth="0">postalCode</td>
+      <td data-ice="type" class="code"><span>Integer</span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>ethereum addresses</p>
-</td>
+      <td data-ice="description"></td>
     </tr>
 </tbody>
   </table>
@@ -686,7 +695,7 @@ You may not instanciate from here, prefer from DetherJS.getUser method</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/detherJs.js.html#lineNumber37">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/detherJs.js.html#lineNumber45">source</a></span></span>
     </span>
   </h3>
 

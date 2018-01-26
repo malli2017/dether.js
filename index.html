@@ -35,6 +35,9 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GAS_PRICE">GAS_PRICE</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utils">utils</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-add0x">add0x</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isAddr">isAddr</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createMnemonic">createMnemonic</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-decryptMnemonic">decryptMnemonic</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-encryptMnemonic">encryptMnemonic</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Contracts">Contracts</a></span></span></li>
 </ul>
 </div>
@@ -44,13 +47,14 @@
 <p><a href="https://travis-ci.com/dethertech/dether.js"><img src="https://travis-ci.com/dethertech/dether.js.svg?token=kdsX9Y3G2xZ5ptCyzuYL&amp;branch=master" alt="Build Status"></a>
 <a href="https://badge.fury.io/js/detherjs"><img src="https://badge.fury.io/js/detherjs.svg" alt="npm version"></a>
 <a href="https://github.com/dethertech/dether.js/issues"><img src="https://img.shields.io/github/issues/dethertech/dether.js.svg" alt="GitHub issues"></a>
-<a href="https://github.com/dethertech/dether.js/stargazers"><img src="https://img.shields.io/github/stars/dethertech/dether.js.svg" alt="GitHub stars"></a></p>
+<a href="https://github.com/dethertech/dether.js/stargazers"><img src="https://img.shields.io/github/stars/dethertech/dether.js.svg" alt="GitHub stars"></a>
+<a href="http://packagequality.com/#?package=detherjs"><img src="http://npm.packagequality.com/shield/detherjs.svg" alt="Package Quality"></a></p>
 <p>DetherJS is Javascript SDK to easily interact with <a href="https://github.com/dethertech/detherContracts">DetherContracts</a></p>
 <p>It provides wrappers for all the public methods of the contract and formats values in and out.</p>
 <h2 id="table-of-contents">Table of Contents</h2><ul>
 <li><a href="#install">Install</a></li>
 <li><a href="#doc">Docs</a></li>
-<li><a href="#example">Example</a></li>
+<li><a href="#usage">Usage</a></li>
 <li><a href="#dev">Dev</a></li>
 <li><a href="#test">Test</a></li>
 <li><a href="#example">Example</a></li>
@@ -60,12 +64,14 @@
 <li><a href="#donation">Donation</a></li>
 </ul>
 <h2 id="install">Install</h2><p>Use NPM to get the package</p>
-<pre><code><code class="source-code prettyprint">npm install --save dether.js</code>
+<pre><code><code class="source-code prettyprint">npm install --save detherjs
+
+yarn add detherjs</code>
 </code></pre><h2 id="docs">Docs</h2><p>Extensive documentation of all the methods can be found on the <a href="https://dethertech.github.io/dether.js">API documentation</a></p>
 <h2 id="usage">Usage</h2><p>You can find more examples of method usage in <a href="https://github.com/dethertech/dether.js/blob/master/examples/usage.js">examples/usage.js</a></p>
 <h3 id="instanciate-a-new-detherjs-instance">Instanciate a new DetherJS instance</h3><pre><code class="lang-javascript"><code class="source-code prettyprint">import DetherJS from &apos;dether.js&apos;;
 
-const dether = new DetherJS({
+const detherjs = new DetherJS({
   network: &apos;ropsten&apos;,
   rpcURL: &apos;http://localhost:8545&apos;,
   etherscanKey: &apos;etherscan&apos;,
@@ -77,25 +83,157 @@ const dether = new DetherJS({
 <li><code>etherscanKey</code>: Etherscan key</li>
 </ul>
 <h4 id="return-value">Return value</h4><p>New instance of DetherJS</p>
+<h3 id="get-teller">Get Teller</h3><pre><code class="lang-javascript"><code class="source-code prettyprint">const addr = &apos;0xab5801a7d398351b8be11c439e05c5b3259aec9b&apos;;
+
+try {
+  cont teller = await detherjs.getTeller(addr)
+} catch () {
+  console.log(e);
+}</code>
+</code></pre>
+<h4 id="inputs">Inputs</h4><ul>
+<li><code>addr</code>: Ethereum address</li>
+</ul>
+<h4 id="return-value">Return value</h4><pre><code class="lang-javascript"><code class="source-code prettyprint">{
+  lat: 1, // Latitude
+  lng: 2, // Longitude
+  countryId: &apos;FR&apos;, // Country ID
+  postalCode: 75019,
+  escrowBalance: 0.01, // Escrow balance
+  rates: 20, // Fees
+  volumeTrade: 0, // Volume of Trade
+  nbTrade: 0, // Number of trade
+  currencyId: 1, // Currency id (1 === &apos;USD&apos;)
+  avatarId: 1, // Avatar ID
+  messengerAddr1: &apos;bobychou&apos;, // Telegram username
+  messengerAddr2: &apos;bobychou&apos;, // Telegram username
+  ethAddress: &apos;0x085b30734fD4f48369D53225b410d7D04b2d9011&apos;, // Ethereum address
+}</code>
+</code></pre>
 <h3 id="get-all-tellers">Get all tellers</h3><pre><code class="lang-javascript"><code class="source-code prettyprint">try {
-  const allTellers = await dether.getAllTellers();
+  const allTellers = await detherjs.getAllTellers();
   console.log(allTellers);
 } catch(e) {
   console.log(e);
 }</code>
 </code></pre>
-<h4 id="inputs">Inputs</h4><h4 id="return-value">Return value</h4><pre><code class="lang-js"><code class="source-code prettyprint">import DetherJS from &apos;dether.js&apos;;
-
-const dether = new DetherJS({ network: &apos;kovan&apos; });
-
-const allTellers = await dether.getAllTellers();
-
-const wallet = DetherJS.Ethers.Wallet.createRandom();
-const encryptedWallet = await wallet.encrypt(&apos;password&apos;);
-
-const user = dether.getUser(encryptedWallet);
-const info = await dether.getInfo();</code>
+<h4 id="inputs">Inputs</h4><p><code>getAllTellers</code> can receive an array of addresses</p>
+<ul>
+<li><code>addrs</code>: Array of ethereum addresses</li>
+</ul>
+<h4 id="return-value">Return value</h4><p>Array of tellers</p>
+<h3 id="get-tellers-in-zone">Get Tellers In Zone</h3><pre><code class="lang-Javascript"><code class="source-code prettyprint">try {
+  const tellersInZone = await detherjs.getTellersInZone();
+} catch (e) {
+  console.log(e);
+}</code>
 </code></pre>
+<h4 id="inputs">Inputs</h4><p><code>getTellersInZone</code> can receive an array of zones ID</p>
+<ul>
+<li><code>zones</code>: Array of zones ID</li>
+</ul>
+<h4 id="return-value">Return value</h4><p>Array of tellers</p>
+<h3 id="get-teller-balance">Get Teller Balance</h3><pre><code class="lang-javascript"><code class="source-code prettyprint">const addr = &apos;0xab5801a7d398351b8be11c439e05c5b3259aec9b&apos;;
+
+try {
+  const balance = await detherjs.getTellerBalance(addr);
+} catch (e) {
+  console.log(e);
+}</code>
+</code></pre>
+<h4 id="inputs">Inputs</h4><ul>
+<li><code>addr</code>: Ethereum address</li>
+</ul>
+<h4 id="return-value">Return value</h4><p>Receive escrow balance of teller</p>
+<h3 id="instanciate-user-methods">Instanciate User methods</h3><pre><code class="lang-Javascript"><code class="source-code prettyprint">const privateKey = &apos;0x0123456789012345678901234567890123456789012345678901234567890123&apos;;
+const userPassword = &apos;1234&apos;;
+
+const wallet = new DetherJS.Ethers.Wallet(privateKey);
+const encryptedWallet = await wallet.encrypt(userPassword);
+
+const User = await dether.getUser(encryptedWallet);</code>
+</code></pre>
+<h3 id="add-sell-point">Add Sell Point</h3><pre><code class="lang-javascript"><code class="source-code prettyprint">const password = &apos;123456789&apos;;
+
+const data = {
+  lat: 1.12,
+  lng: 2.21,
+  countryId: &apos;FR&apos;,
+  postalCode: 75019,
+  rates: 20.20,
+  avatar: 1,
+  currency: 2,
+  messengerAddr1: &apos;telegram&apos;,
+  messengerAddr2: &apos;toshi&apos;,
+  amount: 0.1,
+}
+
+try {
+  const hash = await User.addSellPoint(data, password);
+} catch (e) {
+  console.log(e);
+}</code>
+</code></pre>
+<h4 id="inputs">Inputs</h4><ul>
+<li><code>lat</code>: Latitude</li>
+<li><code>lng</code>: Longitude</li>
+<li><code>countryId</code>: Country ID</li>
+<li><code>postalCode</code>: Postal code</li>
+<li><code>rates</code>: Teller Fees</li>
+<li><code>avatar</code>: Avatar ID</li>
+<li><code>currency</code>: Currency id (1 === &apos;USD&apos;)</li>
+<li><code>messengerAddr1</code>: Telegram username</li>
+<li><code>messengerAddr2</code>: Toshi username</li>
+<li><code>username</code>: Username</li>
+<li><code>amount</code>: Escrow balance</li>
+<li><code>password</code>: Password to decrypt the wallet</li>
+</ul>
+<h4 id="return-value">Return value</h4><p>Return receipt of transaction</p>
+<h3 id="get-info">Get Info</h3><pre><code class="lang-javascript"><code class="source-code prettyprint">try {
+  const info = User.getInfo();
+} catch (e) {
+  console.log(e);
+}</code>
+</code></pre>
+<h4 id="return-value">Return value</h4><p>Return teller info if you are teller</p>
+<h3 id="get-balance">Get Balance</h3><pre><code class="lang-Javascript"><code class="source-code prettyprint">try {
+  const info = User.getBalance();
+} catch (e) {
+  console.log(e);
+}</code>
+</code></pre>
+<h4 id="return-value">Return value</h4><p>Return your balance if you are teller</p>
+<h3 id="send-to-buyer">Send To Buyer</h3><pre><code class="lang-Javascript"><code class="source-code prettyprint">const password = &apos;123456789&apos;;
+
+const opts = {
+  amount: 0.005,
+  receiver: &apos;0x609A999030cEf75FA04274e5Ac5b8401210910Fe&apos;,
+};
+
+try {
+  const sendCoinTransaction = await User.sendToBuyer(opts, password);
+} catch (e) {
+  console.log(e);
+}</code>
+</code></pre>
+<h4 id="inputs">Inputs</h4><ul>
+<li><code>password</code>: Password to decrypt the wallet</li>
+<li><code>amount</code>: Amount to send</li>
+<li><code>receiver</code>: Receiver&apos;s ethereum address</li>
+</ul>
+<h4 id="return-value">Return value</h4><p>Return receipt of transaction</p>
+<h3 id="delete-sell-point">Delete Sell Point</h3><pre><code class="lang-javascript"><code class="source-code prettyprint">const password = &apos;123456789&apos;;
+
+try {
+  const hash = await User.deleteSellPoint(password);
+} catch (e) {
+  console.log(e)
+}</code>
+</code></pre>
+<h4 id="inputs">Inputs</h4><ul>
+<li><code>password</code>: Password to decrypt the wallet</li>
+</ul>
+<h4 id="return-value">Return value</h4><p>Return receipt of transaction</p>
 <h2 id="dev">Dev</h2><pre><code><code class="source-code prettyprint">git clone https://github.com/dethertech/dether.js.git
 cd dether.js
 yarn</code>
@@ -117,6 +255,10 @@ yarn run publish:esdoc</code>
 <li><a href="https://ethereum.org/donate">Ethereum Foundation</a></li>
 <li><a href="https://etherscan.io/address/0x71c7656ec7ab88b098defb751b7401b5f6d8976f">Etherscan</a></li>
 <li><a href="https://etherscan.io/address/0x7cB57B5A97eAbe94205C07890BE4c1aD31E486A8">MyEtherWallet</a></li>
+<li><a href="https://etherscan.io/address/0x0074709077B8AE5a245E4ED161C971Dc4c3C8E2B">CoinMarketCap</a></li>
+</ul>
+<h2 id="todo">TODO</h2><ul>
+<li>Add more tests</li>
 </ul>
 </div>
 </div>

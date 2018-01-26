@@ -36,6 +36,24 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "detherjs/src/utils/mnemonic.js~createmnemonic",
+    "function/index.html#static-function-createMnemonic",
+    "<span>createMnemonic</span> <span class=\"search-result-import-path\">detherjs/src/utils/mnemonic.js</span>",
+    "function"
+  ],
+  [
+    "detherjs/src/utils/mnemonic.js~decryptmnemonic",
+    "function/index.html#static-function-decryptMnemonic",
+    "<span>decryptMnemonic</span> <span class=\"search-result-import-path\">detherjs/src/utils/mnemonic.js</span>",
+    "function"
+  ],
+  [
+    "detherjs/src/utils/mnemonic.js~encryptmnemonic",
+    "function/index.html#static-function-encryptMnemonic",
+    "<span>encryptMnemonic</span> <span class=\"search-result-import-path\">detherjs/src/utils/mnemonic.js</span>",
+    "function"
+  ],
+  [
     "detherjs/src/utils/eth.js~isaddr",
     "function/index.html#static-function-isAddr",
     "<span>isAddr</span> <span class=\"search-result-import-path\">detherjs/src/utils/eth.js</span>",
@@ -390,6 +408,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/detheruser.js~detheruser#certifynewuser",
+    "class/src/detherUser.js~DetherUser.html#instance-method-certifyNewUser",
+    "src/detherUser.js~DetherUser#certifyNewUser",
+    "method"
+  ],
+  [
     "src/detheruser.js~detheruser#constructor",
     "class/src/detherUser.js~DetherUser.html#instance-constructor-constructor",
     "src/detherUser.js~DetherUser#constructor",
@@ -447,6 +471,12 @@ window.esdocSearchIndex = [
     "src/utils/formatters.js",
     "file/src/utils/formatters.js.html",
     "src/utils/formatters.js",
+    "file"
+  ],
+  [
+    "src/utils/mnemonic.js",
+    "file/src/utils/mnemonic.js.html",
+    "src/utils/mnemonic.js",
     "file"
   ],
   [
