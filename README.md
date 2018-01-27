@@ -80,15 +80,16 @@ try {
 {
   lat: 1, // Latitude
   lng: 2, // Longitude
-  zoneId: 42, // Country ID
+  countryId: 'FR', // Country ID
+  postalCode: 75019,
   escrowBalance: 0.01, // Escrow balance
   rates: 20, // Fees
   volumeTrade: 0, // Volume of Trade
   nbTrade: 0, // Number of trade
-  name: 'bob', // Username
   currencyId: 1, // Currency id (1 === 'USD')
   avatarId: 1, // Avatar ID
-  messengerAddr: 'bobychou', // Telegram username
+  messengerAddr1: 'bobychou', // Telegram username
+  messengerAddr2: 'bobychou', // Telegram username
   ethAddress: '0x085b30734fD4f48369D53225b410d7D04b2d9011', // Ethereum address
 }
 ```
@@ -164,13 +165,14 @@ const password = '123456789';
 const data = {
   lat: 1.12,
   lng: 2.21,
-  zone: 42,
+  countryId: 'FR',
+  postalCode: 75019,
   rates: 20.20,
   avatar: 1,
   currency: 2,
-  telegram: 'boby',
-  username: 'Boby',
-  amount: 0.01,
+  messengerAddr1: 'telegram',
+  messengerAddr2: 'toshi',
+  amount: 0.1,
 }
 
 try {
@@ -183,11 +185,13 @@ try {
 #### Inputs
 * `lat`: Latitude
 * `lng`: Longitude
-* `zone`: Country ID
+* `countryId`: Country ID
+* `postalCode`: Postal code
 * `rates`: Teller Fees
 * `avatar`: Avatar ID
 * `currency`: Currency id (1 === 'USD')
-* `telegram`: Telegram username
+* `messengerAddr1`: Telegram username
+* `messengerAddr2`: Toshi username
 * `username`: Username
 * `amount`: Escrow balance
 * `password`: Password to decrypt the wallet

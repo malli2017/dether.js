@@ -109,18 +109,17 @@ class DetherJS {
 
   /**
    * Get All tellers per zone
-   * @param  {string}  countryId
-   * @param  {Integer}  postalCode
+   * @param {object} opts
+   * @param {string} opts.countryId dether instance
+   * @param  {Integer}  opts.postalCode
    * @return {Promise<Array>} array of tellers in zone
    */
-  async getTellersInZone(countryId, postalCode) {
-    if (!Number.isInteger(postalCode) ) throw new TypeError('Invalid zone');
-    const result = [];
-
-      const tellersInZone = await this.storageInstance.getZone(countryId, postalCode);
+  async getTellersInZone(opts) {
+    if (!Number.isInteger(opts.postalCode) ) throw new TypeError('Invalid zone');
+    const tellersInZone = await this.storageInstance.getZone(opts.countryId, opts.postalCode);
     if (!tellersInZone) return [];
-    const tellersList = tellersInZone[0];
-    const tellers = await Promise.all(tellersList.map(this.getTeller.bind(this)));
+    // const tellersList = tellersInZone[0];
+    const tellers = await Promise.all(tellersInZone.map(this.getTeller.bind(this)));
     return tellers;
     // return DetherJS._filterTellerList(tellers);
   }
@@ -132,13 +131,10 @@ class DetherJS {
    */
   async getTellerBalance(address) {
     if (!isAddr(address)) throw new TypeError('Invalid ETH address');
-
     const fullAddress = add0x(address);
-    const result = await this.contractInstance.getTellerBalance(fullAddress);
-
+    const result = await this.storageInstance.getTellerBalance(fullAddress);
     return Number(Ethers.utils.formatEther(result[0]));
   }
-
 }
 
 DetherJS.Ethers = Ethers;

@@ -16,6 +16,7 @@ const storageInstance = {
       messengerAddr: 'telegram',
       messengerAddr2: 'toshi',
     }),
+    getTellerBalance: async () => ({ 0: Ethers.utils.bigNumberify('2200000000000000000') }),
     getTellerProfile2: async () =>
       ({
         rate: 2313,
@@ -31,8 +32,13 @@ const storageInstance = {
       '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',
     ],
   ],
-  getZone: async (data) => {
-    const _42 = [
+  getTellerStatus: async () => ({
+    balance: Ethers.utils.parseEther('2.1'),
+    status: true,
+
+  }),
+  getZone: async (countryId, postalCode) => {
+    const _FR = [
       '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb621',
       '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb622',
       '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',
@@ -42,7 +48,7 @@ const storageInstance = {
       '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb622',
       '0x0c6dd5b28707a045f3a0c7429ed3fb9f835cb623',
     ];
-    return data === 42 ? _42 : _101;
+    return countryId === 'FR' ? _FR : _101;
   },
 };
 

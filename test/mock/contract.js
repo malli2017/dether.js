@@ -22,14 +22,8 @@ const instance = {
   deleteMyProfile: async () => ({
     hash: 'hash',
   }),
-  getTellerBalance: async () => ({ 0: Ethers.utils.bigNumberify('2200000000000000000') }),
   registerTeller: async () => ({
     hash: 'hash',
-  }),
-  getTellerStatus: async () => ({
-    balance: Ethers.utils.parseEther('2.1'),
-    status: true,
-
   }),
 };
 
