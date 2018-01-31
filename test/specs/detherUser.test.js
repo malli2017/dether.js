@@ -133,6 +133,7 @@ describe('dether user', () => {
 
     const result = await user.addSellPoint(sellPoint, 'password');
     expect(result).to.deep.eq(transaction);
+    console.log('regis', registerTeller);
     expect(registerTeller.args[0][0]).to.eq(100000);
     expect(registerTeller.args[0][1]).to.eq(200000);
     expect(registerTeller.args[0][2]).to.eq('FR');
@@ -184,15 +185,38 @@ describe('dether user', () => {
     expect(waitForTransaction.calledWith(transaction.hash));
   });
 
-  it('should withdraw all', async () => {
+  it('should turn offline profile', async () => {
     const transaction = {
       hash: 'hash',
     };
-    const withdrawAll = sinon.stub();
-    withdrawAll.returns(transaction);
+    const switchTellerOffline = sinon.stub();
+    switchTellerOffline.returns(transaction);
     const _getCustomContract = sandbox.stub(Contracts, 'getCustomContract');
     _getCustomContract.returns({
-      withdrawAll,
+      switchTellerOffline,
+    });
+
+    const waitForTransaction = sinon.stub();
+    waitForTransaction.resolves(transaction);
+    user.dether.provider = {
+      waitForTransaction,
+    };
+
+    const result = await user.turnOfflineSellPoint('password');
+    expect(result).to.deep.eq(transaction);
+    expect(_getCustomContract.args[0][0].password).to.eq('password');
+    expect(waitForTransaction.calledWith(transaction.hash));
+  });
+
+  it('should delete my profile', async () => {
+    const transaction = {
+      hash: 'hash',
+    };
+    const deleteMyProfile = sinon.stub();
+    deleteMyProfile.returns(transaction);
+    const _getCustomContract = sandbox.stub(Contracts, 'getCustomContract');
+    _getCustomContract.returns({
+      deleteMyProfile,
     });
 
     const waitForTransaction = sinon.stub();

@@ -7,7 +7,7 @@ import Contracts from './utils/contracts';
 import Providers from './utils/providers';
 import Formatters from './utils/formatters';
 // to add different stuff on it
-import {createMnemonic, encryptMnemonic, decryptMnemonic} from './utils/mnemonic';
+import { createMnemonic, encryptMnemonic, decryptMnemonic } from './utils/mnemonic';
 
 
 /**

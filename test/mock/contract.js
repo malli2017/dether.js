@@ -4,9 +4,6 @@ const instance = {
   sendCoin: async () => ({
     hash: 'hash',
   }),
-  // withdrawAll: async () => ({
-  //   hash: 'hash',
-  // }),
   updateProfile: async () => ({
     hash: 'hash',
   }),

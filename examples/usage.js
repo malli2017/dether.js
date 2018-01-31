@@ -1,4 +1,8 @@
+/* eslint-disable */
 // import DetherJS from 'detherjs';
+import DetherInterfaceJson from 'dethercontract/contracts/DetherInterface.json';
+import DetherTellerStorageJson from 'dethercontract/contracts/DetherTellerStorage.json';
+import DetherSmsJson from 'dethercontract/contracts/SmsCertifier.json';
 
 
 const DetherJS = require('../src/index');
@@ -11,19 +15,103 @@ const DetherJS = require('../src/index');
     network: 'kovan',
   });
 
-  // User data
-  console.log('=======================================');
-//   const privateKey = '0x0123456789012345678901234567890123456789012345678901234567890123';
-// // address: 0x14791697260E4c9A71f18484C9f997B308e59325
-
+// instanciate masterUser
 const privateKey = '0x0123456789012345678901234567890123456789012345678901234567890321';
 // address: 0x391edA1b8D31f891d1653B131779751BdeDA24D3
+const userPassword = '1234';
+const wallet = new DetherJS.Ethers.Wallet(privateKey);
+const encryptedWallet = await wallet.encrypt(userPassword);
+const user = await dether.getUser(encryptedWallet);
+wallet.provider = dether.provider;
 
-  const userPassword = '1234';
 
-  const wallet = new DetherJS.Ethers.Wallet(privateKey);
-  const encryptedWallet = await wallet.encrypt(userPassword);
-  const user = await dether.getUser(encryptedWallet);
+// create 3 random priv key with address
+// const wallet1 = new DetherJS.Ethers.Wallet.createRandom();
+// const encryptedWallet1 = await wallet.encrypt(userPassword);
+// const user1 = await dether.getUser(encryptedWallet);
+// wallet1.provider = dether.provider;
+//
+// const wallet2 = new DetherJS.Ethers.Wallet.createRandom();
+// const encryptedWallet2 = await wallet.encrypt(userPassword);
+// const user2 = await dether.getUser(encryptedWallet);
+// wallet2.provider = dether.provider;
+//
+// const wallet3 = new DetherJS.Ethers.Wallet.createRandom();
+// const encryptedWallet3 = await wallet.encrypt(userPassword);
+// const user3 = await dether.getUser(encryptedWallet);
+// wallet3.provider = dether.provider;
+//
+// // credit them from master key
+// console.log('wallet master -> ', wallet.address);
+// console.log('wallet 1 -> ', wallet1.address);
+// console.log('wallet 2 -> ', wallet2.address);
+// console.log('wallet 3 -> ', wallet3.address);
+// console.log('wallet pre funding');
+// console.log('master', DetherJS.Ethers.utils.formatEther(await dether.provider.getBalance(wallet.address)));
+// console.log('1', DetherJS.Ethers.utils.formatEther(await dether.provider.getBalance(wallet1.address)));
+// console.log('2', DetherJS.Ethers.utils.formatEther(await dether.provider.getBalance(wallet2.address)));
+// console.log('3', DetherJS.Ethers.utils.formatEther(await dether.provider.getBalance(wallet3.address)));
+// let tsx = await wallet.sendTransaction({to: wallet1.address, value: DetherJS.Ethers.utils.parseEther("0.1")});
+// await dether.provider.waitForTransaction(tsx.hash);
+// tsx = await wallet.sendTransaction({to: wallet2.address, value: DetherJS.Ethers.utils.parseEther("0.1")});
+// await dether.provider.waitForTransaction(tsx.hash);
+// tsx = await wallet.sendTransaction({to: wallet3.address, value: DetherJS.Ethers.utils.parseEther("0.1")});
+// await dether.provider.waitForTransaction(tsx.hash);
+// console.log('-- wallet post funding --');
+// console.log('master', DetherJS.Ethers.utils.formatEther(await dether.provider.getBalance(wallet.address)));
+// console.log('1', DetherJS.Ethers.utils.formatEther(await dether.provider.getBalance(wallet1.address)));
+// console.log('2', DetherJS.Ethers.utils.formatEther(await dether.provider.getBalance(wallet2.address)));
+// console.log('3', DetherJS.Ethers.utils.formatEther(await dether.provider.getBalance(wallet3.address)));
+
+// deploy new contract
+const deployStorageTransaction = DetherJS.Ethers.Contract.getDeployTransaction(DetherTellerStorageJson.bytecode, DetherTellerStorageJson.abi);
+const deploySmsTransaction = DetherJS.Ethers.Contract.getDeployTransaction(DetherSmsJson.bytecode, DetherSmsJson.abi);
+
+let deployContract = await wallet.sendTransaction(deployStorageTransaction, {gasLimit: 3000000, gasPrice: DetherJS.Ethers.utils.bigNumberify("40000000000")});
+let deployedContract = await dether.provider.waitForTransaction(deployContract.hash);
+
+function getAddress() {
+    return new Promise(function(resolve, reject) {
+        // Some asynchronous method; some examples
+        //  - request which account from the user
+        //  - query a database
+        //  - wait for another contract to be mined
+
+        var address = wallet.address;
+
+        resolve(address);
+    });
+}
+
+function sign(transaction) {
+    return new Promise(function(resolve, reject) {
+        // Some asynchronous method; some examples
+        //  - prompt the user to confirm or decline
+        //  - check available funds and credits
+        //  - request 2FA over SMS
+
+        var signedTransaction = wallet.sign(transaction);
+
+        resolve(signedTransaction);
+    });
+}
+
+var customSigner = {
+    getAddress: getAddress,
+    provider: ethers.providers.getDefaultProvider(),
+    sign: sign,
+    sendTransaction: 
+}
+
+
+
+console.log('contract deployed => ', deployedContract);
+console.log('contract => ', deployContract);
+
+/*
+ * START TEST
+ */
+
   // User registers as a teller
 
   const sellPoint = {
@@ -39,24 +127,24 @@ const privateKey = '0x0123456789012345678901234567890123456789012345678901234567
     amount: 0.2,
   };
 
-  const teller = await user.addSellPoint(sellPoint, userPassword);
+  // const teller = await user.addSellPoint(sellPoint, userPassword);
 
   // Get teller info
   // let tellerInfo = await user.getInfo();
   // console.log('Teller info1: ', tellerInfo);
 
-  let tellerInfo  = await dether.getTeller('0x391edA1b8D31f891d1653B131779751BdeDA24D3');
-  console.log('Teller info2: ', tellerInfo);
+  // let tellerInfo  = await dether.getTeller('0x391edA1b8D31f891d1653B131779751BdeDA24D3');
+  // console.log('Teller info2: ', tellerInfo);
 
   // validate user
   // const tsx = await user.certifyNewUser({user: '0x35ee4ec2BfabCB87da01b799c35dC1CcCCfCdc15'}, userPassword);
   // console.log('tsx => ', tsx);
 
   // Get list of teller in a zone
-  const countryId = 'FR';
-  const postalCode = 75019;
-  const tellersInZone = await dether.getTellersInZone(countryId, postalCode);
-  console.log('tellerinzone', tellersInZone);
+  // const countryId = 'FR';
+  // const postalCode = 75019;
+  // const tellersInZone = await dether.getTellersInZone(countryId, postalCode);
+  // console.log('tellerinzone', tellersInZone);
 
 
   // // Get details of a teller
@@ -108,7 +196,21 @@ const privateKey = '0x0123456789012345678901234567890123456789012345678901234567
   // // console.log('All tellers: ', allTellers);
   //
 
-
+  // refund master
+  // let balance1 = DetherJS.Ethers.utils.formatEther(await dether.provider.getBalance(wallet1.address)) - 0.03;
+  // let balance2 = DetherJS.Ethers.utils.formatEther(await dether.provider.getBalance(wallet2.address)) - 0.03;
+  // let balance3 = DetherJS.Ethers.utils.formatEther(await dether.provider.getBalance(wallet3.address)) - 0.03;
+  // tsx = await wallet1.sendTransaction({to: wallet.address, value: DetherJS.Ethers.utils.parseEther('' + balance1)});
+  // await dether.provider.waitForTransaction(tsx.hash);
+  // tsx = await wallet2.sendTransaction({to: wallet.address, value: DetherJS.Ethers.utils.parseEther('' + balance2)});
+  // await dether.provider.waitForTransaction(tsx.hash);
+  // tsx = await wallet3.sendTransaction({to: wallet.address, value: DetherJS.Ethers.utils.parseEther('' + balance3)});
+  // await dether.provider.waitForTransaction(tsx.hash);
+  // console.log('-- wallet post refund to master --');
+  // console.log('master', DetherJS.Ethers.utils.formatEther(await dether.provider.getBalance(wallet.address)));
+  // console.log('1', DetherJS.Ethers.utils.formatEther(await dether.provider.getBalance(wallet1.address)));
+  // console.log('2', DetherJS.Ethers.utils.formatEther(await dether.provider.getBalance(wallet2.address)));
+  // console.log('3', DetherJS.Ethers.utils.formatEther(await dether.provider.getBalance(wallet3.address)));
 
 
 

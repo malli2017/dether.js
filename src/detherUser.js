@@ -171,7 +171,7 @@ class DetherUser {
   // 50000 * 25000000000 = 0.001250000000000000 ETH
   // need 0.001250000000000000 ETH to process this function
   /**
-   * Delete sell point, this function withdraw automatically balance escrow to owner
+   * Delete sell point, this function withdraw automatically balance escrow to owner and delete all info
    * @param  {string} password  Wallet password
    * @return {Promise<object>}  Transaction
    */
@@ -186,13 +186,38 @@ class DetherUser {
       password,
     });
 
-    const transaction = await customContract.withdrawAll();
+    const transaction = await customContract.deleteMyProfile();
+    const minedTsx = await this.dether.provider.waitForTransaction(transaction.hash);
+    return minedTsx;
+  }
+
+  // gas used = 26497
+  // gas price average (mainnet) = 25000000000 wei
+  // 50000 * 25000000000 = 0.001250000000000000 ETH
+  // need 0.001250000000000000 ETH to process this function
+  /**
+   * Turn Offline SellPoint withdraw automatically balance escrow to owner but keep info
+   * @param  {string} password  Wallet password
+   * @return {Promise<object>}  Transaction
+   */
+  async turnOfflineSellPoint(password) {
+    const secuPass = validatePassword(password);
+    if (secuPass.error) throw new TypeError(secuPass.msg);
+
+    const wallet = await this._getWallet(password);
+
+    const customContract = await Contracts.getCustomContract({
+      wallet,
+      password,
+    });
+
+    const transaction = await customContract.switchTellerOffline();
     const minedTsx = await this.dether.provider.waitForTransaction(transaction.hash);
     return minedTsx;
   }
 
   /**
-   * Certify New User, this function whitelist by sms new user
+   * Certify New User, this function whitelist by sms new user, USER SHOULD BE DELEGATE
    * @param  {object}  opts
    * @param  {string}  opts.user ethereum address
    * @param  {string} password  Wallet password
